@@ -2327,8 +2327,11 @@
                                                         </label>
                                                         <div class="input-group">
                                                             <select class="form-select border-2" id="llmModel" style="border-radius: 10px 0 0 10px;" onchange="updateModelInfo()">
-                                                                <option value="gpt-4.1-mini" selected>GPT-4.1 Mini (推薦)</option>
-                                                                <option value="gpt-4.1">GPT-4.1 (旗艦)</option>
+                                                                <option value="gpt-5.2" selected>GPT-5.2 (推薦)</option>
+                                                                <option value="gpt-5.1">GPT-5.1</option>
+                                                                <option value="gpt-5.0">GPT-5.0</option>
+                                                                <option value="gpt-4.1-mini">GPT-4.1 Mini</option>
+                                                                <option value="gpt-4.1">GPT-4.1</option>
                                                                 <option value="gpt-4.1-nano">GPT-4.1 Nano (極速)</option>
                                                                 <option value="gpt-4o-mini">GPT-4o Mini</option>
                                                                 <option value="gpt-4o">GPT-4o (高級版)</option>
@@ -4866,6 +4869,27 @@ TONE(語調):
                     console.error('載入模型資訊失敗:', error);
                     // 如果載入失敗，使用預設資訊
                     modelInfo = {
+                        'gpt-5.2': {
+                            name: 'GPT-5.2',
+                            description: '最新旗艦模型，適合最高品質與高準確度場景',
+                            features: ['最高準確度', '強推理能力', '多語言支援', '適合複雜任務'],
+                            pricing: '頂級',
+                            speed: '中等'
+                        },
+                        'gpt-5.1': {
+                            name: 'GPT-5.1',
+                            description: '高品質旗艦模型，適合關鍵任務與專業場景',
+                            features: ['高準確度', '穩定回覆', '多語言支援', '適合專業任務'],
+                            pricing: '高階',
+                            speed: '中等'
+                        },
+                        'gpt-5.0': {
+                            name: 'GPT-5.0',
+                            description: '新一代高品質模型，兼顧品質與效率',
+                            features: ['高品質回覆', '多語言支援', '通用能力強'],
+                            pricing: '高階',
+                            speed: '中等'
+                        },
                         'gpt-4.1': {
                             name: 'GPT-4.1',
                             description: '最新旗艦模型，適合高品質與高準確度場景',
