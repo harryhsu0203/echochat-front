@@ -40,6 +40,10 @@
                 <input class="form-control" id="datetime" placeholder="請從上方點選或輸入 ISO 時間 (YYYY-MM-DDTHH:00:00Z)" required>
               </div>
               <div class="col-12">
+                <label class="form-label">地點 / 地址（選填）</label>
+                <input class="form-control" id="location" placeholder="例如：台中市東區復興路五段178號">
+              </div>
+              <div class="col-12">
                 <label class="form-label">備註（選填）</label>
                 <textarea class="form-control" id="note" rows="2"></textarea>
               </div>
@@ -106,7 +110,8 @@
         name: document.getElementById('name').value.trim(),
         contact: document.getElementById('contact').value.trim(),
         datetime: document.getElementById('datetime').value.trim(),
-        note: document.getElementById('note').value.trim()
+        note: document.getElementById('note').value.trim(),
+        location: document.getElementById('location').value.trim()
       };
       if (!payload.name || !payload.contact || !payload.datetime) {
         showAlert('請完整填寫必填欄位', 'warning');

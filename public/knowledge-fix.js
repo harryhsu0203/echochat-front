@@ -80,9 +80,18 @@ function updateKnowledgeUI(knowledge) {
     
     // 更新分類統計
     const totalCount = knowledge.length;
-    const manualCount = knowledge.filter(item => item.category === 'manual').length;
-    const uploadCount = knowledge.filter(item => item.category === 'upload').length;
-    const tableCount = knowledge.filter(item => item.category === 'table').length;
+    const normalizeCategory = (value) => String(value || '').trim().toLowerCase();
+    const isUpload = (value) => {
+        const cat = normalizeCategory(value);
+        return ['upload', '上傳', 'webpage', '網頁', 'file'].includes(cat);
+    };
+    const isTable = (value) => {
+        const cat = normalizeCategory(value);
+        return ['table', '表格', 'sheet', 'csv', 'excel'].includes(cat);
+    };
+    const uploadCount = knowledge.filter(item => isUpload(item.category)).length;
+    const tableCount = knowledge.filter(item => isTable(item.category)).length;
+    const manualCount = totalCount - uploadCount - tableCount;
     
     // 更新計數器
     document.getElementById('totalCount').textContent = totalCount;
