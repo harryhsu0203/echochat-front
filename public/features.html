@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="features.title">功能特色 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="navbar.css" rel="stylesheet">
+    <script src="js/i18n.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* 主要內容區域 */
+        .main-content {
+            background: white;
+            margin-top: 0;
+            min-height: calc(100vh - 180px);
+            border-radius: 20px 20px 0 0;
+            padding: 40px 0;
+        }
+
+        /* 頁面標題區域 */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        /* 功能卡片樣式 */
+        .feature-section {
+            padding: 60px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            color: #667eea;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .feature-description {
+            color: #555;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* 返回按鈕 */
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+            color: white;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .feature-card {
+                padding: 30px 20px;
+            }
+            
+            .feature-icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 頁面標題 -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title" data-i18n="features.page_title">功能特色</h1>
+            <p class="page-subtitle" data-i18n="features.page_subtitle">探索 EchoChat 的強大功能，為您的客服體驗帶來革命性改變</p>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 功能特色 -->
+            <div class="feature-section">
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-clock feature-icon"></i>
+                        <h3 class="feature-title">24/7 全天候服務</h3>
+                        <p class="feature-description">
+                            AI 客服永不休息，24小時為您的客戶提供即時回應。無論何時何地，客戶都能獲得專業的服務體驗，大幅提升客戶滿意度。
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-brain feature-icon"></i>
+                        <h3 class="feature-title">智能意圖識別</h3>
+                        <p class="feature-description">
+                            先進的自然語言處理技術，精準理解客戶問題的真實意圖。自動分析語境和情感，提供最貼切的回應和解決方案。
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-language feature-icon"></i>
+                        <h3 class="feature-title">多語言支援</h3>
+                        <p class="feature-description">
+                            支援繁體中文、英文、日文、韓文等多種語言，自動識別客戶使用的語言並以相同語言回覆，打破語言障礙。
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-users feature-icon"></i>
+                        <h3 class="feature-title">智能轉接</h3>
+                        <p class="feature-description">
+                            當遇到複雜問題時，AI 會智能判斷並轉接給最適合的人工客服，確保客戶問題得到妥善處理。
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3 class="feature-title">數據分析洞察</h3>
+                        <p class="feature-description">
+                            詳細的對話記錄和分析報告，幫助您了解客戶需求趨勢、服務效果和改進方向，持續優化客服品質。
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-cogs feature-icon"></i>
+                        <h3 class="feature-title">自訂回應邏輯</h3>
+                        <p class="feature-description">
+                            靈活的規則設定和流程定義，您可以根據業務需求自訂 AI 的回應邏輯和處理流程。
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-database feature-icon"></i>
+                        <h3 class="feature-title">知識庫管理</h3>
+                        <p class="feature-description">
+                            強大的知識庫系統，支援文件上傳、問答編輯和內容管理。AI 會持續學習並更新知識庫內容。
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt feature-icon"></i>
+                        <h3 class="feature-title">企業級安全</h3>
+                        <p class="feature-description">
+                            SSL 加密傳輸、資料本地化存儲、符合 GDPR 規範，確保客戶資料安全，讓您安心使用。
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-mobile-alt feature-icon"></i>
+                        <h3 class="feature-title">多平台整合</h3>
+                        <p class="feature-description">
+                            一次設定，同時支援 LINE、Instagram、Telegram、Facebook 等多個社交平台，統一管理所有客服對話。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 返回按鈕 -->
+    <a href="/index.html" class="back-btn">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini 系列功能 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .model-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .model-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .badge-custom {
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+        }
+        
+        .stats-card {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <!-- 標題區域 -->
+        <div class="row mb-4">
+            <div class="col-12 text-center text-white">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="fas fa-robot me-3"></i>Gemini 系列功能
+                </h1>
+                <p class="lead">支援多種語言模型，提供強大的AI對話體驗</p>
+            </div>
+        </div>
+
+        <!-- 功能概覽 -->
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon bg-primary mx-auto">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>多語言模型支援</h4>
+                    <p class="text-muted">支援超過12種語言模型，包括GPT、Claude、Gemini等</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon bg-success mx-auto">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h4>知識庫綁定</h4>
+                    <p class="text-muted">支援將知識型機器人綁定企業知識庫</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon bg-warning mx-auto">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h4>角色權限設定</h4>
+                    <p class="text-muted">可設定機器人的角色權限，控制互動範圍</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 支援的語言模型 -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="stats-card">
+                    <h3 class="mb-4">
+                        <i class="fas fa-list me-2"></i>支援的語言模型
+                    </h3>
+                    <div class="row" id="modelsList">
+                        <!-- 模型列表將在這裡動態生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 功能特色 -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="stats-card">
+                    <h3 class="mb-4">
+                        <i class="fas fa-star me-2"></i>功能特色
+                    </h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    支援與第三方平台整合，如Line Bot、Line OA等
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    支援可被嵌入於其他網頁功能
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    LangGraph 整合 RAG
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    支援對話紀錄查詢
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    同時支援語音辨識STT與語音合成TTS功能
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    支援3D AVATAR人偶
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    可設定須登入帳號密碼或無須登入方式使用
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    啟用/停用控制，方便測試與階段部署
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 統計數據 -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="stats-card">
+                    <h3 class="mb-4">
+                        <i class="fas fa-chart-bar me-2"></i>使用統計
+                    </h3>
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="border-end">
+                                <h2 class="text-primary mb-1" id="totalModels">12</h2>
+                                <p class="text-muted">支援模型數</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border-end">
+                                <h2 class="text-success mb-1" id="activeRobots">5</h2>
+                                <p class="text-muted">活躍機器人</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border-end">
+                                <h2 class="text-warning mb-1" id="totalConversations">2,500</h2>
+                                <p class="text-muted">總對話數</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <h2 class="text-info mb-1" id="satisfactionRate">95%</h2>
+                            <p class="text-muted">滿意度</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 載入支援的語言模型
+        async function loadSupportedModels() {
+            try {
+                const response = await fetch('/api/gemini/ai-models/supported');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayModels(data.models);
+                }
+            } catch (error) {
+                console.error('載入模型失敗:', error);
+            }
+        }
+
+        // 顯示模型列表
+        function displayModels(models) {
+            const modelsList = document.getElementById('modelsList');
+            modelsList.innerHTML = '';
+
+            Object.entries(models).forEach(([key, model]) => {
+                const modelCard = document.createElement('div');
+                modelCard.className = 'col-md-6 col-lg-4';
+                modelCard.innerHTML = `
+                    <div class="model-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="mb-1">${model.name}</h5>
+                            <span class="badge bg-primary badge-custom">${model.provider}</span>
+                        </div>
+                        <p class="text-muted small mb-2">${model.description}</p>
+                        <div class="mb-2">
+                            ${model.features.map(feature => 
+                                `<span class="badge bg-light text-dark me-1 mb-1">${feature}</span>`
+                            ).join('')}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-tachometer-alt me-1"></i>${model.speed}
+                            </small>
+                            <small class="text-muted">
+                                <i class="fas fa-dollar-sign me-1"></i>${model.pricing}
+                            </small>
+                        </div>
+                    </div>
+                `;
+                modelsList.appendChild(modelCard);
+            });
+        }
+
+        // 頁面載入時執行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSupportedModels();
+        });
+    </script>
+</body>
+</html> 

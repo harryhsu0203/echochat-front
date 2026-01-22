@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="pricing.title">資費方案 - EchoChat AI 客服串接平台 | 價格方案</title>
+    <meta name="description" content="EchoChat AI 客服系統價格方案，提供多種訂閱方案選擇，適合不同規模企業的智慧客服需求。包含 LINE 聊天機器人、自動回覆、知識庫等功能。">
+    <meta name="keywords" content="AI 客服價格, 智慧客服費用, LINE 聊天機器人價格, 客服系統價格, EchoChat 價格, 客服系統費用, AI 客服方案, 客服系統訂閱">
+    <link rel="canonical" href="https://echochat-web.onrender.com/pricing.html">
+    <meta name="robots" content="index,follow">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+    <meta name="theme-color" content="#667eea">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="navbar.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+
+
+        /* 英雄區域 */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-title {
+            animation: fadeInUp 1.2s ease-out 0.3s both;
+        }
+
+        .hero-subtitle {
+            animation: fadeInUp 1.2s ease-out 0.6s both;
+        }
+
+        /* 浮動圖標動畫 */
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255,255,255,0.15);
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.8;
+            filter: blur(0.5px);
+        }
+
+        .floating-icon:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 65%; left: 85%; animation-delay: 2s; }
+        .floating-icon:nth-child(3) { top: 85%; left: 25%; animation-delay: 4s; }
+        .floating-icon:nth-child(4) { top: 25%; left: 75%; animation-delay: 1s; }
+        .floating-icon:nth-child(5) { top: 75%; left: 85%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1); 
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateY(-15px) rotate(3deg) scale(1.05); 
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            color: #ffffff;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            font-weight: 300;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 方案區域 */
+        .pricing-section {
+            background: white;
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #6c757d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+            align-items: stretch;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        /* 尊榮版和頂級尊榮版金光特效 */
+        .pricing-card.premium {
+            border: 2px solid #FFD700;
+            background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
+            position: relative;
+        }
+
+        .pricing-card.premium::before {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+        }
+
+        .pricing-card.premium::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FFF8DC, #FFEFD5, #FFF8DC);
+            border-radius: 20px;
+            z-index: -1;
+        }
+
+        /* 付款週期切換樣式 */
+        .billing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0;
+            gap: 20px;
+        }
+
+        .toggle-btn {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .toggle-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .toggle-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .save-badge {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* 尊榮版特色樣式 - 加大並突出 */
+        .pricing-card.featured {
+            transform: scale(1.15);
+            z-index: 10;
+            position: relative;
+            margin: 30px 0;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+            min-height: 600px;
+        }
+
+        .pricing-card.featured .plan-name {
+            font-size: 2.4rem;
+        }
+
+        .pricing-card.featured .plan-price {
+            font-size: 4rem;
+        }
+
+        .pricing-card.featured .plan-features li {
+            font-size: 1.2rem;
+            padding: 12px 0;
+            padding-left: 45px;
+        }
+
+        .pricing-card.featured .plan-features li::before {
+            left: 12px;
+            font-size: 1.3rem;
+            color: #DAA520;
+        }
+
+        .pricing-card.featured .btn-choose-plan {
+            font-size: 1.3rem;
+            padding: 18px 50px;
+        }
+
+        .pricing-card.featured .popular-badge {
+            font-size: 1rem;
+            padding: 10px 25px;
+        }
+
+        /* 尊榮版統一視覺效果 */
+        .pricing-card.premium.featured {
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15), 0 0 20px rgba(255, 248, 220, 0.3);
+        }
+
+        .pricing-card.premium.featured .plan-price {
+            text-shadow: 0 0 5px rgba(255, 248, 220, 0.3);
+        }
+
+
+
+        .pricing-card.enterprise {
+            border: 2px solid #2c3e50;
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+        }
+
+        .pricing-card.enterprise::before {
+            background: linear-gradient(90deg, #2c3e50, #34495e);
+        }
+
+        /* 企業版橫向長型設計 */
+        .pricing-card.enterprise-horizontal {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            padding: 40px 60px;
+            max-width: 100%;
+            margin-top: 40px;
+        }
+
+        .pricing-card.enterprise-horizontal .plan-name {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .pricing-card.enterprise-horizontal .plan-price {
+            font-size: 3.5rem;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        .pricing-card.enterprise-horizontal .plan-period {
+            text-align: left;
+            margin-bottom: 0;
+        }
+
+        .pricing-card.enterprise-horizontal .plan-features {
+            flex: 1;
+            margin: 0 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            text-align: left;
+        }
+
+        .pricing-card.enterprise-horizontal .plan-features li {
+            padding: 5px 0;
+        }
+
+        .pricing-card.enterprise-horizontal .btn-choose-plan {
+            width: auto;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+        }
+
+        /* 響應式設計 - 在小螢幕上改回垂直排列 */
+        @media (max-width: 768px) {
+            .pricing-card.enterprise-horizontal {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 30px;
+            }
+
+            .pricing-card.enterprise-horizontal .plan-name,
+            .pricing-card.enterprise-horizontal .plan-price,
+            .pricing-card.enterprise-horizontal .plan-period {
+                text-align: center;
+            }
+
+            .pricing-card.enterprise-horizontal .plan-features {
+                margin: 20px 0;
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.enterprise-horizontal .btn-choose-plan {
+                width: 100%;
+            }
+        }
+
+        .plan-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .plan-price.premium {
+            background: linear-gradient(45deg, #DAA520, #B8860B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .plan-period {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 8px 0;
+            color: #6c757d;
+            position: relative;
+            padding-left: 35px;
+        }
+
+        .plan-features li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 8px;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .plan-features.premium li::before {
+            color: #DAA520;
+            font-size: 1.2rem;
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+        }
+
+        .btn-choose-plan {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .btn-choose-plan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-choose-plan.premium {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #2c3e50;
+        }
+
+        .btn-choose-plan.premium:hover {
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+            color: #2c3e50;
+        }
+
+        .btn-choose-plan.enterprise {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .btn-choose-plan.enterprise:hover {
+            box-shadow: 0 8px 25px rgba(44, 62, 80, 0.4);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #2c3e50;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transform: rotate(15deg);
+            animation: badgeGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        /* FAQ 區域 */
+        .faq-section {
+            background: #f8f9fa;
+            padding: 100px 0;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .faq-question {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .faq-answer {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        /* CTA 區域 */
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 50px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary-custom {
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50px;
+            padding: 18px 50px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .btn-secondary-custom {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 50px;
+            padding: 18px 50px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary-custom:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            text-decoration: none;
+        }
+
+        .back-to-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .back-to-home-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .back-to-home-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 企業版成長型設計 */
+        .enterprise-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 80px 0;
+            margin-top: 60px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enterprise-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .enterprise-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .enterprise-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .enterprise-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .enterprise-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .enterprise-feature {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .enterprise-feature:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .enterprise-feature i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #FFD700;
+        }
+
+        .enterprise-feature h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .enterprise-feature p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .btn-enterprise {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #2c3e50;
+            border: none;
+            border-radius: 50px;
+            padding: 18px 50px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn-enterprise:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .enterprise-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="js/i18n.js"></script>
+</head>
+<body>
+    <a href="index.html" class="back-to-home-btn" title="回首頁">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄區域 -->
+    <section class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="floating-icons">
+            <div class="floating-icon"><i class="fab fa-line"></i></div>
+            <div class="floating-icon"><i class="fab fa-instagram"></i></div>
+            <div class="floating-icon"><i class="fab fa-telegram"></i></div>
+            <div class="floating-icon"><i class="fab fa-facebook"></i></div>
+            <div class="floating-icon"><i class="fab fa-whatsapp"></i></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title" data-i18n="pricing.hero.title">資費方案</h1>
+            <p class="hero-subtitle" data-i18n="pricing.hero.subtitle">選擇最適合您業務需求的 EchoChat 方案，從免費試用到企業級解決方案，我們為您提供完整的智能客服服務</p>
+        </div>
+    </section>
+
+    <!-- 方案區域 -->
+    <section class="pricing-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="pricing.plans.title">選擇您的方案</h2>
+                <p class="section-subtitle" data-i18n="pricing.plans.subtitle">從個人使用到企業級應用，我們提供多種方案滿足不同需求</p>
+                
+                <!-- 付款週期切換 -->
+                <div class="billing-toggle">
+                    <button class="toggle-btn active" data-period="monthly">每月付款</button>
+                    <button class="toggle-btn" data-period="yearly">每年付款</button>
+                    <div class="save-badge">年付省 17%</div>
+                </div>
+            </div>
+            
+            <div class="pricing-grid">
+                <!-- 免費版 -->
+                <div class="pricing-card">
+                    <h3 class="plan-name">免費版</h3>
+                    <div class="plan-price">$0</div>
+                    <div class="plan-period">永久免費</div>
+                    <ul class="plan-features">
+                        <li>每月 100 次對話</li>
+                        <li>基本 AI 回覆功能</li>
+                        <li>支援 LINE 串接</li>
+                        <li>標準客服時間</li>
+                        <li>基本知識庫</li>
+                        <li>社群支援</li>
+                    </ul>
+                    <a href="register.html" class="btn btn-choose-plan">
+                        <i class="fas fa-rocket me-2"></i>立即開始
+                    </a>
+                </div>
+
+                <!-- 尊榮版 -->
+                <div class="pricing-card premium featured">
+                    <h3 class="plan-name">尊榮版</h3>
+                    <div class="plan-price premium">
+                        <span class="monthly-price" data-price-twd="NT$900" data-price-usd="$29.99" data-price-jpy="¥3,900">NT$900</span>
+                        <span class="yearly-price" style="display: none;" data-price-twd="NT$9,000" data-price-usd="$299.99" data-price-jpy="¥39,000">NT$9,000</span>
+                    </div>
+                    <div class="plan-period">
+                        <span class="monthly-period">每月</span>
+                        <span class="yearly-period" style="display: none;">每年</span>
+                    </div>
+                    <ul class="plan-features premium">
+                        <li>每月 5,000 次對話</li>
+                        <li>高級 AI 回覆功能</li>
+                        <li>支援所有社交平台</li>
+                        <li>專屬客服經理</li>
+                        <li>無限知識庫</li>
+                        <li>進階數據分析</li>
+                        <li>客製化訓練</li>
+                        <li>API 存取權限</li>
+                        <li>優先技術支援</li>
+                    </ul>
+                    <div class="text-center mb-2">
+                        <span class="badge bg-success"><i class="fas fa-gift me-1"></i>可免費試用 1 個月</span>
+                    </div>
+                    <a href="register.html" class="btn btn-choose-plan premium">
+                        <i class="fas fa-crown me-2"></i>選擇尊榮版（立即試用）
+                    </a>
+                </div>
+
+                <!-- 企業版 -->
+                <div class="pricing-card">
+                    <h3 class="plan-name">企業版</h3>
+                    <div class="plan-price">請聯繫</div>
+                    <div class="plan-period">客製化方案</div>
+                    <ul class="plan-features">
+                        <li>無限對話次數</li>
+                        <li>企業級 AI 功能</li>
+                        <li>多平台完整整合</li>
+                        <li>專屬技術團隊</li>
+                        <li>企業級安全認證</li>
+                        <li>客製化開發</li>
+                        <li>專屬部署方案</li>
+                        <li>SLA 保證</li>
+                        <li>專屬培訓課程</li>
+                        <li>7x24 專線支援</li>
+                    </ul>
+                    <a href="contact-us.html" class="btn btn-choose-plan">
+                        <i class="fas fa-building me-2"></i>聯繫我們
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ 區域 -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">常見問題</h2>
+                <p class="section-subtitle">關於 EchoChat 資費方案的常見問題解答</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="faq-item">
+                        <h4 class="faq-question">如何選擇適合的方案？</h4>
+                        <p class="faq-answer">建議根據您的月對話量、支援平台數量和功能需求來選擇。我們提供免費試用，讓您先體驗再決定。</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="faq-item">
+                        <h4 class="faq-question">可以隨時升級或降級方案嗎？</h4>
+                        <p class="faq-answer">是的，您可以隨時調整方案。升級立即生效，降級在當前計費週期結束後生效。</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="faq-item">
+                        <h4 class="faq-question">企業版有什麼特殊服務？</h4>
+                        <p class="faq-answer">企業版提供專屬技術團隊、客製化開發、專屬部署、SLA 保證和 7x24 專線支援等企業級服務。</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="faq-item">
+                        <h4 class="faq-question">支援哪些付款方式？</h4>
+                        <p class="faq-answer">我們支援信用卡、銀行轉帳、PayPal 等多種付款方式，企業版還提供月結付款選項。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 行動呼籲 -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">準備好開始了嗎？</h2>
+                <p class="cta-subtitle">立即選擇適合的方案，開始您的智能客服之旅</p>
+                <div class="cta-buttons">
+                    <a href="register.html" class="btn-primary-custom">
+                        <i class="fas fa-rocket me-2"></i>免費試用
+                    </a>
+                    <a href="contact-us.html" class="btn-secondary-custom">
+                        <i class="fas fa-phone me-2"></i>諮詢方案
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        // 付款週期切換功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtns = document.querySelectorAll('.toggle-btn');
+            const monthlyPrices = document.querySelectorAll('.monthly-price');
+            const yearlyPrices = document.querySelectorAll('.yearly-price');
+            const monthlyPeriods = document.querySelectorAll('.monthly-period');
+            const yearlyPeriods = document.querySelectorAll('.yearly-period');
+            // 根據語言切換幣別
+            (function applyCurrencyByLocale(){
+                const lang = (document.documentElement.lang || navigator.language || 'zh-TW').toLowerCase();
+                const isTWD = lang.includes('zh');
+                const isJPY = lang.includes('ja');
+                const monthly = document.querySelector('.monthly-price');
+                const yearly = document.querySelector('.yearly-price');
+                if (monthly && yearly) {
+                    if (isTWD) {
+                        monthly.textContent = monthly.getAttribute('data-price-twd') || 'NT$900';
+                        yearly.textContent = yearly.getAttribute('data-price-twd') || 'NT$9,000';
+                    } else if (isJPY) {
+                        monthly.textContent = monthly.getAttribute('data-price-jpy') || '¥3,900';
+                        yearly.textContent = yearly.getAttribute('data-price-jpy') || '¥39,000';
+                    } else {
+                        monthly.textContent = monthly.getAttribute('data-price-usd') || '$29.99';
+                        yearly.textContent = yearly.getAttribute('data-price-usd') || '$299.99';
+                    }
+                }
+            })();
+
+            toggleBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const period = this.getAttribute('data-period');
+                    
+                    // 更新按鈕狀態
+                    toggleBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 切換價格顯示
+                    if (period === 'monthly') {
+                        monthlyPrices.forEach(price => price.style.display = 'inline');
+                        yearlyPrices.forEach(price => price.style.display = 'none');
+                        monthlyPeriods.forEach(period => period.style.display = 'inline');
+                        yearlyPeriods.forEach(period => period.style.display = 'none');
+                    } else {
+                        monthlyPrices.forEach(price => price.style.display = 'none');
+                        yearlyPrices.forEach(price => price.style.display = 'inline');
+                        monthlyPeriods.forEach(period => period.style.display = 'none');
+                        yearlyPeriods.forEach(period => period.style.display = 'inline');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

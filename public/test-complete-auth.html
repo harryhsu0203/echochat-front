@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完整驗證測試 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            min-height: 100vh;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            padding: 20px;
+        }
+        .test-card {
+            background: rgba(255,255,255,0.98);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .btn-test {
+            margin: 5px;
+            padding: 10px 20px;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .result.success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        .result.error {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        .result.info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-card">
+            <h1 class="text-center text-success mb-4">
+                <i class="fas fa-shield-alt me-2"></i>EchoChat 完整驗證測試
+            </h1>
+            
+            <!-- API 連接測試 -->
+            <div class="test-card">
+                <h3><i class="fas fa-plug me-2"></i>API 連接測試</h3>
+                <button class="btn btn-primary btn-test" onclick="testApiConnection()">
+                    <i class="fas fa-link me-2"></i>測試 API 連接
+                </button>
+                <div id="apiResult"></div>
+            </div>
+            
+            <!-- 登入測試 -->
+            <div class="test-card">
+                <h3><i class="fas fa-sign-in-alt me-2"></i>登入功能測試</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>用戶名:</label>
+                        <input type="text" id="testUsername" class="form-control" value="sunnyharry1">
+                    </div>
+                    <div class="col-md-6">
+                        <label>密碼:</label>
+                        <input type="password" id="testPassword" class="form-control" value="admin123">
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-success btn-test" onclick="testLogin()">
+                        <i class="fas fa-key me-2"></i>測試登入
+                    </button>
+                    <button class="btn btn-info btn-test" onclick="testLoginWithGele()">
+                        <i class="fas fa-user me-2"></i>測試 gele1227 密碼
+                    </button>
+                </div>
+                <div id="loginResult"></div>
+            </div>
+            
+            <!-- Token 驗證測試 -->
+            <div class="test-card">
+                <h3><i class="fas fa-certificate me-2"></i>Token 驗證測試</h3>
+                <button class="btn btn-warning btn-test" onclick="testTokenValidation()">
+                    <i class="fas fa-check-circle me-2"></i>驗證當前 Token
+                </button>
+                <button class="btn btn-secondary btn-test" onclick="clearTokens()">
+                    <i class="fas fa-trash me-2"></i>清除所有 Token
+                </button>
+                <div id="tokenResult"></div>
+            </div>
+            
+            <!-- 完整流程測試 -->
+            <div class="test-card">
+                <h3><i class="fas fa-flow-chart me-2"></i>完整流程測試</h3>
+                <button class="btn btn-success btn-test" onclick="testCompleteFlow()">
+                    <i class="fas fa-play me-2"></i>測試完整登入 → 驗證流程
+                </button>
+                <div id="flowResult"></div>
+            </div>
+            
+            <!-- 快速動作 -->
+            <div class="test-card">
+                <h3><i class="fas fa-rocket me-2"></i>快速動作</h3>
+                <a href="login.html" class="btn btn-primary btn-test">
+                    <i class="fas fa-sign-in-alt me-2"></i>前往登入頁
+                </a>
+                <a href="dashboard.html" class="btn btn-info btn-test">
+                    <i class="fas fa-tachometer-alt me-2"></i>前往儀表板
+                </a>
+                <button class="btn btn-success btn-test" onclick="setValidToken()">
+                    <i class="fas fa-magic me-2"></i>設置有效 Token
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://echochat-api.onrender.com';
+        
+        function showResult(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="result ${type}">
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info'}-circle me-2"></i>
+                    ${message}
+                </div>
+            `;
+        }
+        
+        async function testApiConnection() {
+            showResult('apiResult', '正在測試 API 連接...', 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult('apiResult', `
+                        <strong>✅ API 連接成功</strong><br>
+                        狀態: ${response.status}<br>
+                        訊息: ${data.message}<br>
+                        時間戳: ${data.timestamp}
+                    `, 'success');
+                } else {
+                    showResult('apiResult', `❌ API 回應錯誤: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                showResult('apiResult', `❌ 連接失敗: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testLogin() {
+            const username = document.getElementById('testUsername').value;
+            const password = document.getElementById('testPassword').value;
+            
+            showResult('loginResult', `正在測試登入: ${username}...`, 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('staffName', data.user.name);
+                    localStorage.setItem('staffRole', data.user.role);
+                    localStorage.setItem('staffUsername', data.user.username);
+                    
+                    showResult('loginResult', `
+                        <strong>✅ 登入成功</strong><br>
+                        用戶: ${data.user.name} (${data.user.username})<br>
+                        角色: ${data.user.role}<br>
+                        Token: ${data.token.substring(0, 20)}...<br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `, 'success');
+                } else {
+                    showResult('loginResult', `
+                        ❌ 登入失敗<br>
+                        錯誤: ${data.error || '未知錯誤'}<br>
+                        狀態: ${response.status}
+                    `, 'error');
+                }
+            } catch (error) {
+                showResult('loginResult', `❌ 登入請求失敗: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testLoginWithGele() {
+            document.getElementById('testUsername').value = 'sunnyharry1';
+            document.getElementById('testPassword').value = 'gele1227';
+            await testLogin();
+        }
+        
+        async function testTokenValidation() {
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                showResult('tokenResult', '❌ 沒有找到 Token', 'error');
+                return;
+            }
+            
+            showResult('tokenResult', '正在驗證 Token...', 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showResult('tokenResult', `
+                        <strong>✅ Token 驗證成功</strong><br>
+                        用戶: ${data.user.name} (${data.user.username})<br>
+                        角色: ${data.user.role}<br>
+                        ID: ${data.user.id}<br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `, 'success');
+                } else {
+                    showResult('tokenResult', `
+                        ❌ Token 驗證失敗<br>
+                        錯誤: ${data.error || '未知錯誤'}<br>
+                        狀態: ${response.status}
+                    `, 'error');
+                }
+            } catch (error) {
+                showResult('tokenResult', `❌ Token 驗證請求失敗: ${error.message}`, 'error');
+            }
+        }
+        
+        function clearTokens() {
+            localStorage.clear();
+            sessionStorage.clear();
+            showResult('tokenResult', '✅ 已清除所有 Token 和本地存儲', 'success');
+        }
+        
+        async function testCompleteFlow() {
+            showResult('flowResult', '開始完整流程測試...', 'info');
+            
+            // 清除舊 token
+            localStorage.clear();
+            
+            let results = [];
+            
+            try {
+                // 1. 測試登入
+                results.push('1. 測試登入...');
+                const loginResponse = await fetch(`${API_BASE}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'sunnyharry1', password: 'admin123' })
+                });
+                
+                const loginData = await loginResponse.json();
+                
+                if (!loginResponse.ok || !loginData.success) {
+                    throw new Error(`登入失敗: ${loginData.error}`);
+                }
+                
+                results.push('✅ 登入成功');
+                localStorage.setItem('token', loginData.token);
+                
+                // 2. 測試 token 驗證
+                results.push('2. 測試 Token 驗證...');
+                const tokenResponse = await fetch(`${API_BASE}/api/me`, {
+                    headers: { 'Authorization': `Bearer ${loginData.token}` }
+                });
+                
+                const tokenData = await tokenResponse.json();
+                
+                if (!tokenResponse.ok || !tokenData.success) {
+                    throw new Error(`Token 驗證失敗: ${tokenData.error}`);
+                }
+                
+                results.push('✅ Token 驗證成功');
+                
+                // 3. 設置用戶資訊
+                localStorage.setItem('staffName', tokenData.user.name);
+                localStorage.setItem('staffRole', tokenData.user.role);
+                localStorage.setItem('staffUsername', tokenData.user.username);
+                
+                results.push('✅ 用戶資訊已設置');
+                results.push('🎉 完整流程測試成功！');
+                
+                showResult('flowResult', `
+                    <strong>✅ 完整流程測試成功</strong><br>
+                    ${results.join('<br>')}<br><br>
+                    現在可以安全地訪問儀表板了！
+                `, 'success');
+                
+            } catch (error) {
+                results.push(`❌ 測試失敗: ${error.message}`);
+                showResult('flowResult', results.join('<br>'), 'error');
+            }
+        }
+        
+        async function setValidToken() {
+            try {
+                const response = await fetch(`${API_BASE}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'sunnyharry1', password: 'admin123' })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('staffName', data.user.name);
+                    localStorage.setItem('staffRole', data.user.role);
+                    localStorage.setItem('staffUsername', data.user.username);
+                    
+                    alert('✅ 有效 Token 已設置！現在可以訪問儀表板了。');
+                } else {
+                    alert('❌ 無法獲取有效 Token');
+                }
+            } catch (error) {
+                alert('❌ 設置 Token 失敗: ' + error.message);
+            }
+        }
+        
+        // 頁面載入時顯示當前狀態
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('staffUsername');
+            
+            if (token && username) {
+                document.querySelector('.container').insertAdjacentHTML('afterbegin', `
+                    <div class="alert alert-success">
+                        <i class="fas fa-user-check me-2"></i>
+                        <strong>當前已登入:</strong> ${username} 
+                        <button class="btn btn-sm btn-outline-success ms-2" onclick="testTokenValidation()">驗證</button>
+                    </div>
+                `);
+            } else {
+                document.querySelector('.container').insertAdjacentHTML('afterbegin', `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>目前未登入</strong> - 請執行登入測試
+                    </div>
+                `);
+            }
+        });
+    </script>
+</body>
+</html>

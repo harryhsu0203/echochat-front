@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>應用程式整合範例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .code {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 應用程式整合範例</h1>
+    
+    <div class="section">
+        <h2>1. 基本設定</h2>
+        <p>首先，設定您的 API 基礎 URL：</p>
+        <div class="code">
+const API_BASE_URL = 'https://your-render-app.onrender.com';
+// 或者使用本地開發
+// const API_BASE_URL = 'http://localhost:3000';
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. 登入整合</h2>
+        <p>在您的應用程式中加入登入功能：</p>
+        <div class="code">
+async function loginUser(username, password) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // 儲存 token
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('userData', JSON.stringify(data.user));
+            
+            // 跳轉到應用程式主頁
+            window.location.href = '/app-dashboard.html';
+            return { success: true, user: data.user };
+        } else {
+            return { success: false, error: data.error };
+        }
+    } catch (error) {
+        return { success: false, error: '網路錯誤' };
+    }
+}
+        </div>
+        
+        <button class="button" onclick="testLogin()">測試登入</button>
+    </div>
+
+    <div class="section">
+        <h2>3. 註冊整合</h2>
+        <p>在您的應用程式中加入註冊功能：</p>
+        <div class="code">
+async function registerUser(username, email, password) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, password })
+        });
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        return { success: false, error: '註冊失敗' };
+    }
+}
+
+async function sendVerificationCode(email) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/send-verification-code`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        return { success: false, error: '發送驗證碼失敗' };
+    }
+}
+
+async function verifyCode(email, code) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/verify-code`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, code })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            localStorage.setItem('authToken', data.token);
+            return { success: true, token: data.token };
+        } else {
+            return { success: false, error: data.error };
+        }
+    } catch (error) {
+        return { success: false, error: '驗證失敗' };
+    }
+}
+        </div>
+        
+        <button class="button" onclick="testRegister()">測試註冊</button>
+    </div>
+
+    <div class="section">
+        <h2>4. 認證檢查</h2>
+        <p>在每個需要認證的頁面加入檢查：</p>
+        <div class="code">
+async function checkAuthentication() {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+        // 未登入，跳轉到登入頁面
+        window.location.href = '/login.html';
+        return false;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/me`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // 已登入，顯示用戶資料
+            displayUserInfo(data.user);
+            return true;
+        } else {
+            // Token 無效，清除並跳轉
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            window.location.href = '/login.html';
+            return false;
+        }
+    } catch (error) {
+        // 網路錯誤，清除並跳轉
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        window.location.href = '/login.html';
+        return false;
+    }
+}
+
+// 頁面載入時檢查認證
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuthentication();
+});
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>5. 登出功能</h2>
+        <p>在您的應用程式中加入登出功能：</p>
+        <div class="code">
+function logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    window.location.href = '/login.html';
+}
+        </div>
+        
+        <button class="button" onclick="testLogout()">測試登出</button>
+    </div>
+
+    <div class="section">
+        <h2>6. 完整的應用程式範例</h2>
+        <p>這是一個完整的應用程式整合範例：</p>
+        <div class="code">
+// app.js - 您的應用程式主檔案
+
+class AppAuth {
+    constructor(apiBaseUrl) {
+        this.apiBaseUrl = apiBaseUrl;
+        this.token = localStorage.getItem('authToken');
+    }
+    
+    // 登入
+    async login(username, password) {
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                this.token = data.token;
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('userData', JSON.stringify(data.user));
+                return { success: true, user: data.user };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            return { success: false, error: '登入失敗' };
+        }
+    }
+    
+    // 檢查認證
+    async checkAuth() {
+        if (!this.token) {
+            return { authenticated: false };
+        }
+        
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/api/me`, {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                return { authenticated: true, user: data.user };
+            } else {
+                this.logout();
+                return { authenticated: false };
+            }
+        } catch (error) {
+            this.logout();
+            return { authenticated: false };
+        }
+    }
+    
+    // 登出
+    logout() {
+        this.token = null;
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+    }
+    
+    // 獲取用戶資料
+    getUser() {
+        const userData = localStorage.getItem('userData');
+        return userData ? JSON.parse(userData) : null;
+    }
+}
+
+// 初始化認證系統
+const auth = new AppAuth('https://your-render-app.onrender.com');
+
+// 在您的應用程式中使用
+async function initApp() {
+    const authStatus = await auth.checkAuth();
+    
+    if (authStatus.authenticated) {
+        // 用戶已登入，顯示應用程式內容
+        showAppContent(authStatus.user);
+    } else {
+        // 用戶未登入，顯示登入表單
+        showLoginForm();
+    }
+}
+
+// 啟動應用程式
+initApp();
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>7. 環境設定</h2>
+        <p>根據不同環境設定 API URL：</p>
+        <div class="code">
+// 開發環境
+const DEV_API_URL = 'http://localhost:3000';
+
+// 生產環境 (Render)
+const PROD_API_URL = 'https://your-render-app.onrender.com';
+
+// 根據環境選擇 API URL
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? DEV_API_URL 
+    : PROD_API_URL;
+        </div>
+    </div>
+
+    <script>
+        // 測試函數
+        async function testLogin() {
+            const result = await loginUser('testuser', 'password123');
+            alert(result.success ? '登入成功！' : '登入失敗：' + result.error);
+        }
+        
+        async function testRegister() {
+            const result = await registerUser('newuser', 'newuser@example.com', 'password123');
+            alert(result.success ? '註冊成功！' : '註冊失敗：' + result.error);
+        }
+        
+        function testLogout() {
+            logout();
+            alert('已登出！');
+        }
+        
+        // 模擬函數
+        async function loginUser(username, password) {
+            return { success: true, user: { username, email: 'test@example.com' } };
+        }
+        
+        async function registerUser(username, email, password) {
+            return { success: true, message: '註冊成功' };
+        }
+        
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+        }
+    </script>
+</body>
+</html> 

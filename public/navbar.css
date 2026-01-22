@@ -1,0 +1,569 @@
+/* 統一導航欄樣式 */
+
+/* 導航欄容器 */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 12px 0;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+/* 導航欄滾動效果 */
+.navbar.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    padding: 8px 0;
+}
+
+/* 品牌標誌 */
+.navbar-brand {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #667eea !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.navbar-brand:hover {
+    color: #5a6fd8 !important;
+    transform: translateY(-1px);
+}
+
+.navbar-brand i {
+    margin-right: 8px;
+    color: #667eea;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover i {
+    transform: rotate(5deg) scale(1.1);
+}
+
+/* 導航連結 */
+.nav-link {
+    color: #2c3e50 !important;
+    font-weight: 600;
+    margin: 0 12px;
+    padding: 8px 16px !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.nav-link:hover::before {
+    left: 100%;
+}
+
+.nav-link:hover {
+    color: #667eea !important;
+    background: rgba(102, 126, 234, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+/* Active 狀態 */
+.nav-link.active {
+    color: #667eea !important;
+    font-weight: 700;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    position: relative;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 2px;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+    to {
+        width: 30px;
+        opacity: 1;
+    }
+}
+
+/* 登入按鈕 */
+.btn-login {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-login:hover::before {
+    left: 100%;
+}
+
+.btn-login:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a5acd 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-login:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* 語言選擇器 */
+.language-selector {
+    border: 2px solid transparent;
+    background: transparent;
+    color: #2c3e50;
+    font-weight: 600;
+    margin-left: 15px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+.language-selector:hover {
+    border-color: rgba(102, 126, 234, 0.3);
+    background: rgba(102, 126, 234, 0.05);
+    color: #667eea;
+}
+
+.language-selector:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 漢堡選單按鈕 */
+.navbar-toggler {
+    border: none;
+    padding: 6px 10px;
+    background: transparent;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.navbar-toggler:hover {
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 6px;
+}
+
+.navbar-toggler-icon {
+    background-image: none;
+    display: block;
+    width: 1.75em;
+    height: 2px;
+    background-color: #2c3e50;
+    border-radius: 999px;
+    position: relative;
+    transition: all 0.3s ease;
+    margin: 0.2em auto;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background-color: inherit;
+    transition: inherit;
+}
+
+.navbar-toggler-icon::before {
+    top: -6px;
+}
+
+.navbar-toggler-icon::after {
+    top: 6px;
+}
+
+.navbar-toggler:hover .navbar-toggler-icon,
+.navbar-toggler:hover .navbar-toggler-icon::before,
+.navbar-toggler:hover .navbar-toggler-icon::after {
+    background-color: #667eea;
+}
+
+/* 手機端下拉選單 */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(15px);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        margin-top: 15px;
+        padding: 20px;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .nav-item {
+        margin: 8px 0;
+    }
+
+    .nav-link {
+        padding: 12px 20px !important;
+        margin: 0;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+        background: rgba(102, 126, 234, 0.1);
+        transform: translateX(5px);
+    }
+
+    .nav-link.active {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+        transform: translateX(8px);
+    }
+
+    .nav-link.active::after {
+        display: none;
+    }
+
+    .d-flex.align-items-center {
+        flex-direction: column;
+        margin-top: 20px;
+        gap: 15px;
+    }
+
+    .btn-login {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .language-selector {
+        margin-left: 0;
+        width: 100%;
+        max-width: 200px;
+        text-align: center;
+    }
+}
+
+/* 桌面端響應式 */
+@media (min-width: 992px) {
+    .navbar-toggler {
+        display: none;
+    }
+
+    /* 導航欄容器佈局 */
+    .navbar-collapse {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        flex: 1;
+    }
+
+    /* 導航選項居中 */
+    .navbar-nav {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        flex: 1;
+        margin: 0 !important;
+    }
+
+    .nav-link {
+        position: relative;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+    .nav-link.active::after {
+        width: 100%;
+    }
+
+    /* 確保品牌標誌在最左邊 */
+    .navbar-brand {
+        flex-shrink: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* 確保登入按鈕在最右邊 */
+    .d-flex.align-items-center {
+        flex-shrink: 0 !important;
+        margin-left: auto !important;
+    }
+}
+
+/* 動畫效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.navbar-brand,
+.nav-link,
+.btn-login,
+.language-selector {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.nav-link:nth-child(1) { animation-delay: 0.1s; }
+.nav-link:nth-child(2) { animation-delay: 0.2s; }
+.nav-link:nth-child(3) { animation-delay: 0.3s; }
+.nav-link:nth-child(4) { animation-delay: 0.4s; }
+.btn-login { animation-delay: 0.5s; }
+.language-selector { animation-delay: 0.6s; } 
+
+/* ============================================================
+   Global layout responsiveness for marketing pages
+   ============================================================ */
+@media (max-width: 991.98px) {
+    html,
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .hero-section,
+    .page-header {
+        padding: 100px 0 60px !important;
+    }
+
+    .hero-content {
+        padding: 0 20px !important;
+    }
+
+    .hero-icon {
+        font-size: 4rem !important;
+        margin-bottom: 20px !important;
+    }
+
+    .hero-title,
+    .page-title {
+        font-size: clamp(2rem, 6vw, 3rem) !important;
+        line-height: 1.2 !important;
+    }
+
+    .hero-subtitle,
+    .page-subtitle,
+    .hero-description,
+    .ai-description {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+        margin-bottom: 20px !important;
+    }
+
+    .hero-stats {
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+    }
+
+    #main-content .main-container {
+        padding: 30px 20px !important;
+        margin: 0 !important;
+    }
+
+    .feature-grid,
+    .platform-grid,
+    .enterprise-features {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+        gap: 20px !important;
+    }
+
+    .benefit-container {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+    }
+
+    .benefit-content {
+        padding-right: 0 !important;
+    }
+
+    .section-title,
+    .benefit-title,
+    .cta-title,
+    .enterprise-title {
+        font-size: clamp(2rem, 6vw, 2.6rem) !important;
+    }
+
+    .cta-subtitle,
+    .section-subtitle,
+    .enterprise-subtitle {
+        font-size: 1rem !important;
+    }
+
+    .pricing-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .pricing-card {
+        min-height: auto !important;
+        padding: 30px 20px !important;
+    }
+
+    .pricing-card.featured {
+        transform: none !important;
+        margin: 0 !important;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .pricing-card.enterprise-horizontal {
+        flex-direction: column !important;
+        text-align: center !important;
+        padding: 30px !important;
+    }
+
+    .pricing-card.enterprise-horizontal .plan-features {
+        grid-template-columns: 1fr !important;
+        margin: 20px 0 !important;
+    }
+
+    .cta-buttons,
+    .hero-buttons,
+    .ai-buttons {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px !important;
+        align-items: stretch !important;
+    }
+
+    .cta-buttons > *,
+    .hero-buttons > *,
+    .ai-buttons > * {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    .mission-item,
+    .team-member,
+    .feature-card,
+    .benefit-item,
+    .faq-item,
+    .job-card,
+    .stat-item {
+        padding: 24px !important;
+    }
+
+    .floating-sidebar {
+        display: none !important;
+    }
+
+    .page-header .floating-icons,
+    .hero-section .floating-icons {
+        display: none !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .hero-section,
+    .page-header {
+        padding: 90px 0 40px !important;
+    }
+
+    .hero-title,
+    .page-title {
+        font-size: clamp(1.8rem, 7vw, 2.4rem) !important;
+    }
+
+    .hero-subtitle,
+    .page-subtitle,
+    .hero-description {
+        font-size: 0.95rem !important;
+    }
+
+    .feature-card p,
+    .mission-item p,
+    .benefit-text p,
+    .platform-desc,
+    .ai-example,
+    .faq-answer {
+        font-size: 0.95rem !important;
+    }
+
+    .hero-buttons .btn-hero,
+    .cta-buttons a,
+    .ai-buttons a {
+        font-size: 1rem !important;
+        padding: 12px !important;
+    }
+
+    .hero-icon {
+        font-size: 3.2rem !important;
+    }
+}

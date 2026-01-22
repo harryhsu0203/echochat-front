@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="careers.title">工作機會 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="navbar.css" rel="stylesheet">
+    <script src="js/i18n.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+
+
+        /* 主要內容區域 */
+        .main-content {
+            background: white;
+            margin-top: 0;
+            min-height: calc(100vh - 180px);
+            border-radius: 20px 20px 0 0;
+            padding: 40px 0;
+        }
+
+        /* 頁面標題區域 */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        /* 工作機會卡片 */
+        .job-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .job-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .job-department {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .job-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .job-requirements {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .job-requirements h4 {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .job-requirements ul {
+            margin-bottom: 0;
+            padding-left: 20px;
+        }
+
+        .job-requirements li {
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .btn-apply {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-apply:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        /* 公司文化區域 */
+        .culture-section {
+            background: #f8f9fa;
+            padding: 60px 0;
+            margin-top: 60px;
+        }
+
+        .culture-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 40px;
+        }
+
+        .culture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .culture-item {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .culture-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .culture-item h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .culture-item p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .job-card {
+                padding: 20px;
+            }
+            
+            .culture-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 頁面載入動畫 */
+        body.loaded {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 頁面標題 -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title" data-i18n="careers.page_title">工作機會</h1>
+            <p class="page-subtitle" data-i18n="careers.page_subtitle">加入我們，一起改變客服的未來</p>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 暫無職缺訊息 -->
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="job-card text-center" style="padding: 60px 30px;">
+                        <i class="fas fa-briefcase" style="font-size: 4rem; color: #667eea; margin-bottom: 30px;"></i>
+                        <h2 class="mb-4" data-i18n="careers.no_positions">暫無職缺</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁腳 -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 data-i18n="footer.company">公司</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="about-us.html" class="text-white-50" data-i18n="nav.about">關於我們</a></li>
+                        <li><a href="careers.html" class="text-white-50" data-i18n="nav.careers">徵才</a></li>
+                        <li><a href="contact-us.html" class="text-white-50" data-i18n="nav.contact">聯絡我們</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5 data-i18n="footer.product">產品</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="products.html" class="text-white-50" data-i18n="nav.products">產品</a></li>
+                        <li><a href="pricing.html" class="text-white-50" data-i18n="nav.pricing">資費方案</a></li>
+                        <li><a href="use-cases.html" class="text-white-50" data-i18n="nav.use_cases">使用場景</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0" data-i18n="footer.copyright">© 2024 EchoChat. 保留所有權利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+
+</body>
+</html> 

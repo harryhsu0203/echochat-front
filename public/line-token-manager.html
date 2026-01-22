@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE 頻道設定 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            max-width: 800px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #00C851 0%, #00A041 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #00C851;
+            box-shadow: 0 0 0 0.2rem rgba(0, 200, 81, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #00C851 0%, #00A041 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 200, 81, 0.3);
+        }
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        .step-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #00C851;
+        }
+        .step-number {
+            background: #00C851;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .loading {
+            display: none;
+        }
+        .loading.show {
+            display: block;
+        }
+        .success-message {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <div class="header position-relative">
+                <button class="back-btn" onclick="goBack()">
+        <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1><i class="fab fa-line me-3"></i>LINE 頻道設定</h1>
+                <p>設定您的 LINE Channel Token 以啟用自動回覆功能</p>
+            </div>
+
+            <div class="content">
+                <!-- 載入提示 -->
+                <div class="loading show text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">載入中...</span>
+                    </div>
+                    <p class="mt-2">正在載入設定...</p>
+                </div>
+
+                <!-- 錯誤提示 -->
+                <div id="errorAlert" class="alert alert-danger" style="display: none;">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span id="errorMessage"></span>
+                </div>
+
+                <!-- 設定表單 -->
+                <div id="settingsForm" style="display: none;">
+                    <!-- 設定步驟 -->
+                    <div class="step-card">
+                        <h5><span class="step-number">1</span>前往 LINE Developers</h5>
+                        <p class="mb-2">請先前往 <a href="https://developers.line.biz/" target="_blank" class="text-decoration-none">LINE Developers Console</a> 建立您的 Provider 和 Channel。</p>
+                    </div>
+
+                    <div class="step-card">
+                        <h5><span class="step-number">2</span>取得 Token 資訊</h5>
+                        <p class="mb-2">在 Channel 設定中取得以下資訊：</p>
+                        <ul class="mb-0">
+                            <li><strong>Channel ID</strong></li>
+                            <li><strong>Channel Access Token</strong></li>
+                            <li><strong>Channel Secret</strong></li>
+                        </ul>
+                    </div>
+
+                    <!-- 表單 -->
+                    <form id="lineConfigForm">
+                            <div class="mb-3">
+                            <label for="channelAccessToken" class="form-label">Channel Access Token *</label>
+                            <input type="text" class="form-control" id="channelAccessToken" required 
+                                   placeholder="請輸入您的 LINE Channel Access Token">
+                            <div class="form-text">此 Token 用於發送訊息給用戶</div>
+                                </div>
+
+                        <div class="mb-4">
+                            <label for="channelSecret" class="form-label">Channel Secret *</label>
+                            <input type="text" class="form-control" id="channelSecret" required 
+                                   placeholder="請輸入您的 LINE Channel Secret">
+                            <div class="form-text">此 Secret 用於驗證 Webhook 請求</div>
+                            </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>儲存設定
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
+                                <i class="fas fa-undo me-2"></i>重置
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- 成功訊息 -->
+                    <div id="successMessage" class="success-message" style="display: none;">
+                        <h5><i class="fas fa-check-circle text-success me-2"></i>設定儲存成功！</h5>
+                        <p class="mb-2">您的 LINE 頻道已成功設定。</p>
+                        
+                        <!-- 啟用/停用開關 -->
+                        <div class="mb-3 p-3 bg-white rounded border">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>頻道狀態：</strong>
+                                    <span id="channelStatus" class="badge ms-2"></span>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="channelToggle" 
+                                           style="width: 3rem; height: 1.5rem; cursor: pointer;"
+                                           onchange="toggleChannel()">
+                                    <label class="form-check-label ms-2" for="channelToggle" id="toggleLabel" 
+                                           style="cursor: pointer;">
+                                        啟用中
+                                </label>
+                                </div>
+                            </div>
+                            <small class="text-muted d-block mt-2" id="toggleHint">
+                                啟用後，LINE Bot 將開始接收和回覆訊息
+                            </small>
+                        </div>
+                        
+                        <button class="btn btn-outline-primary mt-3" type="button" onclick="goBack()">
+                            <i class="fas fa-arrow-left me-2"></i>返回儀表板
+                        </button>
+                    </div>
+
+                    <!-- Webhook URL 區塊 - 無論是否儲存都可取得 -->
+                    <div id="webhookInfoCard" class="info-card mt-4 p-3 bg-light rounded border" style="display: none;">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <div>
+                                <h5 class="mb-1"><i class="fas fa-link me-2"></i>Webhook URL</h5>
+                                <small class="text-muted">請將此網址貼到 LINE Developers Console 並啟用 Webhook</small>
+                            </div>
+                            <button class="btn btn-success" type="button" onclick="openLineDevelopers()">
+                                <i class="fas fa-arrow-right me-1"></i>下一步：前往 LINE Developers
+                            </button>
+                        </div>
+                        <code id="webhookUrl" class="bg-white p-3 rounded d-block mt-3 text-break"></code>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <button class="btn btn-outline-primary" type="button" onclick="copyWebhookUrl(event)">
+                                <i class="fas fa-copy me-1"></i>複製 Webhook URL
+                            </button>
+                            <button class="btn btn-outline-secondary" type="button" onclick="refreshWebhookUrl()">
+                                <i class="fas fa-sync me-1"></i>重新取得
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api-config.js"></script>
+    <script>
+        // 頁面載入時初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+        });
+
+        // 獲取用戶 ID
+        function getUserId() {
+            const token = localStorage.getItem('token');
+            if (!token) return null;
+            
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                return payload.id || payload.user_id;
+            } catch (error) {
+                console.error('解析 token 失敗:', error);
+                return null;
+            }
+        }
+
+        // 返回按鈕
+        function goBack() {
+            window.location.href = '/dashboard.html';
+            }
+
+            // 載入現有設定
+        async function loadSettings() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    showError('請先登入');
+                    return;
+                }
+
+                const apiBase = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
+                const response = await fetch(`${apiBase}/line-api/settings`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('載入設定回應:', data);
+                    if (data.success && data.data) {
+                        // 載入現有設定（不顯示敏感資訊）
+                        if (data.data.channel_access_token || data.data.channelAccessToken) {
+                            document.getElementById('channelAccessToken').value = '****已設定****';
+                        }
+                        if (data.data.channel_secret || data.data.channelSecret) {
+                            document.getElementById('channelSecret').value = '****已設定****';
+                        }
+                        
+                        // 顯示 Webhook URL
+                        const webhookUrl = data.data.webhook_url || data.data.webhookUrl;
+                        if (webhookUrl) {
+                            document.getElementById('successMessage').style.display = 'block';
+                            updateWebhookDisplay(webhookUrl);
+                        }
+                        
+                        // 更新啟用狀態
+                        const isActive = data.data.isActive !== false; // 預設為啟用
+                        updateChannelStatus(isActive);
+                        }
+                    } else {
+                    const errorData = await response.json();
+                    console.error('載入設定失敗:', errorData);
+                }
+
+                document.querySelector('.loading').classList.remove('show');
+                document.getElementById('settingsForm').style.display = 'block';
+                await ensureWebhookUrl();
+            } catch (error) {
+                console.error('載入設定錯誤:', error);
+                document.querySelector('.loading').classList.remove('show');
+                document.getElementById('settingsForm').style.display = 'block';
+                showError('載入設定失敗: ' + error.message);
+                    }
+            
+            await ensureWebhookUrl();
+        }
+
+        // 表單提交
+        document.getElementById('lineConfigForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showError('請先登入');
+                return;
+            }
+
+            // 獲取正確的 API 基礎 URL 和主機
+            const apiBase = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
+            // 從 API base URL 提取主機名（移除 /api 後綴）
+            let apiHost = apiBase;
+            if (apiBase.endsWith('/api')) {
+                apiHost = apiBase.slice(0, -4); // 移除 '/api'
+            }
+            // 確保是完整的 URL（包含 https://）
+            if (!apiHost.startsWith('http://') && !apiHost.startsWith('https://')) {
+                apiHost = 'https://' + apiHost;
+            }
+            
+            const formData = {
+                channelAccessToken: document.getElementById('channelAccessToken').value,
+                channelSecret: document.getElementById('channelSecret').value,
+                webhookUrl: `${apiHost}/api/webhook/line/${getUserId()}`
+            };
+
+            console.log('準備提交表單資料:', formData);
+            console.log('用戶 ID:', getUserId());
+
+            try {
+                const apiBase = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
+                const response = await fetch(`${apiBase}/line-api/settings`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                console.log('API 回應狀態:', response.status);
+                console.log('API 回應標頭:', response.headers);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('API 錯誤回應:', errorData);
+                    throw new Error(errorData.message || errorData.error || '儲存設定失敗');
+                }
+
+                const data = await response.json();
+                console.log('API 成功回應:', data);
+                
+                if (data.success) {
+                    // 顯示成功訊息和 Webhook URL
+                    const webhookUrl = data.data.webhook_url || data.data.webhookUrl;
+                    if (webhookUrl) {
+                        document.getElementById('successMessage').style.display = 'block';
+                        updateWebhookDisplay(webhookUrl);
+                    }
+                    
+                    // 更新啟用狀態
+                    const isActive = data.data.isActive !== false; // 預設為啟用
+                    updateChannelStatus(isActive);
+                    
+                    // 滾動到成功訊息
+                    document.getElementById('successMessage').scrollIntoView({ 
+                        behavior: 'smooth' 
+                    });
+                } else {
+                    throw new Error(data.message || '儲存設定失敗');
+                }
+                
+            } catch (error) {
+                console.error('儲存設定錯誤:', error);
+                showError('儲存設定失敗: ' + error.message);
+            }
+        });
+
+        // 重置表單
+        function resetForm() {
+            if (confirm('確定要重置所有設定嗎？')) {
+                document.getElementById('lineConfigForm').reset();
+                document.getElementById('successMessage').style.display = 'none';
+            }
+        }
+
+        // 複製 Webhook URL
+        function copyWebhookUrl(event) {
+            const webhookUrl = document.getElementById('webhookUrl').textContent?.trim();
+            
+            if (!webhookUrl) {
+                showError('尚未產生 Webhook URL，請先儲存設定');
+                return;
+            }
+
+            navigator.clipboard.writeText(webhookUrl).then(function() {
+                const btn = event?.currentTarget;
+                if (btn) {
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-check me-1"></i>已複製';
+                    btn.classList.add('btn-success');
+                    btn.classList.remove('btn-outline-primary');
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-outline-primary');
+                    }, 2000);
+                }
+            }).catch(function(err) {
+                console.error('複製失敗:', err);
+                showError('複製失敗，請手動複製');
+            });
+        }
+
+        // 更新頻道狀態顯示
+        function updateChannelStatus(isActive) {
+            const toggle = document.getElementById('channelToggle');
+            const label = document.getElementById('toggleLabel');
+            const status = document.getElementById('channelStatus');
+            const hint = document.getElementById('toggleHint');
+            
+            if (toggle) {
+                toggle.checked = isActive;
+            }
+            
+            if (label) {
+                label.textContent = isActive ? '啟用中' : '已停用';
+            }
+            
+            if (status) {
+                status.textContent = isActive ? '啟用中' : '已停用';
+                status.className = 'badge ms-2 ' + (isActive ? 'bg-success' : 'bg-secondary');
+            }
+            
+            if (hint) {
+                hint.textContent = isActive ? 
+                    '啟用後，LINE Bot 將開始接收和回覆訊息' : 
+                    '已停用，LINE Bot 不會接收或回覆訊息';
+            }
+        }
+
+        // 切換頻道啟用狀態
+        async function toggleChannel() {
+            const toggle = document.getElementById('channelToggle');
+            const isActive = toggle.checked;
+            
+            // 禁用開關，避免重複點擊
+            toggle.disabled = true;
+
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    showError('請先登入');
+                    toggle.checked = !isActive; // 恢復原狀態
+                    toggle.disabled = false;
+                    return;
+                }
+                
+                const apiBase = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
+                const response = await fetch(`${apiBase}/line-api/settings/toggle`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ isActive: isActive })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        updateChannelStatus(isActive);
+                        // 顯示成功訊息
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert alert-success alert-dismissible fade show mt-2';
+                        alertDiv.innerHTML = `
+                            <i class="fas fa-check-circle me-2"></i>${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        `;
+                        document.getElementById('successMessage').insertBefore(alertDiv, document.getElementById('successMessage').firstChild);
+                        
+                        setTimeout(() => {
+                            alertDiv.remove();
+                        }, 3000);
+                    } else {
+                        throw new Error(data.error || '切換失敗');
+                    }
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || '切換失敗');
+                }
+            } catch (error) {
+                console.error('切換頻道狀態錯誤:', error);
+                showError('切換失敗: ' + error.message);
+                toggle.checked = !isActive; // 恢復原狀態
+            } finally {
+                toggle.disabled = false;
+            }
+        }
+
+        async function ensureWebhookUrl() {
+            try {
+            const token = localStorage.getItem('token');
+                if (!token) return;
+                
+                const apiBase = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
+                const response = await fetch(`${apiBase}/user/webhook-url`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) return;
+                const data = await response.json();
+                const webhookUrl = data?.data?.webhookUrl || data?.data?.webhook_url;
+                if (webhookUrl) {
+                    updateWebhookDisplay(webhookUrl);
+            }
+            } catch (error) {
+                console.error('取得 Webhook URL 失敗:', error);
+            }
+        }
+
+        function updateWebhookDisplay(webhookUrl) {
+            const urlElement = document.getElementById('webhookUrl');
+            const infoCard = document.getElementById('webhookInfoCard');
+            if (!urlElement || !infoCard) return;
+            urlElement.textContent = webhookUrl;
+            infoCard.style.display = 'block';
+        }
+
+        async function refreshWebhookUrl() {
+            await ensureWebhookUrl();
+        }
+
+        function openLineDevelopers() {
+            window.open('https://developers.line.biz/console/', '_blank');
+        }
+
+        // 顯示錯誤訊息
+        function showError(message) {
+            const errorAlert = document.getElementById('errorAlert');
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorAlert.style.display = 'block';
+            
+            setTimeout(() => {
+                errorAlert.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: echochat-frontend
+    env: static
+    plan: free
+    buildCommand: echo "Frontend static deployment"
+    startCommand: echo "Static site - no start needed"
+    staticPublishPath: ./public
+    healthCheckPath: /index.html
+    autoDeploy: true 

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API URL 調試</title>
+    <script src="js/api-config.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .debug-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #007bff; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🔍 API URL 調試工具</h1>
+        
+        <div class="debug-item">
+            <h3>📋 環境資訊</h3>
+            <p><strong>當前域名:</strong> <span id="hostname"></span></p>
+            <p><strong>當前端口:</strong> <span id="port"></span></p>
+            <p><strong>API 基礎 URL:</strong> <span id="apiUrl"></span></p>
+        </div>
+        
+        <div class="debug-item">
+            <h3>🔧 API 連接測試</h3>
+            <button onclick="testApiConnection()">測試 API 連接</button>
+            <button onclick="testLogin()">測試登入</button>
+            <div id="testResults"></div>
+        </div>
+        
+        <div class="debug-item">
+            <h3>📊 詳細資訊</h3>
+            <div id="detailedInfo"></div>
+        </div>
+    </div>
+
+    <script>
+        // 顯示環境資訊
+        document.getElementById('hostname').textContent = window.location.hostname;
+        document.getElementById('port').textContent = window.location.port || '80/443';
+        document.getElementById('apiUrl').textContent = API_BASE_URL;
+        
+        // 測試 API 連接
+        async function testApiConnection() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '<p class="info">🔄 測試中...</p>';
+            
+            try {
+                console.log('🔍 開始測試 API 連接...');
+                console.log('📍 API URL:', API_BASE_URL);
+                
+                const response = await fetch(`${API_BASE_URL}/health`);
+                console.log('📥 回應狀態:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ API 連接成功:', data);
+                    resultsDiv.innerHTML = `
+                        <p class="success">✅ API 連接成功</p>
+                        <p><strong>狀態:</strong> ${response.status}</p>
+                        <p><strong>回應:</strong> ${JSON.stringify(data, null, 2)}</p>
+                    `;
+                } else {
+                    console.log('❌ API 連接失敗:', response.status, response.statusText);
+                    resultsDiv.innerHTML = `
+                        <p class="error">❌ API 連接失敗</p>
+                        <p><strong>狀態:</strong> ${response.status}</p>
+                        <p><strong>狀態文字:</strong> ${response.statusText}</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('❌ API 連接錯誤:', error);
+                resultsDiv.innerHTML = `
+                    <p class="error">❌ API 連接錯誤</p>
+                    <p><strong>錯誤:</strong> ${error.message}</p>
+                `;
+            }
+        }
+        
+        // 測試登入
+        async function testLogin() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '<p class="info">🔄 測試登入中...</p>';
+            
+            try {
+                console.log('🔍 開始測試登入...');
+                
+                const response = await fetch(`${API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'sunnyharry1',
+                        password: 'gele1227'
+                    })
+                });
+                
+                console.log('📥 登入回應狀態:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ 登入成功:', data);
+                    resultsDiv.innerHTML = `
+                        <p class="success">✅ 登入成功</p>
+                        <p><strong>用戶:</strong> ${data.user.username}</p>
+                        <p><strong>角色:</strong> ${data.user.role}</p>
+                        <p><strong>Token:</strong> ${data.token ? '已收到' : '未收到'}</p>
+                    `;
+                } else {
+                    const errorData = await response.json();
+                    console.log('❌ 登入失敗:', errorData);
+                    resultsDiv.innerHTML = `
+                        <p class="error">❌ 登入失敗</p>
+                        <p><strong>狀態:</strong> ${response.status}</p>
+                        <p><strong>錯誤:</strong> ${errorData.error || '未知錯誤'}</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('❌ 登入錯誤:', error);
+                resultsDiv.innerHTML = `
+                    <p class="error">❌ 登入錯誤</p>
+                    <p><strong>錯誤:</strong> ${error.message}</p>
+                `;
+            }
+        }
+        
+        // 頁面載入時顯示詳細資訊
+        document.addEventListener('DOMContentLoaded', function() {
+            const detailedInfo = document.getElementById('detailedInfo');
+            detailedInfo.innerHTML = `
+                <p><strong>User Agent:</strong> ${navigator.userAgent}</p>
+                <p><strong>當前 URL:</strong> ${window.location.href}</p>
+                <p><strong>協議:</strong> ${window.location.protocol}</p>
+                <p><strong>完整域名:</strong> ${window.location.host}</p>
+                <p><strong>路徑:</strong> ${window.location.pathname}</p>
+            `;
+        });
+    </script>
+</body>
+</html> 

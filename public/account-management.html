@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帳號管理 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="navbar.css" rel="stylesheet">
+    <script src="js/api-config.js"></script>
+    <link href="navbar-mobile.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Microsoft JhengHei', sans-serif;
+        }
+        
+        .main-container {
+            margin-top: 80px;
+            padding: 20px;
+        }
+        
+        .management-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+        
+        .btn-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .btn-danger-custom {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            color: white;
+        }
+        
+        .btn-warning-custom {
+            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-warning-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(254, 202, 87, 0.4);
+            color: white;
+        }
+        
+        .table-responsive {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+        }
+        
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f8f9ff;
+        }
+        
+        .badge {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .badge-admin {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .badge-user {
+            background: linear-gradient(135deg, #48c78e 0%, #06d6a0 100%);
+            color: white;
+        }
+        
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            border: none;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: #667eea;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stats-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-robot me-2"></i>EchoChat
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="fas fa-tachometer-alt me-1"></i>儀表板
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="account-management.html">
+                            <i class="fas fa-users me-1"></i>帳號管理
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i><span id="navbarUsername">管理員</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="account.html"><i class="fas fa-user-cog me-2"></i>個人設定</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>登出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="container">
+            <!-- 頁面標題 -->
+            <div class="management-card">
+                <div class="row align-items-center mb-4">
+                    <div class="col-md-6">
+                        <h1 class="mb-0">
+                            <i class="fas fa-users me-3" style="color: #667eea;"></i>帳號管理
+                        </h1>
+                        <p class="text-muted mt-2">管理系統中的所有用戶帳號</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <button class="btn btn-custom" onclick="showCreateModal()">
+                            <i class="fas fa-plus me-2"></i>新增帳號
+                        </button>
+                        <button class="btn btn-outline-secondary ms-2" onclick="loadAccounts()">
+                            <i class="fas fa-sync-alt me-2"></i>重新整理
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 統計卡片 -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-number" id="totalAccounts">0</div>
+                            <div class="stats-label">總帳號數</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card" style="background: linear-gradient(135deg, #48c78e 0%, #06d6a0 100%);">
+                            <div class="stats-number" id="adminAccounts">0</div>
+                            <div class="stats-label">管理員</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card" style="background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);">
+                            <div class="stats-number" id="userAccounts">0</div>
+                            <div class="stats-label">一般用戶</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);">
+                            <div class="stats-number" id="recentAccounts">0</div>
+                            <div class="stats-label">本月新增</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 帳號列表 -->
+            <div class="management-card">
+                <div class="loading" id="loading">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">載入中...</span>
+                    </div>
+                    <p class="mt-3">載入帳號資料中...</p>
+                </div>
+
+                <div id="accountsTable" style="display: none;">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>用戶名</th>
+                                    <th>姓名</th>
+                                    <th>角色</th>
+                                    <th>方案</th>
+                                    <th>到期日</th>
+                                    <th>狀態</th>
+                                    <th>下次扣款</th>
+                                    <th>電子郵件</th>
+                                    <th>創建時間</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accountsTableBody">
+                                <!-- 動態載入帳號資料 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="noAccounts" style="display: none;" class="text-center py-5">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">目前沒有帳號資料</h5>
+                    <p class="text-muted">點擊「新增帳號」來創建第一個帳號</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增/編輯帳號模態框 -->
+    <div class="modal fade" id="accountModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">新增帳號</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="accountForm">
+                        <input type="hidden" id="accountId">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">用戶名 <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="username" required>
+                            <div class="form-text">用戶名必須唯一，不能重複</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">密碼 <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="password" required>
+                            <div class="form-text">密碼至少需要 6 個字符</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">姓名 <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">角色</label>
+                            <select class="form-control" id="role">
+                                <option value="user">一般用戶</option>
+                                <option value="admin">管理員</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="plan" class="form-label">方案</label>
+                            <select class="form-control" id="plan">
+                                <option value="free">免費版</option>
+                                <option value="premium">尊榮版</option>
+                                <option value="enterprise">企業版</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="plan_expires_at" class="form-label">到期日（付費方案/企業版）</label>
+                            <input type="date" class="form-control" id="plan_expires_at">
+                        </div>
+                        <div class="mb-3">
+                            <label for="subscription_status" class="form-label">訂閱狀態</label>
+                            <select class="form-control" id="subscription_status">
+                                <option value="none">無</option>
+                                <option value="active">生效中</option>
+                                <option value="canceled">已取消</option>
+                                <option value="past_due">逾期</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="next_billing_at" class="form-label">下次扣款日（若為週期付費）</label>
+                            <input type="date" class="form-control" id="next_billing_at">
+                        </div>
+                        <div class="row g-3">
+                          <div class="col-md-4">
+                            <label for="enterprise_token_monthly" class="form-label">企業版每月額度</label>
+                            <input type="number" class="form-control" id="enterprise_token_monthly" placeholder="僅企業版使用">
+                          </div>
+                          <div class="col-md-4">
+                            <label for="token_used_in_cycle" class="form-label">本月已用</label>
+                            <input type="number" class="form-control" id="token_used_in_cycle">
+                          </div>
+                          <div class="col-md-4">
+                            <label for="token_bonus_balance" class="form-label">儲值餘額</label>
+                            <input type="number" class="form-control" id="token_bonus_balance">
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">電子郵件</label>
+                            <input type="email" class="form-control" id="email">
+                            <div class="form-text">選填，如未填寫將自動生成</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-custom" onclick="saveAccount()">
+                        <i class="fas fa-save me-2"></i>儲存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 刪除確認模態框 -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle me-2"></i>確認刪除
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>您確定要刪除帳號 <strong id="deleteAccountName"></strong> 嗎？</p>
+                    <p class="text-danger">
+                        <i class="fas fa-warning me-2"></i>
+                        此操作無法復原，該帳號的所有資料將被永久刪除。
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                        <i class="fas fa-trash me-2"></i>確認刪除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api-config.js"></script>
+    <script src="js/ultimate-empty-auth.js"></script>
+    
+    <script>
+        const ADMIN_ROLES = ['admin', 'super_admin'];
+        const isAdminRoleFn = (role) => ADMIN_ROLES.includes((role || '').toLowerCase());
+
+        let accounts = [];
+        let deleteAccountId = null;
+        let isEditMode = false;
+
+        // 頁面載入時初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 設置用戶名
+            const staffName = localStorage.getItem('staffName') || '管理員';
+            document.getElementById('navbarUsername').textContent = staffName;
+            
+            // 載入帳號資料
+            loadAccounts();
+        });
+
+        // 載入所有帳號
+        async function loadAccounts() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('accountsTable').style.display = 'none';
+                document.getElementById('noAccounts').style.display = 'none';
+
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_BASE_URL}/accounts`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    accounts = data.accounts;
+                    displayAccounts();
+                    updateStats();
+                } else {
+                    throw new Error(data.error || '載入帳號失敗');
+                }
+            } catch (error) {
+                console.error('載入帳號錯誤:', error);
+                
+                // 如果是認證錯誤，清除 token 並跳轉到登入頁面
+                if (error.message.includes('認證令牌') || error.message.includes('401')) {
+                    console.log('🔄 Token 無效，重新導向到登入頁面');
+                    localStorage.clear();
+                    alert('登入已過期，請重新登入');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                showAlert('載入帳號失敗: ' + error.message, 'danger');
+                document.getElementById('noAccounts').style.display = 'block';
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // 顯示帳號列表
+        function displayAccounts() {
+            const tbody = document.getElementById('accountsTableBody');
+            
+            if (accounts.length === 0) {
+                document.getElementById('noAccounts').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('accountsTable').style.display = 'block';
+            
+            tbody.innerHTML = accounts.map(account => `
+                <tr>
+                    <td>${account.id}</td>
+                    <td><strong>${account.username}</strong></td>
+                    <td>${account.name}</td>
+                    <td>
+                        <span class="badge ${isAdminRoleFn(account.role) ? 'badge-admin' : 'badge-user'}">
+                            <i class="fas ${isAdminRoleFn(account.role) ? 'fa-crown' : 'fa-user'} me-1"></i>
+                            ${isAdminRoleFn(account.role) ? '管理員' : '一般用戶'}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge" style="background: ${account.plan === 'enterprise' ? 'linear-gradient(135deg,#ff6b6b,#ee5a5a)' : account.plan === 'premium' ? 'linear-gradient(135deg,#48c78e,#06d6a0)' : 'linear-gradient(135deg,#6c757d,#495057)'}; color: white;">
+                            ${account.plan === 'enterprise' ? '企業版' : account.plan === 'premium' ? '尊榮版' : '免費版'}
+                        </span>
+                    </td>
+                    <td>${account.plan_expires_at ? new Date(account.plan_expires_at).toLocaleDateString() : '-'}</td>
+                    <td>${account.subscription_status || '-'}</td>
+                    <td>${account.next_billing_at ? new Date(account.next_billing_at).toLocaleDateString() : '-'}</td>
+                    <td>${account.email || '-'}</td>
+                    <td>${formatDate(account.created_at)}</td>
+                    <td>
+                        <button class="btn btn-warning-custom btn-sm me-1" onclick="editAccount(${account.id})" title="編輯">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger-custom btn-sm" onclick="showDeleteModal(${account.id}, '${account.username}')" title="刪除">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 更新統計數據
+        function updateStats() {
+            const total = accounts.length;
+            const adminCount = accounts.filter(a => isAdminRoleFn(a.role)).length;
+            const userCount = accounts.filter(a => !isAdminRoleFn(a.role)).length;
+            
+            // 計算本月新增帳號
+            const thisMonth = new Date();
+            const recentCount = accounts.filter(account => {
+                const createdDate = new Date(account.created_at);
+                return createdDate.getMonth() === thisMonth.getMonth() && 
+                       createdDate.getFullYear() === thisMonth.getFullYear();
+            }).length;
+
+            document.getElementById('totalAccounts').textContent = total;
+            document.getElementById('adminAccounts').textContent = adminCount;
+            document.getElementById('userAccounts').textContent = userCount;
+            document.getElementById('recentAccounts').textContent = recentCount;
+        }
+
+        // 顯示新增帳號模態框
+        function showCreateModal() {
+            isEditMode = false;
+            document.getElementById('modalTitle').textContent = '新增帳號';
+            document.getElementById('accountForm').reset();
+            document.getElementById('accountId').value = '';
+            document.getElementById('password').required = true;
+            
+            const modal = new bootstrap.Modal(document.getElementById('accountModal'));
+            modal.show();
+        }
+
+        // 編輯帳號
+        function editAccount(accountId) {
+            const account = accounts.find(a => a.id === accountId);
+            if (!account) return;
+
+            isEditMode = true;
+            document.getElementById('modalTitle').textContent = '編輯帳號';
+            document.getElementById('accountId').value = account.id;
+            document.getElementById('username').value = account.username;
+            document.getElementById('password').value = '';
+            document.getElementById('password').required = false;
+            document.getElementById('name').value = account.name;
+            document.getElementById('role').value = account.role;
+            document.getElementById('plan').value = account.plan || 'free';
+            document.getElementById('email').value = account.email || '';
+            document.getElementById('plan_expires_at').value = account.plan_expires_at ? account.plan_expires_at.substring(0,10) : '';
+            document.getElementById('subscription_status').value = account.subscription_status || 'none';
+            document.getElementById('next_billing_at').value = account.next_billing_at ? account.next_billing_at.substring(0,10) : '';
+            // 僅在資料存在時才填入，避免「亂跳」
+            if (account.enterprise_token_monthly !== undefined) document.getElementById('enterprise_token_monthly').value = account.enterprise_token_monthly;
+            if (account.token_used_in_cycle !== undefined) document.getElementById('token_used_in_cycle').value = account.token_used_in_cycle;
+            if (account.token_bonus_balance !== undefined) document.getElementById('token_bonus_balance').value = account.token_bonus_balance;
+
+            const modal = new bootstrap.Modal(document.getElementById('accountModal'));
+            modal.show();
+        }
+
+        // 儲存帳號
+        async function saveAccount() {
+            try {
+                const accountId = document.getElementById('accountId').value;
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                const name = document.getElementById('name').value.trim();
+                const role = document.getElementById('role').value;
+                const plan = document.getElementById('plan').value;
+                const email = document.getElementById('email').value.trim();
+                const plan_expires_at = document.getElementById('plan_expires_at').value ? new Date(document.getElementById('plan_expires_at').value).toISOString() : undefined;
+                const subscription_status = document.getElementById('subscription_status').value;
+                const next_billing_at = document.getElementById('next_billing_at').value ? new Date(document.getElementById('next_billing_at').value).toISOString() : undefined;
+                const enterprise_token_monthly = document.getElementById('enterprise_token_monthly').value ? parseInt(document.getElementById('enterprise_token_monthly').value, 10) : undefined;
+                const token_used_in_cycle = document.getElementById('token_used_in_cycle').value ? parseInt(document.getElementById('token_used_in_cycle').value, 10) : undefined;
+                const token_bonus_balance = document.getElementById('token_bonus_balance').value ? parseInt(document.getElementById('token_bonus_balance').value, 10) : undefined;
+
+                // 驗證必填欄位
+                if (!username || !name) {
+                    showAlert('請填寫所有必填欄位', 'warning');
+                    return;
+                }
+
+                if (!isEditMode && !password) {
+                    showAlert('新增帳號時密碼為必填', 'warning');
+                    return;
+                }
+
+                if (password && password.length < 6) {
+                    showAlert('密碼至少需要 6 個字符', 'warning');
+                    return;
+                }
+
+                const token = localStorage.getItem('token');
+                const url = isEditMode 
+                    ? `${API_BASE_URL}/accounts/${accountId}`
+                    : `${API_BASE_URL}/accounts`;
+                
+                const method = isEditMode ? 'PUT' : 'POST';
+                
+                const requestBody = {
+                    username,
+                    name,
+                    role,
+                    plan,
+                    email: email || undefined,
+                    plan_expires_at,
+                    subscription_status,
+                    next_billing_at,
+                    enterprise_token_monthly,
+                    token_used_in_cycle,
+                    token_bonus_balance
+                };
+
+                if (password) {
+                    requestBody.password = password;
+                }
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    
+                    // 關閉模態框
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('accountModal'));
+                    modal.hide();
+                    
+                    // 重新載入帳號列表
+                    loadAccounts();
+                } else {
+                    throw new Error(data.error || '儲存帳號失敗');
+                }
+            } catch (error) {
+                console.error('儲存帳號錯誤:', error);
+                showAlert('儲存帳號失敗: ' + error.message, 'danger');
+            }
+        }
+
+        // 顯示刪除確認模態框
+        function showDeleteModal(accountId, username) {
+            deleteAccountId = accountId;
+            document.getElementById('deleteAccountName').textContent = username;
+            
+            const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            modal.show();
+        }
+
+        // 確認刪除帳號
+        async function confirmDelete() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_BASE_URL}/accounts/${deleteAccountId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    
+                    // 關閉模態框
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+                    modal.hide();
+                    
+                    // 重新載入帳號列表
+                    loadAccounts();
+                } else {
+                    throw new Error(data.error || '刪除帳號失敗');
+                }
+            } catch (error) {
+                console.error('刪除帳號錯誤:', error);
+                showAlert('刪除帳號失敗: ' + error.message, 'danger');
+            }
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleString('zh-TW', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // 顯示提示訊息
+        function showAlert(message, type = 'info') {
+            // 移除現有的提示
+            const existingAlert = document.querySelector('.alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+
+            // 創建新的提示
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = 'top: 100px; right: 20px; z-index: 9999; min-width: 300px;';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            document.body.appendChild(alertDiv);
+
+            // 3秒後自動移除
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 3000);
+        }
+
+        // 登出功能
+        function logout() {
+            localStorage.clear();
+            console.log('✅ 已登出，清除本地儲存');
+            // 不跳轉，保持在當前頁面
+        }
+    </script>
+</body>
+</html>

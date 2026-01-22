@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="page.title">EchoChat - AI 客服串接平台 | 智慧客服系統 | LINE 聊天機器人</title>
+<meta name="description" content="EchoChat 提供 AI 客服、智慧客服系統、LINE 聊天機器人、LINE 官方帳號自動回覆、網站客服外掛、多渠道整合、知識庫導入與自動回覆，幫助企業快速上線 24/7 智慧客服。支援 OpenAI、Claude、Gemini 等 AI 模型。">
+<meta name="keywords" content="AI 客服, 智慧客服, 聊天機器人, LINE 官方帳號, LINE Bot, LINE 聊天機器人, 客服系統, 客服外掛, 自動回覆, 智能客服, AI 客服系統, 線上客服, 網站客服, 客服軟體, 客服平台, 客服解決方案, 客服自動化, 客服機器人, 客服 AI, 客服聊天機器人, LINE 客服, LINE 自動回覆, LINE 機器人, 客服整合, 多渠道客服, 知識庫, 客服知識庫, EchoChat, 台灣客服系統, 台灣 AI 客服">
+    <link rel="canonical" href="https://echochat-web.onrender.com/">
+    <meta name="robots" content="index,follow">
+    <meta name="author" content="EchoChat">
+    <meta name="language" content="zh-TW">
+    <meta name="geo.region" content="TW">
+    <meta name="geo.placename" content="Taiwan">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+    <meta name="theme-color" content="#667eea">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+<meta property="og:site_name" content="EchoChat">
+<meta property="og:title" content="EchoChat - AI 客服串接平台 | 智慧客服系統 | LINE 聊天機器人">
+    <meta property="og:description" content="EchoChat 提供 AI 客服、智慧客服系統、LINE 聊天機器人、LINE 官方帳號自動回覆、網站客服外掛、多渠道整合、知識庫導入與自動回覆，幫助企業快速上線 24/7 智慧客服。">
+    <meta property="og:url" content="https://echochat-web.onrender.com/">
+    <meta property="og:image" content="https://echochat-web.onrender.com/og-image.svg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="EchoChat - AI 客服串接平台 | 智慧客服系統 | LINE 聊天機器人">
+    <meta property="og:locale" content="zh_TW">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="EchoChat - AI 客服串接平台 | 智慧客服系統 | LINE 聊天機器人">
+    <meta name="twitter:description" content="EchoChat 提供 AI 客服、智慧客服系統、LINE 聊天機器人、LINE 官方帳號自動回覆、網站客服外掛、多渠道整合、知識庫導入與自動回覆，幫助企業快速上線 24/7 智慧客服。">
+    <meta name="twitter:image" content="https://echochat-web.onrender.com/og-image.svg">
+    <meta name="twitter:image:alt" content="EchoChat - AI 客服串接平台 | 智慧客服系統 | LINE 聊天機器人">
+    <meta name="twitter:site" content="@EchoChat">
+
+    <!-- JSON-LD 結構化資料 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+  "name": "EchoChat",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "url": "https://echochat-web.onrender.com/",
+      "description": "AI 客服平台，支援 LINE 與網站整合，知識庫導入與自動回覆。提供智慧客服系統、LINE 聊天機器人、LINE 官方帳號自動回覆、網站客服外掛、多渠道整合等功能。",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "25"
+      },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "TWD",
+        "availability": "https://schema.org/InStock"
+      },
+      "featureList": [
+        "AI 客服系統",
+        "LINE 聊天機器人",
+        "LINE 官方帳號自動回覆",
+        "網站客服外掛",
+        "多渠道整合",
+        "知識庫導入",
+        "自動回覆",
+        "24/7 智慧客服"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "EchoChat",
+      "url": "https://echochat-web.onrender.com/",
+      "logo": "https://echochat-web.onrender.com/og-image.svg",
+      "description": "EchoChat 提供 AI 客服、智慧客服系統、LINE 聊天機器人、LINE 官方帳號自動回覆、網站客服外掛、多渠道整合、知識庫導入與自動回覆，幫助企業快速上線 24/7 智慧客服。",
+      "sameAs": [
+        "https://echochat-web.onrender.com/"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": "zh-TW"
+      }
+    }
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="navbar.css" rel="stylesheet">
+    <script src="js/i18n.js"></script>
+    <style>
+        /* 確保導航欄正確佈局 */
+        @media (min-width: 992px) {
+            .navbar-nav {
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                flex: 1;
+                margin: 0 !important;
+            }
+            
+            .navbar-collapse {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+            }
+            
+            .navbar-brand {
+                flex-shrink: 0 !important;
+                margin-right: 0 !important;
+            }
+            
+            .d-flex.align-items-center {
+                flex-shrink: 0 !important;
+                margin-left: auto !important;
+            }
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* 導航欄樣式 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea !important;
+            text-decoration: none;
+        }
+
+        .navbar-brand i {
+            margin-right: 8px;
+            color: #667eea;
+        }
+
+        .nav-link {
+            color: #2c3e50 !important;
+            font-weight: 600;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+
+        .nav-link:hover {
+            color: #667eea !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+
+
+        .btn-login {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .language-selector {
+            border: none;
+            background: transparent;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-left: 15px;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+
+
+
+        /* 主要內容區域 */
+        .main-content {
+            padding: 80px 0 40px;
+            min-height: calc(100vh - 80px);
+            color: white;
+        }
+
+        .hero-slogan {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .hero-slogan h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-slogan p {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 0;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* 白色容器 */
+        .main-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        /* 功能卡片 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-card:nth-child(1) .feature-icon { color: #FFD700; }
+        .feature-card:nth-child(2) .feature-icon { color: #FF6B6B; }
+        .feature-card:nth-child(3) .feature-icon { color: #4ECDC4; }
+        .feature-card:nth-child(4) .feature-icon { color: #45B7D1; }
+        .feature-card:nth-child(5) .feature-icon { color: #96CEB4; }
+        .feature-card:nth-child(6) .feature-icon { color: #FFEAA7; }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .feature-card p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        /* AI 助理區域 */
+        .ai-assistant-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .ai-assistant-section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .ai-description {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .ai-example {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            color: #2c3e50;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 400;
+            border: 1px solid #e9ecef;
+        }
+
+        .ai-buttons {
+            margin-top: 30px;
+        }
+
+        .btn-chat, .btn-call {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-chat:hover, .btn-call:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* 聊天對話框樣式 */
+        .chat-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .chat-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .chat-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .message.user .message-content {
+            background: #667eea;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e9ecef;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+            background: white;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .chat-input input:focus {
+            border-color: #667eea;
+        }
+
+        .chat-send {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chat-send:hover {
+            background: #5a6fd8;
+            transform: scale(1.1);
+        }
+
+        .chat-contact {
+            background: transparent;
+            color: #667eea;
+            border: 1px solid #667eea;
+            border-radius: 25px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .chat-contact:hover {
+            background: #eef1ff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 電話號碼彈出框樣式 */
+        .phone-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .phone-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-container {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .phone-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .phone-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .phone-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .phone-content {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .phone-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .phone-number i {
+            font-size: 1.5rem;
+            color: #25D366;
+        }
+
+        .phone-description {
+            color: #6c757d;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .phone-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .phone-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .phone-btn.call {
+            background: #25D366;
+            color: white;
+        }
+
+        .phone-btn.call:hover {
+            background: #20c55e;
+            transform: translateY(-2px);
+        }
+
+        .phone-btn.copy {
+            background: #667eea;
+            color: white;
+        }
+
+        .phone-btn.copy:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        /* 右側浮動側邊欄 */
+        .floating-sidebar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: none; /* 預設隱藏 */
+        }
+
+        /* 主要內容區域的浮動側邊欄 */
+        .main-sidebar {
+            display: block !important;
+            z-index: 1001;
+        }
+
+        /* 隱藏原始浮動側邊欄 */
+        .floating-sidebar:not(.main-sidebar) {
+            display: none !important;
+        }
+
+        .floating-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-button.call-me,
+        .floating-button.whatsapp,
+        .floating-button.facebook,
+        .floating-button.instagram,
+        .floating-button.line {
+            display: none;
+        }
+
+        .floating-button.robot {
+            background: #6c757d;
+        }
+
+        /* Apple 風格的動畫首頁 */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            margin: 0;
+            padding: 120px 0 100px 0;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            margin: 0;
+            padding: 0;
+        }
+
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255,255,255,0.15);
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.8;
+            filter: blur(0.5px);
+        }
+
+        .floating-icon:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 65%; left: 85%; animation-delay: 2s; }
+        .floating-icon:nth-child(3) { top: 85%; left: 25%; animation-delay: 4s; }
+        .floating-icon:nth-child(4) { top: 25%; left: 75%; animation-delay: 1s; }
+        .floating-icon:nth-child(5) { top: 75%; left: 85%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1); 
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateY(-15px) rotate(3deg) scale(1.05); 
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+
+
+        .hero-content {
+            max-width: 900px;
+            padding: 80px 20px 40px 20px;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3);
+            animation: fadeInUp 1.2s ease-out 0.3s both;
+            color: #ffffff;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+            line-height: 1.6;
+            animation: fadeInUp 1.2s ease-out 0.6s both;
+            font-weight: 500;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            color: #f8f9fa;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            line-height: 1.8;
+            animation: fadeInUp 1.2s ease-out 0.9s both;
+            font-weight: 400;
+        }
+
+        .hero-icon {
+            font-size: 6rem;
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+            color: white;
+        }
+
+        .btn-hero {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 10px;
+            display: inline-block;
+            animation: fadeInUp 1s ease-out 1.2s both;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-hero:hover::before {
+            left: 100%;
+        }
+
+        .btn-hero:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary-hero {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary-hero:hover {
+            background: #f8f9fa;
+            color: #667eea;
+        }
+
+        /* 動畫效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .feature-card {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .feature-card.animate {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+
+        /* 頁腳樣式 */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer h5 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .footer a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #667eea;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 50%;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #764ba2;
+            transform: translateY(-3px);
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .hero-slogan h1 {
+                font-size: 2rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .main-container {
+                padding: 30px 20px;
+                margin: 0 15px;
+            }
+
+            .floating-sidebar {
+                right: 10px;
+            }
+
+            .floating-button {
+                width: 50px;
+                height: 50px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .hero-icon {
+                font-size: 4rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .main-container {
+                padding: 30px 20px;
+                margin: 0 15px;
+            }
+
+            .floating-sidebar {
+                right: 10px;
+            }
+
+            .floating-button {
+                width: 50px;
+                height: 50px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .hero-icon {
+                font-size: 3rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-slogan h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 動畫首頁區域 -->
+    <section class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="floating-icons">
+            <div class="floating-icon"><i class="fas fa-comments"></i></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <h1 class="hero-title" data-i18n="hero.title">AI 客服串接平台</h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">將 AI 智能客服串接到您的 LINE、Instagram、Telegram 等平台</p>
+            <p class="hero-description" data-i18n="hero.description">
+                EchoChat 提供強大的 AI 客服解決方案，讓您輕鬆將智能客服串接到各種社交媒體平台。
+                採用訂閱制服務，無需複雜的技術設置，即可為您的客戶提供 24/7 的智能客服支援。
+                支援多語言對話、智能意圖識別、情感分析等先進功能，讓您的客服體驗更上一層樓。
+            </p>
+            <div class="hero-buttons">
+                <a href="#main-content" class="btn btn-hero btn-primary-hero">
+                    <i class="fas fa-rocket me-2"></i><span data-i18n="hero.start">開始使用</span>
+                </a>
+                <a href="products.html" class="btn btn-hero">
+                    <i class="fas fa-play me-2"></i><span data-i18n="hero.learn">了解更多</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 主要內容區域 -->
+    <div id="main-content" class="main-content">
+        <div class="container">
+            <!-- 主要標語 -->
+            <div class="hero-slogan">
+                <h1>一站式 AI 客服中台，文字與語音一次到位</h1>
+                <p>快速導入、彈性擴充，串聯網站與社群管道，專注提升成交與服務效率</p>
+            </div>
+
+            <!-- 主要白色容器 -->
+            <div class="main-container">
+                <!-- 功能卡片網格 -->
+                <div class="feature-grid">
+                    <div class="feature-card" onclick="window.location.href='products.html'" style="cursor: pointer;">
+                        <i class="fas fa-star feature-icon"></i>
+                        <h3 data-i18n="feature.customer_service">客戶服務</h3>
+                        <p data-i18n="feature.customer_service_desc">處理客戶諮詢並提供即時幫助</p>
+                    </div>
+                    
+                    <div class="feature-card" onclick="window.location.href='products.html'" style="cursor: pointer;">
+                        <i class="fas fa-bullseye feature-icon"></i>
+                        <h3 data-i18n="feature.lead_screening">預審潛在客戶</h3>
+                        <p data-i18n="feature.lead_screening_desc">通過與潛在客戶互動進行預篩選</p>
+                    </div>
+                    
+                    <div class="feature-card" onclick="window.location.href='products.html'" style="cursor: pointer;">
+                        <i class="fas fa-calendar-check feature-icon"></i>
+                        <h3 data-i18n="feature.appointment">預約</h3>
+                        <p data-i18n="feature.appointment_desc">簡化與客戶的預約安排</p>
+                    </div>
+                    
+                    <div class="feature-card" onclick="window.location.href='products.html'" style="cursor: pointer;">
+                        <i class="fas fa-user-tie feature-icon"></i>
+                        <h3 data-i18n="feature.receptionist">接待員</h3>
+                        <p data-i18n="feature.receptionist_desc">為訪客提供無縫高效的體驗</p>
+                    </div>
+                    
+                    <div class="feature-card" onclick="window.location.href='products.html'" style="cursor: pointer;">
+                        <i class="fas fa-handshake feature-icon"></i>
+                        <h3 data-i18n="feature.survey">調查</h3>
+                        <p data-i18n="feature.survey_desc">以對話方式吸引用戶參與</p>
+                    </div>
+                    
+                    <div class="feature-card" onclick="window.location.href='products.html'" style="cursor: pointer;">
+                        <i class="fas fa-question-circle feature-icon"></i>
+                        <h3 data-i18n="feature.faq">回答常見問題</h3>
+                        <p data-i18n="feature.faq_desc">自動回答常見問題</p>
+                    </div>
+                </div>
+
+                <!-- AI 助理區域 -->
+                <div class="ai-assistant-section">
+                    <h2 data-i18n="ai.title">或建立您自己的AI智能助理，然後選擇與它聊天或跟它打電話！</h2>
+                    <p class="ai-description" data-i18n="ai.description">在此描述您的AI智能助理。</p>
+                    
+                    <div class="ai-example" data-i18n="ai.example">
+                        例如：歡迎來到 ChocoLoco Delights！我是您的私人巧克力顧問 "ChocoChatter"。我可以幫您找到完美的巧克力禮物，推薦季節性特色產品，並提供獨家的巧克力品嚐體驗。無論您是在尋找浪漫的禮物、企業禮品，還是想要探索世界各地的精品巧克力，我都能為您提供專業的建議和個性化的服務。
+                    </div>
+                    
+                    <div class="ai-buttons">
+                        <a href="register.html" class="btn btn-hero btn-primary-hero">
+                            <i class="fas fa-rocket me-2"></i>立即開始！
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 主要內容區域的浮動側邊欄 -->
+            <div class="floating-sidebar main-sidebar">
+                <button class="floating-button robot" id="contactChatBtn" title="聯繫我們">
+                    <i class="fas fa-comments"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隱藏的原始浮動側邊欄 -->
+    <div class="floating-sidebar" style="display: none;">
+        <button class="floating-button robot" title="聯繫我們">
+            <i class="fas fa-comments"></i>
+        </button>
+    </div>
+
+    <!-- 聊天對話框 -->
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-container">
+            <div class="chat-header">
+            <h3><i class="fas fa-robot me-2"></i>EchoChat AI 助手</h3>
+                <button class="chat-close" id="chatClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-content">
+            您好！我是 EchoChat AI 助手，很高興為您服務。我可以幫您了解我們的 AI 客服平台功能，或者回答任何相關問題。請問有什麼我可以協助您的嗎？
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <div class="chat-input-container">
+                    <input type="text" id="chatInput" placeholder="輸入您的訊息..." maxlength="500">
+                    <button class="chat-contact" id="chatContact">聯繫我們</button>
+                    <button class="chat-send" id="chatSend">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 電話號碼彈出框 -->
+    <div class="phone-modal" id="phoneModal">
+        <div class="phone-container">
+            <div class="phone-header">
+                <h3><i class="fas fa-phone me-2"></i>聯繫我們</h3>
+                <button class="phone-close" id="phoneClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="phone-content">
+                <div class="phone-description">
+            歡迎聯繫 EchoChat 客服團隊！我們提供專業的技術支援和業務諮詢服務。
+                </div>
+                <div class="phone-number">
+                    <i class="fas fa-phone"></i>
+                    <span id="phoneNumber">+886 2 2345 6789</span>
+                </div>
+                <div class="phone-description">
+                    服務時間：週一至週五 9:00-18:00<br>
+                    週六 10:00-16:00
+                </div>
+                <div class="phone-buttons">
+                    <a href="tel:+886223456789" class="phone-btn call">
+                        <i class="fas fa-phone"></i>
+                        立即撥打
+                    </a>
+                    <button class="phone-btn copy" id="copyPhone">
+                        <i class="fas fa-copy"></i>
+                        複製號碼
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁腳 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-robot me-2"></i>EchoChat</h5>
+                    <p>AI 客服串接平台，讓您的業務更智能、更高效。2025年最新技術，支援多語言、多平台、多場景應用</p>
+                    <div class="social-links">
+                        <a href="/contact-us.html" id="footerContact"><i class="fas fa-comments"></i></a>
+                        <span class="text-muted small ms-2">聯繫我們</span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <h5>產品</h5>
+                    <ul class="list-unstyled">
+                                        <li><a href="products.html">功能特色</a></li>
+                <li><a href="platforms.html">支援平台</a></li>
+                        <li><a href="pricing.html">訂閱方案</a></li>
+                        <li><a href="technical-support.html">API 文件</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5>支援</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/help-center.html">幫助中心</a></li>
+                        <li><a href="/technical-support.html">技術支援</a></li>
+                        <li><a href="/faq.html">常見問題</a></li>
+                        <li><a href="/contact-us.html">聯繫我們</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5>公司</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/about-us.html">關於我們</a></li>
+                        
+                        <li><a href="/careers.html">工作機會</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5>法律</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/privacy-policy.html">隱私政策</a></li>
+                        <li><a href="/terms-of-service.html">服務條款</a></li>
+                        <li><a href="/cookie-policy.html">Cookie 政策</a></li>
+                        <li><a href="/gdpr.html">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6">
+<p>&copy; 2025 迴音. 保留所有權利。</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>系統開發測試中</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api-config.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        // 平滑滾動
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 頁面載入動畫
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 頁面載入完成，開始動畫...');
+            document.body.style.opacity = '1';
+            
+            // 檢查hero section是否存在
+            const heroSection = document.querySelector('.hero-section');
+            const heroTitle = document.querySelector('.hero-title');
+            const floatingIcons = document.querySelector('.floating-icons');
+            
+            console.log('Hero Section:', heroSection ? '✅ 存在' : '❌ 缺失');
+            console.log('Hero Title:', heroTitle ? '✅ 存在' : '❌ 缺失');
+            console.log('Floating Icons:', floatingIcons ? '✅ 存在' : '❌ 缺失');
+            
+            // 功能卡片動畫
+            const featureCards = document.querySelectorAll('.feature-card');
+            console.log('Feature Cards:', featureCards.length, '個');
+            
+            featureCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'all 0.6s ease';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+            
+            // 確保hero section動畫正常
+            if (heroSection) {
+                heroSection.style.opacity = '1';
+                console.log('✅ Hero section 動畫已啟動');
+            }
+        });
+
+        // 聊天對話框功能
+        const chatModal = document.getElementById('chatModal');
+        const chatClose = document.getElementById('chatClose');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        const chatMessages = document.getElementById('chatMessages');
+
+        // 首頁聊天 - 保持單次開啟的上下文（關閉叉叉才重置）
+        let homepageChatHistory = [];
+
+        // 打開聊天對話框
+        function openChat() {
+            chatModal.classList.add('show');
+            chatInput.focus();
+        }
+
+        // 關閉聊天對話框
+        function closeChat() {
+            chatModal.classList.remove('show');
+            // 自動重置對話內容
+            if (chatMessages) {
+                chatMessages.innerHTML = '';
+            }
+            if (chatInput) {
+                chatInput.value = '';
+            }
+            homepageChatHistory = [];
+        }
+
+        // 添加訊息到對話框
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = content;
+            
+            messageDiv.appendChild(messageContent);
+            chatMessages.appendChild(messageDiv);
+            
+            // 滾動到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // 發送訊息（呼叫公開聊天 API）
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            chatInput.value = '';
+
+            try {
+                // 使用環境自動偵測的 API 基底，確保打到正確後端
+                const resp = await fetch(`${window.API_BASE_URL.replace(/\/$/, '')}/public-chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message, messages: homepageChatHistory })
+                });
+                if (!resp.ok) {
+                    addMessage('伺服器暫時無法回覆，請稍後再試。');
+                    return;
+                }
+                const data = await resp.json();
+                const reply = data.reply || '目前無法提供回覆，請稍後再試。';
+                addMessage(reply);
+                homepageChatHistory.push({ role: 'user', content: message });
+                homepageChatHistory.push({ role: 'assistant', content: reply });
+            } catch (e) {
+                addMessage('連線逾時或網路異常，請稍後再試。');
+            }
+        }
+
+        // 立即聊天按鈕點擊事件（保留以便其他頁複用；首頁主要由右側浮動按鈕觸發）
+        const btnChat = document.querySelector('.btn-chat');
+        if (btnChat) {
+            btnChat.addEventListener('click', openChat);
+        }
+
+        // 關閉按鈕事件
+        chatClose.addEventListener('click', closeChat);
+
+        // 點擊背景關閉對話框
+        chatModal.addEventListener('click', function(e) {
+            if (e.target === chatModal) {
+                closeChat();
+            }
+        });
+
+        // 發送按鈕事件
+        chatSend.addEventListener('click', sendMessage);
+
+        // 按 Enter 鍵發送訊息
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // 聯繫我們按鈕（對話框內）
+        const chatContact = document.getElementById('chatContact');
+        if (chatContact) {
+            chatContact.addEventListener('click', function() {
+                window.location.href = '/contact-us.html';
+            });
+        }
+
+        // 電話號碼彈出框功能
+        const phoneModal = document.getElementById('phoneModal');
+        const phoneClose = document.getElementById('phoneClose');
+        const copyPhone = document.getElementById('copyPhone');
+        const phoneNumber = document.getElementById('phoneNumber');
+
+        // 打開電話號碼彈出框
+        function openPhone() {
+            phoneModal.classList.add('show');
+        }
+
+        // 關閉電話號碼彈出框
+        function closePhone() {
+            phoneModal.classList.remove('show');
+        }
+
+        // 複製電話號碼
+        function copyPhoneNumber() {
+            const number = phoneNumber.textContent;
+            navigator.clipboard.writeText(number).then(() => {
+                // 顯示複製成功提示
+                const originalText = copyPhone.innerHTML;
+                copyPhone.innerHTML = '<i class="fas fa-check"></i>已複製';
+                copyPhone.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    copyPhone.innerHTML = originalText;
+                    copyPhone.style.background = '#667eea';
+                }, 2000);
+            }).catch(err => {
+                console.error('複製失敗:', err);
+                alert('複製失敗，請手動複製：' + number);
+            });
+        }
+
+        // 現在打電話給我按鈕點擊事件（首頁已移除該按鈕，保留容錯）
+        const btnCall = document.querySelector('.btn-call');
+        if (btnCall) {
+            btnCall.addEventListener('click', openPhone);
+        }
+
+        // 關閉按鈕事件
+        phoneClose.addEventListener('click', closePhone);
+
+        // 點擊背景關閉彈出框
+        phoneModal.addEventListener('click', function(e) {
+            if (e.target === phoneModal) {
+                closePhone();
+            }
+        });
+
+        // 複製電話號碼按鈕事件
+        copyPhone.addEventListener('click', copyPhoneNumber);
+
+        // 聯繫我們按鈕
+        const contactBtn = document.getElementById('contactChatBtn');
+        if (contactBtn) {
+            contactBtn.addEventListener('click', function() {
+                openChat();
+            });
+        }
+
+        // 導航欄滾動效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+
+        // 滾動動畫觀察器
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, observerOptions);
+        
+        // 觀察所有需要動畫的元素
+        document.addEventListener('DOMContentLoaded', function() {
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            featureCards.forEach(card => observer.observe(card));
+            
+            // 添加頁面載入動畫
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-in-out';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+
+            // 添加滾動到主要內容的平滑滾動
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

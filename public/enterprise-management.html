@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企業管理 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .management-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .management-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+        
+        .user-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .user-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .stats-card {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .badge-custom {
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <!-- 標題區域 -->
+        <div class="row mb-4">
+            <div class="col-12 text-center text-white">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="fas fa-building me-3"></i>企業管理
+                </h1>
+                <p class="lead">集中管理企業所有使用者帳號，根據職級或業務類型指派不同功能權限</p>
+            </div>
+        </div>
+
+        <!-- 統計概覽 -->
+        <div class="row mb-5">
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <div class="bg-primary bg-opacity-10 rounded-3 p-3 mb-3">
+                        <i class="fas fa-users fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="text-primary mb-1" id="totalUsers">150</h3>
+                    <p class="text-muted mb-0">總用戶數</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <div class="bg-success bg-opacity-10 rounded-3 p-3 mb-3">
+                        <i class="fas fa-user-check fa-2x text-success"></i>
+                    </div>
+                    <h3 class="text-success mb-1" id="activeUsers">120</h3>
+                    <p class="text-muted mb-0">活躍用戶</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <div class="bg-warning bg-opacity-10 rounded-3 p-3 mb-3">
+                        <i class="fas fa-user-plus fa-2x text-warning"></i>
+                    </div>
+                    <h3 class="text-warning mb-1" id="newUsers">25</h3>
+                    <p class="text-muted mb-0">本月新增</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <div class="bg-info bg-opacity-10 rounded-3 p-3 mb-3">
+                        <i class="fas fa-shield-alt fa-2x text-info"></i>
+                    </div>
+                    <h3 class="text-info mb-1" id="totalRoles">8</h3>
+                    <p class="text-muted mb-0">角色類型</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用戶管理 -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="management-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>
+                            <i class="fas fa-users me-2"></i>用戶管理
+                        </h3>
+                        <button class="btn btn-primary" onclick="showAddUserModal()">
+                            <i class="fas fa-plus me-2"></i>新增用戶
+                        </button>
+                    </div>
+                    <div class="row" id="usersList">
+                        <!-- 用戶列表將在這裡動態生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 部門管理 -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="management-card">
+                    <h3 class="mb-4">
+                        <i class="fas fa-sitemap me-2"></i>部門管理
+                    </h3>
+                    <div class="row" id="departmentsList">
+                        <!-- 部門列表將在這裡動態生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 角色管理 -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="management-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>
+                            <i class="fas fa-user-shield me-2"></i>角色管理
+                        </h3>
+                        <button class="btn btn-success" onclick="showAddRoleModal()">
+                            <i class="fas fa-plus me-2"></i>新增角色
+                        </button>
+                    </div>
+                    <div class="row" id="rolesList">
+                        <!-- 角色列表將在這裡動態生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增用戶模態框 -->
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增用戶</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="mb-3">
+                            <label class="form-label">姓名</label>
+                            <input type="text" class="form-control" id="userName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">電子郵件</label>
+                            <input type="email" class="form-control" id="userEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">角色</label>
+                            <select class="form-select" id="userRole" required>
+                                <option value="">請選擇角色</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">部門</label>
+                            <select class="form-select" id="userDepartment">
+                                <option value="">請選擇部門</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">密碼</label>
+                            <input type="password" class="form-control" id="userPassword" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="addUser()">新增</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 載入用戶列表
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/enterprise/users');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayUsers(data.users);
+                }
+            } catch (error) {
+                console.error('載入用戶失敗:', error);
+            }
+        }
+
+        // 顯示用戶列表
+        function displayUsers(users) {
+            const usersList = document.getElementById('usersList');
+            usersList.innerHTML = '';
+
+            users.forEach(user => {
+                const userCard = document.createElement('div');
+                userCard.className = 'col-md-6 col-lg-4';
+                userCard.innerHTML = `
+                    <div class="user-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="mb-1">${user.name}</h6>
+                            <span class="badge bg-success badge-custom">${user.status}</span>
+                        </div>
+                        <p class="text-muted small mb-2">
+                            <i class="fas fa-envelope me-1"></i>${user.email}
+                        </p>
+                        <p class="text-muted small mb-2">
+                            <i class="fas fa-user-tag me-1"></i>${user.role}
+                        </p>
+                        <p class="text-muted small mb-2">
+                            <i class="fas fa-building me-1"></i>${user.department}
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>${new Date(user.createdAt).toLocaleDateString()}
+                            </small>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-1" onclick="editUser('${user.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${user.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                usersList.appendChild(userCard);
+            });
+        }
+
+        // 載入部門列表
+        async function loadDepartments() {
+            try {
+                const response = await fetch('/api/enterprise/departments');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayDepartments(data.departments);
+                }
+            } catch (error) {
+                console.error('載入部門失敗:', error);
+            }
+        }
+
+        // 顯示部門列表
+        function displayDepartments(departments) {
+            const departmentsList = document.getElementById('departmentsList');
+            departmentsList.innerHTML = '';
+
+            departments.forEach(dept => {
+                const deptCard = document.createElement('div');
+                deptCard.className = 'col-md-6 col-lg-3';
+                deptCard.innerHTML = `
+                    <div class="user-card text-center">
+                        <div class="bg-primary bg-opacity-10 rounded-3 p-3 mb-3">
+                            <i class="fas fa-building fa-2x text-primary"></i>
+                        </div>
+                        <h6 class="mb-1">${dept.name}</h6>
+                        <p class="text-muted small mb-0">${dept.description}</p>
+                    </div>
+                `;
+                departmentsList.appendChild(deptCard);
+            });
+        }
+
+        // 載入角色列表
+        async function loadRoles() {
+            try {
+                const response = await fetch('/api/enterprise/roles');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayRoles(data.roles);
+                }
+            } catch (error) {
+                console.error('載入角色失敗:', error);
+            }
+        }
+
+        // 顯示角色列表
+        function displayRoles(roles) {
+            const rolesList = document.getElementById('rolesList');
+            rolesList.innerHTML = '';
+
+            roles.forEach(role => {
+                const roleCard = document.createElement('div');
+                roleCard.className = 'col-md-6 col-lg-4';
+                roleCard.innerHTML = `
+                    <div class="user-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="mb-1">${role.name}</h6>
+                            <span class="badge bg-primary badge-custom">${role.permissions.length} 權限</span>
+                        </div>
+                        <p class="text-muted small mb-2">${role.description || '無描述'}</p>
+                        <div class="mb-2">
+                            ${role.permissions.map(permission => 
+                                `<span class="badge bg-light text-dark me-1 mb-1">${permission}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+                rolesList.appendChild(roleCard);
+            });
+        }
+
+        // 顯示新增用戶模態框
+        function showAddUserModal() {
+            const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
+            modal.show();
+        }
+
+        // 新增用戶
+        async function addUser() {
+            const formData = {
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                role: document.getElementById('userRole').value,
+                department: document.getElementById('userDepartment').value,
+                password: document.getElementById('userPassword').value
+            };
+
+            try {
+                const response = await fetch('/api/enterprise/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('用戶新增成功！');
+                    bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+                    loadUsers();
+                } else {
+                    alert('新增失敗：' + data.error);
+                }
+            } catch (error) {
+                console.error('新增用戶失敗:', error);
+                alert('新增用戶失敗');
+            }
+        }
+
+        // 頁面載入時執行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUsers();
+            loadDepartments();
+            loadRoles();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://echochat-web.onrender.com/sitemap.xml

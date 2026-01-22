@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="login.title">EchoChat - 登入 | AI 客服系統管理後台</title>
+    <meta name="description" content="登入 EchoChat AI 客服系統管理後台，管理您的 LINE 聊天機器人、智慧客服設定、知識庫和對話記錄。">
+    <meta name="keywords" content="EchoChat 登入, AI 客服登入, 客服系統登入, LINE Bot 管理, 智慧客服後台, 客服管理系統">
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="canonical" href="https://echochat-web.onrender.com/login.html">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+    <meta name="theme-color" content="#667eea">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="navbar.css" rel="stylesheet">
+    <script src="js/api-config.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .login-header h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .login-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .login-body {
+            padding: 40px 30px;
+        }
+        
+        .form-floating {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .input-group-text {
+            background: transparent;
+            border: 2px solid #e9ecef;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .input-group:focus-within .input-group-text {
+            border-color: #667eea;
+        }
+        
+        .input-group:focus-within .btn-outline-secondary {
+            border-color: #667eea;
+        }
+        
+        .btn-outline-secondary {
+            border-color: #e9ecef;
+            color: #6c757d;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: #f8f9fa;
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+        
+        .form-check-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .form-check-label {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .footer-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .footer-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #764ba2;
+        }
+        
+        .back-to-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            z-index: 1000;
+            text-decoration: none;
+        }
+        
+        .back-to-home-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .back-to-home-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+    <script src="js/i18n.js"></script>
+</head>
+<body>
+
+
+    <a href="index.html" class="back-to-home-btn" title="回首頁">
+        <i class="fas fa-home"></i>
+    </a>
+    
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-robot fa-3x mb-3"></i>
+                <h2 data-i18n="login.brand">EchoChat</h2>
+                <p data-i18n="login.subtitle">智能聊天機器人管理系統</p>
+            </div>
+            
+            <div class="login-body">
+                <div id="alertContainer"></div>
+                <div class="d-grid mb-3" id="googleSignInBlock" style="display:none;">
+                    <div id="g_id_onload"
+                         data-client_id=""
+                         data-context="signin"
+                         data-ux_mode="popup"
+                         data-callback="onGoogleSignIn"
+                         data-auto_select="false"
+                         data-itp_support="true"></div>
+                    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
+                </div>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <input type="text" class="form-control" id="username" placeholder="使用者名稱" data-i18n-placeholder="login.form.username" required>
+                    </div>
+                    
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                        <input type="password" class="form-control" id="password" placeholder="密碼" data-i18n-placeholder="login.form.password" required>
+                        <button type="button" class="btn btn-outline-secondary" id="togglePassword" style="border-left: none;">
+                            <i class="fas fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="rememberUsername">
+                        <label class="form-check-label" for="rememberUsername" data-i18n="login.form.remember">
+                            記住帳號
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-login" id="loginBtn" data-i18n="login.btn.login">
+                        <i class="fas fa-sign-in-alt me-2"></i>登入
+                    </button>
+                </form>
+                
+
+                
+                <div class="footer-links">
+                    <a href="#" id="forgotPasswordBtn" data-i18n="login.form.forgot">忘記密碼？</a>
+                    <a href="register.html" id="showRegisterBtn" data-i18n="login.register.link">註冊新帳號</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function onGoogleSignIn(resp) {
+            try {
+                const id_token = resp.credential;
+                const baseUrl = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
+                const r = await fetch(`${baseUrl}/auth/google`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id_token })});
+                const data = await r.json();
+                if (r.ok && data.success && data.token) {
+                    localStorage.setItem('token', data.token);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    showAlert(data.error || 'Google 登入失敗', 'danger');
+                }
+            } catch (e) { showAlert('Google 登入失敗', 'danger'); }
+        }
+
+        // 動態載入 Client ID 並顯示 Google 登入按鈕
+        (async () => {
+            try {
+                const baseUrl = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
+                const r = await fetch(`${baseUrl}/auth/google/client-id`);
+                const d = await r.json();
+                if (d && d.client_id) {
+                    document.getElementById('g_id_onload').setAttribute('data-client_id', d.client_id);
+                    document.getElementById('googleSignInBlock').style.display = 'block';
+                }
+            } catch {}
+        })();
+        // 頁面載入時檢查是否有記住的帳號
+        document.addEventListener('DOMContentLoaded', function() {
+            const rememberedUsername = localStorage.getItem('rememberedUsername');
+            if (rememberedUsername) {
+                document.getElementById('username').value = rememberedUsername;
+                document.getElementById('rememberUsername').checked = true;
+            }
+
+            try {
+                const logoutReason = sessionStorage.getItem('logoutReason');
+                if (logoutReason === 'timeout') {
+                    showAlert('您已超過 15 分鐘未操作，請重新登入。', 'warning');
+                    // 立即清除，避免重新整理時再次顯示
+                    sessionStorage.removeItem('logoutReason');
+                    sessionStorage.removeItem('__sessionLogoutTriggered');
+                }
+            } catch (error) {
+                console.warn('無法讀取 sessionStorage:', error);
+            }
+        });
+
+        // 顯示/隱藏密碼功能
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+
+        // 記住帳號功能
+        document.getElementById('rememberUsername').addEventListener('change', function() {
+            const username = document.getElementById('username').value;
+            if (this.checked) {
+                localStorage.setItem('rememberedUsername', username);
+            } else {
+                localStorage.removeItem('rememberedUsername');
+            }
+        });
+
+        // 當用戶名輸入框失去焦點時，如果勾選了記住帳號，則保存
+        document.getElementById('username').addEventListener('blur', function() {
+            const rememberCheckbox = document.getElementById('rememberUsername');
+            if (rememberCheckbox.checked) {
+                localStorage.setItem('rememberedUsername', this.value);
+            }
+        });
+
+        
+        document.getElementById('forgotPasswordBtn').onclick = function(e) {
+            e.preventDefault();
+            showForgotPassword();
+        };
+
+        document.getElementById('loginForm').onsubmit = handleLogin;
+        async function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            
+            console.log('開始登入流程...');
+            console.log('🔍 當前 API URL:', API_BASE_URL);
+            
+            // 先測試API連接
+            try {
+                const isConnected = await apiClient.testConnection();
+                if (!isConnected) {
+                    showAlert('無法連接到伺服器，請檢查網路連接或稍後再試', 'danger');
+                    return;
+                }
+            } catch (error) {
+                console.error('API 連接測試失敗:', error);
+                showAlert('伺服器連接失敗，請稍後再試', 'danger');
+                return;
+            }
+            
+            loginBtn.innerHTML = '<span class="loading"></span> 登入中...';
+            loginBtn.disabled = true;
+            
+            try {
+                const response = await apiClient.post('/login', { username, password });
+                
+                console.log('收到回應，狀態:', response.status);
+                
+                                if (response.ok) {
+                    const data = await response.json();
+                    // 登入成功，不在 console 輸出敏感資訊
+                    
+                    // 完整設置用戶資訊
+                    apiClient.setToken(data.token);
+                    localStorage.setItem('staffName', data.user.name);
+                    localStorage.setItem('staffRole', data.user.role);
+                    localStorage.setItem('staffUsername', data.user.username);
+                    localStorage.setItem('staffId', data.user.id.toString());
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('loginTime', new Date().toISOString());
+                    localStorage.setItem('lastActiveAt', Date.now().toString());
+                    
+                    // 清除登出原因，避免重新整理時再次顯示
+                    try {
+                        sessionStorage.removeItem('logoutReason');
+                        sessionStorage.removeItem('__sessionLogoutTriggered');
+                    } catch (e) {
+                        console.warn('無法清除 sessionStorage:', e);
+                    }
+                    
+                    // 清除記憶體中的密碼變數，避免被誤用
+                    try { window.password = undefined; } catch(e) {}
+                    try { document.getElementById('password').value = ''; } catch(e) {}
+                    
+                    console.log('🔄 延遲 2 秒後跳轉到儀表板...');
+                    
+                    // 顯示成功消息
+                    showAlert('登入成功！正在跳轉到儀表板...', 'success');
+                    
+                    // 延遲跳轉，確保所有資料都已設置
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    const errorData = await response.json();
+                    
+                    let errorMessage = '登入失敗';
+                    if (errorData.error) {
+                        errorMessage = errorData.error;
+                    } else if (response.status === 401) {
+                        errorMessage = '用戶名或密碼錯誤';
+                    } else if (response.status === 500) {
+                        errorMessage = '伺服器錯誤，請稍後再試';
+                    }
+                    
+                    showAlert(errorMessage, 'danger');
+                }
+            } catch (e) {
+                console.error('登入錯誤:', e);
+                showAlert('網路錯誤，請檢查您的網路連接', 'danger');
+            } finally {
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>登入';
+                loginBtn.disabled = false;
+            }
+        }
+        function showAlert(msg, type) {
+            document.getElementById('alertContainer').innerHTML = `<div class='alert alert-${type}'>${msg}</div>`;
+        }
+        function showForgotPassword() { 
+            window.location.href = 'forgot-password.html'; 
+        }
+
+    </script>
+</body>
+</html> 

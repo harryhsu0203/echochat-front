@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="platforms.title">支援平台 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="navbar.css" rel="stylesheet">
+    <script src="js/i18n.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* 確保導航欄不會覆蓋標題 */
+        .navbar {
+            z-index: 1030;
+        }
+
+        /* 主要內容區域 */
+        .main-content {
+            background: white;
+            margin-top: 0;
+            min-height: calc(100vh - 180px);
+            border-radius: 20px 20px 0 0;
+            padding: 40px 0;
+        }
+
+        /* 頁面標題區域 */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        /* 平台卡片樣式 */
+        .platform-section {
+            padding: 60px 0;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .platform-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .platform-icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .platform-line { color: #00C300; }
+        .platform-instagram { color: #E4405F; }
+        .platform-telegram { color: #0088CC; }
+        .platform-facebook { color: #1877F2; }
+        .platform-whatsapp { color: #25D366; }
+        .platform-wechat { color: #07C160; }
+        .platform-discord { color: #7289DA; }
+        .platform-tiktok { color: #000000; }
+
+        .platform-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .platform-description {
+            color: #555;
+            line-height: 1.6;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .platform-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .platform-features li {
+            color: #667eea;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .platform-features li i {
+            margin-right: 8px;
+            font-size: 0.8rem;
+        }
+
+        .coming-soon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ffc107;
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* 返回按鈕 */
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+            color: white;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .platform-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .platform-card {
+                padding: 30px 20px;
+            }
+            
+            .platform-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                        <option value="en">English</option>
+                        <option value="ja">日本語</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 頁面標題 -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title" data-i18n="platforms.page_title">支援平台</h1>
+            <p class="page-subtitle" data-i18n="platforms.page_subtitle">一次設定，多平台同步，讓您的客服服務無處不在</p>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 支援平台 -->
+            <div class="platform-section">
+                <div class="platform-grid">
+                    <div class="platform-card">
+                        <i class="fab fa-line platform-icon platform-line"></i>
+                        <h3 class="platform-title">LINE</h3>
+                        <p class="platform-description">
+                            台灣最受歡迎的通訊軟體，超過 2100 萬用戶。完整支援文字、圖片、貼圖和 Rich Menu 功能。
+                        </p>
+                        <ul class="platform-features">
+                            <li><i class="fas fa-check"></i>官方帳號串接</li>
+                            <li><i class="fas fa-check"></i>Rich Menu 支援</li>
+                            <li><i class="fas fa-check"></i>推播訊息</li>
+                            <li><i class="fas fa-check"></i>群組管理</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <i class="fab fa-instagram platform-icon platform-instagram"></i>
+                        <h3 class="platform-title">Instagram</h3>
+                        <p class="platform-description">
+                            全球最受歡迎的圖片社交平台，支援 Instagram Direct 私訊和留言自動回覆功能。
+                        </p>
+                        <ul class="platform-features">
+                            <li><i class="fas fa-check"></i>私訊自動回覆</li>
+                            <li><i class="fas fa-check"></i>留言管理</li>
+                            <li><i class="fas fa-check"></i>限時動態互動</li>
+                            <li><i class="fas fa-check"></i>商業帳號整合</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <i class="fab fa-telegram platform-icon platform-telegram"></i>
+                        <h3 class="platform-title">Telegram</h3>
+                        <p class="platform-description">
+                            安全性極高的通訊軟體，支援 Bot API 和豐富的互動功能，適合技術導向的用戶群。
+                        </p>
+                        <ul class="platform-features">
+                            <li><i class="fas fa-check"></i>Bot API 整合</li>
+                            <li><i class="fas fa-check"></i>群組管理</li>
+                            <li><i class="fas fa-check"></i>內聯鍵盤</li>
+                            <li><i class="fas fa-check"></i>文件傳輸</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <i class="fab fa-facebook-messenger platform-icon platform-facebook"></i>
+                        <h3 class="platform-title">Facebook Messenger</h3>
+                        <p class="platform-description">
+                            Facebook 的即時通訊服務，全球超過 13 億用戶，支援豐富的聊天機器人功能。
+                        </p>
+                        <ul class="platform-features">
+                            <li><i class="fas fa-check"></i>Messenger Bot</li>
+                            <li><i class="fas fa-check"></i>快速回覆</li>
+                            <li><i class="fas fa-check"></i>持續選單</li>
+                            <li><i class="fas fa-check"></i>網頁外掛</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <i class="fab fa-whatsapp platform-icon platform-whatsapp"></i>
+                        <h3 class="platform-title">WhatsApp</h3>
+                        <p class="platform-description">
+                            全球最大的即時通訊應用，超過 20 億用戶。支援 WhatsApp Business API 商業應用。
+                        </p>
+                        <ul class="platform-features">
+                            <li><i class="fas fa-check"></i>Business API</li>
+                            <li><i class="fas fa-check"></i>模板訊息</li>
+                            <li><i class="fas fa-check"></i>媒體訊息</li>
+                            <li><i class="fas fa-check"></i>群組廣播</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <i class="fab fa-weixin platform-icon platform-wechat"></i>
+                        <h3 class="platform-title">WeChat</h3>
+                        <p class="platform-description">
+                            中國最大的社交平台，超過 12 億用戶。支援公眾號和小程序整合。
+                        </p>
+                        <ul class="platform-features">
+                            <li><i class="fas fa-check"></i>公眾號整合</li>
+                            <li><i class="fas fa-check"></i>小程序支援</li>
+                            <li><i class="fas fa-check"></i>自定義選單</li>
+                            <li><i class="fas fa-check"></i>支付功能</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <i class="fab fa-discord platform-icon platform-discord"></i>
+                        <h3 class="platform-title">Discord</h3>
+                        <p class="platform-description">
+                            遊戲和社群導向的通訊平台，支援語音、文字和豐富的 Bot 功能。
+                        </p>
+                        <ul class="platform-features">
+                            <li><i class="fas fa-check"></i>Discord Bot</li>
+                            <li><i class="fas fa-check"></i>伺服器管理</li>
+                            <li><i class="fas fa-check"></i>斜線命令</li>
+                            <li><i class="fas fa-check"></i>語音支援</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <div class="coming-soon">即將推出</div>
+                        <i class="fab fa-tiktok platform-icon platform-tiktok"></i>
+                        <h3 class="platform-title">TikTok</h3>
+                        <p class="platform-description">
+                            全球最受歡迎的短影音平台，我們正在開發 TikTok 私訊和留言自動回覆功能。
+                        </p>
+                        <ul class="platform-features">
+                            <li><i class="fas fa-clock"></i>私訊自動回覆</li>
+                            <li><i class="fas fa-clock"></i>留言管理</li>
+                            <li><i class="fas fa-clock"></i>直播互動</li>
+                            <li><i class="fas fa-clock"></i>商業帳號整合</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 返回按鈕 -->
+    <a href="/index.html" class="back-btn">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="terms.title">服務條款 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="navbar.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* 導航欄樣式 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea !important;
+            text-decoration: none;
+        }
+
+        .navbar-brand i {
+            margin-right: 8px;
+            color: #667eea;
+        }
+
+        .nav-link {
+            color: #2c3e50 !important;
+            font-weight: 600;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+
+        .nav-link:hover {
+            color: #667eea !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .btn-login {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .language-selector {
+            border: none;
+            background: transparent;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-left: 15px;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+
+        /* 主要內容區域 */
+        .main-content {
+            background: white;
+            margin-top: 0;
+            min-height: calc(100vh - 180px);
+            border-radius: 20px 20px 0 0;
+            padding: 40px 0;
+        }
+
+        /* 頁面標題區域 */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        /* 內容區域樣式 */
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .policy-content {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .policy-content p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .policy-content h3 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+
+        .policy-content ul {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        .policy-content li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .policy-content strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        /* 返回按鈕 */
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+            color: white;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .content-section {
+                padding: 25px;
+                margin-bottom: 20px;
+            }
+            
+            .section-title {
+                font-size: 1.4rem;
+            }
+            
+            .policy-content {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+    <script src="js/i18n.js"></script>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- 頁面標題 -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title" data-i18n="terms.page_title">服務條款</h1>
+            <p class="page-subtitle" data-i18n="terms.page_subtitle">使用我們的服務前，請仔細閱讀以下條款</p>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content">
+        <div class="container">
+        <div class="content-section">
+            <h2 class="section-title">服務條款概述</h2>
+            <div class="policy-content">
+                <p>最後更新日期：2025年1月1日</p>
+                <p>歡迎使用EchoChat的AI客服平台服務。本服務條款（以下簡稱「條款」）規範您使用EchoChat提供的所有服務。使用我們的服務即表示您同意遵守這些條款。</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">服務說明</h2>
+            <div class="policy-content">
+                <h3>EchoChat服務</h3>
+                <p>EchoChat提供基於人工智慧的客服平台服務，包括但不限於：</p>
+                <ul>
+                    <li>AI智能對話系統</li>
+                    <li>多平台客服整合（LINE、Instagram、Telegram等）</li>
+                    <li>知識庫管理和訓練</li>
+                    <li>客戶對話記錄和分析</li>
+                    <li>客製化AI模型訓練</li>
+                    <li>技術支援和維護服務</li>
+                </ul>
+
+                <h3>服務可用性</h3>
+                <ul>
+                    <li>我們致力於提供99.9%的服務可用性</li>
+                    <li>可能會進行定期維護和系統更新</li>
+                    <li>在緊急情況下可能會暫停服務</li>
+                    <li>我們會提前通知計劃性維護時間</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">帳戶註冊和使用</h2>
+            <div class="policy-content">
+                <h3>帳戶註冊</h3>
+                <ul>
+                    <li>您必須提供準確、完整和最新的註冊資訊</li>
+                    <li>您有責任保護您的帳戶密碼和登入資訊</li>
+                    <li>您對帳戶下的所有活動負責</li>
+                    <li>一個帳戶只能由一個實體使用</li>
+                </ul>
+
+                <h3>使用限制</h3>
+                <ul>
+                    <li>不得將服務用於非法目的</li>
+                    <li>不得干擾或破壞服務的正常運作</li>
+                    <li>不得嘗試未授權存取我們的系統</li>
+                    <li>不得使用服務發送垃圾訊息或惡意內容</li>
+                    <li>不得違反任何適用的法律法規</li>
+                </ul>
+
+                <h3>內容責任</h3>
+                <p>您對透過我們的服務發送的所有內容負責，包括但不限於：</p>
+                <ul>
+                    <li>AI訓練資料和知識庫內容</li>
+                    <li>客戶對話內容和回應</li>
+                    <li>上傳的檔案和資料</li>
+                    <li>任何違反法律或侵犯他人權利的內容</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">付款和訂閱</h2>
+            <div class="policy-content">
+                <h3>付款條款</h3>
+                <ul>
+                    <li>所有費用均以新台幣計算</li>
+                    <li>付款應在服務開始前完成</li>
+                    <li>我們使用安全的第三方支付處理商</li>
+                    <li>發票將在付款後自動生成</li>
+                </ul>
+
+                <h3>訂閱服務</h3>
+                <ul>
+                    <li>訂閱服務按年或按月計費</li>
+                    <li>自動續費除非您取消訂閱</li>
+                    <li>價格可能會在續費前30天通知調整</li>
+                    <li>取消訂閱後，服務將在當前計費週期結束時停止</li>
+                </ul>
+
+                <h3>退款政策</h3>
+                <ul>
+                    <li>在服務開始前可申請全額退款</li>
+                    <li>服務開始後，根據使用情況評估部分退款</li>
+                    <li>因服務故障導致的問題可申請退款</li>
+                    <li>退款將在30個工作日內處理</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">智慧財產權</h2>
+            <div class="policy-content">
+                <h3>我們的權利</h3>
+                <ul>
+                    <li>EchoChat平台和技術的智慧財產權歸我們所有</li>
+                    <li>我們的商標、標誌和品牌資產受法律保護</li>
+                    <li>未經許可不得使用我們的智慧財產權</li>
+                    <li>我們保留所有未明確授予的權利</li>
+                </ul>
+
+                <h3>您的權利</h3>
+                <ul>
+                    <li>您保留您上傳內容的智慧財產權</li>
+                    <li>您授權我們使用您的內容提供服務</li>
+                    <li>您可以隨時要求刪除您的內容</li>
+                    <li>我們不會將您的內容用於其他商業目的</li>
+                </ul>
+
+                <h3>AI模型和資料</h3>
+                <ul>
+                    <li>我們使用您的資料訓練和改進AI模型</li>
+                    <li>訓練後的模型可能用於改善其他客戶的服務</li>
+                    <li>您的具體業務資料不會洩露給其他客戶</li>
+                    <li>您可以選擇退出AI模型訓練</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">隱私和資料保護</h2>
+            <div class="policy-content">
+                <h3>資料處理</h3>
+                <ul>
+                    <li>我們按照隱私政策處理您的個人資料</li>
+                    <li>我們實施適當的技術和組織措施保護資料</li>
+                    <li>我們只收集提供服務所需的資料</li>
+                    <li>您可以隨時要求存取、更正或刪除您的資料</li>
+                </ul>
+
+                <h3>資料安全</h3>
+                <ul>
+                    <li>我們使用加密技術保護資料傳輸和儲存</li>
+                    <li>我們定期進行安全審計和漏洞掃描</li>
+                    <li>我們實施存取控制和監控措施</li>
+                    <li>我們會通知您任何可能影響您資料的安全事件</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">服務限制和免責聲明</h2>
+            <div class="policy-content">
+                <h3>服務可用性</h3>
+                <ul>
+                    <li>我們不保證服務100%可用</li>
+                    <li>服務可能因維護、更新或技術問題而暫停</li>
+                    <li>我們會盡力減少服務中斷的影響</li>
+                    <li>我們不承擔因服務中斷造成的間接損失</li>
+                </ul>
+
+                <h3>AI服務限制</h3>
+                <ul>
+                    <li>AI回應的準確性取決於訓練資料和模型</li>
+                    <li>我們不保證AI回應的100%準確性</li>
+                    <li>您應審查和驗證AI生成的內容</li>
+                    <li>我們不承擔因AI回應錯誤造成的損失</li>
+                </ul>
+
+                <h3>免責聲明</h3>
+                <p>在法律允許的最大範圍內，我們不承擔以下責任：</p>
+                <ul>
+                    <li>間接、偶然或特殊損害</li>
+                    <li>資料遺失或損壞</li>
+                    <li>業務中斷或利潤損失</li>
+                    <li>第三方行為造成的損害</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">終止和暫停</h2>
+            <div class="policy-content">
+                <h3>帳戶終止</h3>
+                <ul>
+                    <li>您可以隨時取消帳戶</li>
+                    <li>我們可能會因違反條款而暫停或終止帳戶</li>
+                    <li>終止後，您的資料將在30天內刪除</li>
+                    <li>終止不影響已產生的付款義務</li>
+                </ul>
+
+                <h3>服務暫停</h3>
+                <ul>
+                    <li>我們可能會因維護或安全問題暫停服務</li>
+                    <li>我們會盡力提前通知計劃性暫停</li>
+                    <li>緊急暫停可能無法提前通知</li>
+                    <li>暫停期間不計入服務時間</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">爭議解決</h2>
+            <div class="policy-content">
+                <h3>爭議處理</h3>
+                <ul>
+                    <li>我們鼓勵透過協商解決爭議</li>
+                    <li>如有爭議，請先聯繫我們的客戶服務</li>
+                    <li>我們會盡力在30天內回應您的問題</li>
+                    <li>如無法解決，可尋求法律途徑</li>
+                </ul>
+
+                <h3>適用法律</h3>
+                <ul>
+                    <li>本條款受台灣法律管轄</li>
+                    <li>任何爭議應在台北地方法院解決</li>
+                    <li>如條款任何部分無效，不影響其他部分</li>
+                    <li>我們保留修改條款的權利</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">條款更新</h2>
+            <div class="policy-content">
+                <p>我們可能會不時更新這些服務條款。重大變更時，我們會透過電子郵件或網站公告通知您。繼續使用服務即表示您同意更新後的條款。</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">聯繫我們</h2>
+            <div class="policy-content">
+                <p>如果您對這些服務條款有任何問題，請透過以下方式聯繫我們：</p>
+                <ul>
+                    <li><strong>電子郵件：</strong>legal@echochat.com</li>
+                    <li><strong>電話：</strong>+886 2 1234 5678</li>
+                    <li><strong>地址：</strong>台中市東區復興路五段178號</li>
+                    <li><strong>客戶服務：</strong>contact@echochat.com.tw</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- 返回按鈕 -->
+    <a href="/index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html> 

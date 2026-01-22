@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="products.title">產品介紹 - EchoChat AI 客服串接平台 | 智慧客服系統功能</title>
+    <meta name="description" content="了解 EchoChat AI 客服系統的完整功能：LINE 聊天機器人、智慧客服、自動回覆、知識庫管理、多渠道整合、對話記錄分析等。">
+    <meta name="keywords" content="AI 客服功能, 智慧客服系統, LINE 聊天機器人功能, 客服系統功能, 自動回覆系統, 知識庫管理, 多渠道客服, 對話記錄分析, EchoChat 產品">
+    <link rel="canonical" href="https://echochat-web.onrender.com/products.html">
+    <meta name="robots" content="index,follow">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+    <meta name="theme-color" content="#667eea">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="navbar.css" rel="stylesheet">
+    <script src="js/i18n.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea !important;
+            text-decoration: none;
+        }
+
+        .navbar-brand i {
+            margin-right: 8px;
+            color: #667eea;
+        }
+
+        .nav-link {
+            color: #2c3e50 !important;
+            font-weight: 600;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #667eea !important;
+        }
+
+
+
+        .btn-login {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .language-selector {
+            border: none;
+            background: transparent;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-left: 15px;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+
+        /* 新的英雄區域設計 */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-title {
+            animation: fadeInUp 1.2s ease-out 0.3s both;
+        }
+
+        .hero-subtitle {
+            animation: fadeInUp 1.2s ease-out 0.6s both;
+        }
+
+        .hero-stats {
+            animation: fadeInUp 1.2s ease-out 0.9s both;
+        }
+
+        /* 浮動圖標動畫 */
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255,255,255,0.15);
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.8;
+            filter: blur(0.5px);
+        }
+
+        .floating-icon:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 65%; left: 85%; animation-delay: 2s; }
+        .floating-icon:nth-child(3) { top: 85%; left: 25%; animation-delay: 4s; }
+        .floating-icon:nth-child(4) { top: 25%; left: 75%; animation-delay: 1s; }
+        .floating-icon:nth-child(5) { top: 75%; left: 85%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1); 
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateY(-15px) rotate(3deg) scale(1.05); 
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            color: #ffffff;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 功能區域 - 卡片式設計 */
+        .feature-section {
+            background: white;
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #6c757d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            border: 1px solid #f8f9fa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+
+        .feature-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .feature-description {
+            color: #6c757d;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* 優勢區域 - 側邊欄設計 */
+        .benefit-section {
+            background: #f8f9fa;
+            padding: 100px 0;
+        }
+
+        .benefit-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .benefit-content {
+            padding-right: 40px;
+        }
+
+        .benefit-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .benefit-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            transform: translateX(10px);
+        }
+
+        .benefit-icon {
+            font-size: 2rem;
+            color: #667eea;
+            margin-right: 20px;
+            min-width: 50px;
+        }
+
+        .benefit-text h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .benefit-text p {
+            color: #6c757d;
+            margin: 0;
+        }
+
+        .benefit-visual {
+            text-align: center;
+        }
+
+        .benefit-visual img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* 平台區域 - 網格設計 */
+        .platform-section {
+            background: white;
+            padding: 100px 0;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .platform-card {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px);
+            border-color: #667eea;
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .platform-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .platform-card:hover .platform-icon {
+            transform: scale(1.1);
+        }
+
+        .platform-icon.fa-line { color: #00B900; }
+        .platform-icon.fa-instagram { color: #E4405F; }
+        .platform-icon.fa-telegram { color: #0088cc; }
+        .platform-icon.fa-facebook { color: #1877F2; }
+        .platform-icon.fa-whatsapp { color: #25D366; }
+
+        .platform-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .platform-desc {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* CTA 區域 - 全寬設計 */
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 50px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary-custom {
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50px;
+            padding: 18px 50px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .btn-secondary-custom {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 50px;
+            padding: 18px 50px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary-custom:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            text-decoration: none;
+        }
+
+        .back-to-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .back-to-home-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .back-to-home-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .benefit-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .benefit-content {
+                padding-right: 0;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="js/i18n.js"></script>
+</head>
+<body>
+    <a href="index.html" class="back-to-home-btn" title="回首頁">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄區域 -->
+    <section class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="floating-icons">
+            <div class="floating-icon"><i class="fab fa-line"></i></div>
+            <div class="floating-icon"><i class="fab fa-instagram"></i></div>
+            <div class="floating-icon"><i class="fab fa-telegram"></i></div>
+            <div class="floating-icon"><i class="fab fa-facebook"></i></div>
+            <div class="floating-icon"><i class="fab fa-whatsapp"></i></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title" data-i18n="products.hero.title">EchoChat 產品介紹</h1>
+            <p class="hero-subtitle" data-i18n="products.hero.subtitle">讓 AI 智能客服為您節省 80% 的客服時間，輕鬆串接各大社交平台</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">80%</span>
+                    <span class="stat-label" data-i18n="products.stats.time_save">時間節省</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label" data-i18n="products.stats.service">全天候服務</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">6+</span>
+                    <span class="stat-label" data-i18n="products.stats.platforms">支援平台</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">5分鐘</span>
+                    <span class="stat-label" data-i18n="products.stats.setup">快速設置</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心功能 -->
+    <section class="feature-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="products.features.title">核心功能</h2>
+                <p class="section-subtitle" data-i18n="products.features.subtitle">專為現代企業打造的智能客服解決方案，讓您的客服體驗更上一層樓</p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <i class="fas fa-clock feature-icon"></i>
+                    <h3 class="feature-title">24/7 自動回覆</h3>
+                    <p class="feature-description">
+                        全天候自動處理客戶諮詢，無需人工值守。智能分析客戶問題，提供準確、快速的回覆，確保客戶隨時都能得到即時回應。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-brain feature-icon"></i>
+                    <h3 class="feature-title">智能意圖識別</h3>
+                    <p class="feature-description">
+                        深度學習算法識別客戶真實意圖，提供個性化、精準的服務體驗。自動理解客戶需求，提供最適合的解決方案。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-language feature-icon"></i>
+                    <h3 class="feature-title">多語言支援</h3>
+                    <p class="feature-description">
+                        支援繁體中文、英文、日文等多種語言，為國際客戶提供本地化服務。打破語言障礙，服務全球客戶。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-chart-line feature-icon"></i>
+                    <h3 class="feature-title">數據分析</h3>
+                    <p class="feature-description">
+                        詳細的對話記錄和分析報告，幫助您了解客戶需求和服務效果。透過數據洞察，持續優化客服品質。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-users feature-icon"></i>
+                    <h3 class="feature-title">團隊協作</h3>
+                    <p class="feature-description">
+                        支援多客服人員協作，智能分配和轉接複雜問題。讓人工客服專注於需要人性化處理的複雜案例。
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt feature-icon"></i>
+                    <h3 class="feature-title">安全可靠</h3>
+                    <p class="feature-description">
+                        SSL 加密保護，符合 GDPR 規範，確保客戶資料安全。企業級安全標準，讓您安心使用。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 產品優勢 -->
+    <section class="benefit-section">
+        <div class="container">
+            <div class="benefit-container">
+                <div class="benefit-content">
+                    <h2 class="benefit-title">為什麼選擇 EchoChat？</h2>
+                    <ul class="benefit-list">
+                        <li class="benefit-item">
+                            <i class="fas fa-save benefit-icon"></i>
+                            <div class="benefit-text">
+                                <h4>節省 80% 客服時間</h4>
+                                <p>自動處理常見問題，讓您的客服團隊專注於複雜問題和重要客戶</p>
+                            </div>
+                        </li>
+                        
+                        <li class="benefit-item">
+                            <i class="fas fa-rocket benefit-icon"></i>
+                            <div class="benefit-text">
+                                <h4>5 分鐘快速設置</h4>
+                                <p>無需複雜的技術配置，簡單幾步即可完成 AI 客服的部署</p>
+                            </div>
+                        </li>
+                        
+                        <li class="benefit-item">
+                            <i class="fas fa-dollar-sign benefit-icon"></i>
+                            <div class="benefit-text">
+                                <h4>降低 60% 客服成本</h4>
+                                <p>減少人工客服需求，大幅降低運營成本，提高投資回報率</p>
+                            </div>
+                        </li>
+                        
+                        <li class="benefit-item">
+                            <i class="fas fa-smile benefit-icon"></i>
+                            <div class="benefit-text">
+                                <h4>提升客戶滿意度</h4>
+                                <p>24/7 即時回覆，快速解決問題，讓客戶體驗更上一層樓</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="benefit-visual">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 400px; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 600;">
+                        <i class="fas fa-chart-pie" style="font-size: 4rem; margin-right: 20px;"></i>
+                        數據視覺化
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 支援平台 -->
+    <section class="platform-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">支援平台</h2>
+                <p class="section-subtitle">一次設置，多平台同步，讓您的 AI 客服無處不在</p>
+            </div>
+            
+            <div class="platform-grid">
+                <div class="platform-card">
+                    <i class="fab fa-line platform-icon"></i>
+                    <h5 class="platform-name">LINE</h5>
+                    <p class="platform-desc">台灣最受歡迎的即時通訊平台</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-instagram platform-icon"></i>
+                    <h5 class="platform-name">Instagram</h5>
+                    <p class="platform-desc">視覺化社交媒體平台</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-telegram platform-icon"></i>
+                    <h5 class="platform-name">Telegram</h5>
+                    <p class="platform-desc">安全加密的通訊平台</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-facebook platform-icon"></i>
+                    <h5 class="platform-name">Facebook</h5>
+                    <p class="platform-desc">全球最大的社交網路</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-whatsapp platform-icon"></i>
+                    <h5 class="platform-name">WhatsApp</h5>
+                    <p class="platform-desc">國際通用的通訊應用</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fas fa-globe platform-icon" style="color: #667eea;"></i>
+                    <h5 class="platform-name">網站</h5>
+                    <p class="platform-desc">企業官方網站整合</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 行動呼籲 -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">準備好提升您的客服體驗了嗎？</h2>
+                <p class="cta-subtitle">立即開始使用 EchoChat，讓 AI 為您的業務創造更多價值</p>
+                <div class="cta-buttons">
+                    <a href="register.html" class="btn-primary-custom">
+                        <i class="fas fa-rocket me-2"></i>免費試用
+                    </a>
+                    <a href="login.html" class="btn-secondary-custom">
+                        <i class="fas fa-sign-in-alt me-2"></i>立即登入
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+</body>
+</html> 

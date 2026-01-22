@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="register.title">EchoChat - 註冊</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .register-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .register-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .register-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .register-header h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .register-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .register-body {
+            padding: 40px 30px;
+        }
+        
+        .form-floating {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-register {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .input-group-text {
+            background: transparent;
+            border: 2px solid #e9ecef;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .input-group:focus-within .input-group-text {
+            border-color: #667eea;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .plan-card {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .plan-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .plan-card.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .plan-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+        
+        .plan-features li {
+            padding: 5px 0;
+            color: #666;
+        }
+        
+        .plan-features li:before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .footer-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .footer-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #764ba2;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        
+        .step.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .step.completed {
+            background: #28a745;
+            color: white;
+        }
+    </style>
+    <script src="js/i18n.js"></script>
+    <script src="js/api-config.js"></script>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-card">
+            <div class="register-header">
+                <div class="position-absolute" style="top: 20px; left: 20px;">
+                    <a href="/index.html" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-home me-2"></i>回首頁
+                    </a>
+                </div>
+                <i class="fas fa-robot fa-3x mb-3"></i>
+                <h2 data-i18n="register.brand">EchoChat</h2>
+                <p data-i18n="register.subtitle">智能聊天機器人管理系統 - 註冊</p>
+            </div>
+            
+            <div class="register-body">
+                <div id="alertContainer"></div>
+                <div class="d-grid mb-3" id="googleSignUpBlock" style="display:none;">
+                    <div id="g_id_onload" data-client_id="" data-context="signup" data-ux_mode="popup" data-callback="onGoogleSignUp" data-auto_select="false" data-itp_support="true"></div>
+                    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signup_with" data-shape="rectangular" data-logo_alignment="left"></div>
+                </div>
+                
+                <!-- 步驟指示器 -->
+                <div class="step-indicator">
+                    <div class="step active" id="step1">1</div>
+                    <div class="step" id="step2">2</div>
+                </div>
+                
+                <!-- 步驟1：基本資料 -->
+                <div id="step1Content">
+                    <h4 class="mb-4" data-i18n="register.step1.title">基本資料</h4>
+                    <form id="basicInfoForm">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fas fa-id-card"></i>
+                            </span>
+                            <input type="text" class="form-control" id="displayName" placeholder="姓名或商家名稱" required>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input type="text" class="form-control" id="username" placeholder="使用者名稱" data-i18n-placeholder="register.form.username" required>
+                        </div>
+                        
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control" id="email" placeholder="電子郵件" data-i18n-placeholder="register.form.email" required>
+                        </div>
+                        
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input type="password" class="form-control" id="password" placeholder="密碼" data-i18n-placeholder="register.form.password" required>
+                        </div>
+                        
+                        <div class="input-group mb-4">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="確認密碼" data-i18n-placeholder="register.form.confirm_password" required>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary btn-register" onclick="nextStep()">
+                            <span data-i18n="register.btn.next">下一步</span> <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </form>
+                </div>
+                
+
+                
+                <!-- 步驟2：電子郵件驗證 -->
+                <div id="step2Content" style="display: none;">
+                    <h4 class="mb-4" data-i18n="register.step2.title">驗證電子郵件</h4>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <span data-i18n="register.step2.info">我們已向您的電子郵件發送驗證碼，請查看您的郵箱並輸入驗證碼。</span>
+                    </div>
+                    
+                    <div class="verification-section">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control" id="verificationEmail" placeholder="電子郵件" readonly>
+                        </div>
+                        
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fas fa-key"></i>
+                            </span>
+                            <input type="text" class="form-control" id="verificationCode" placeholder="請輸入6位數驗證碼" data-i18n-placeholder="register.form.verification_code" maxlength="6">
+                        </div>
+                        
+                        <div class="text-center mb-3">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="resendCodeBtn" onclick="resendVerificationCode()">
+                                <i class="fas fa-redo me-2"></i><span data-i18n="register.btn.resend">重新發送驗證碼</span>
+                            </button>
+                            <div id="countdown" class="small text-muted mt-2"></div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary" onclick="prevStep()">
+                                <i class="fas fa-arrow-left me-2"></i><span data-i18n="register.btn.previous">上一步</span>
+                            </button>
+                            <button type="button" class="btn btn-primary btn-register" id="verifyBtn" onclick="verifyEmailCode()">
+                                <i class="fas fa-check me-2"></i><span data-i18n="register.btn.verify">驗證並註冊</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <a href="/login.html" data-i18n="register.login_link">已有帳號？立即登入</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const API_BASE = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
+
+      async function onGoogleSignUp(resp) {
+        try {
+          const id_token = resp.credential;
+          const r = await fetch(`${API_BASE}/auth/google`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id_token })});
+          const data = await r.json();
+          if (r.ok && data.success && data.token) {
+            localStorage.setItem('token', data.token);
+            window.location.href = 'dashboard.html';
+          } else { alert(data.error || 'Google 註冊失敗'); }
+        } catch { alert('Google 註冊失敗'); }
+      }
+
+      (async () => {
+        try {
+          const r = await fetch(`${API_BASE}/auth/google/client-id`);
+          const d = await r.json();
+          if (d && d.client_id) {
+            document.getElementById('g_id_onload').setAttribute('data-client_id', d.client_id);
+            document.getElementById('googleSignUpBlock').style.display = 'block';
+          }
+        } catch {}
+      })();
+        let currentStep = 1;
+        let userData = {};
+
+
+
+        // 下一步
+        async function nextStep() {
+            if (currentStep === 1) {
+                if (!validateBasicInfo()) return;
+                userData = {
+                    displayName: document.getElementById('displayName').value,
+                    username: document.getElementById('username').value,
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value
+                };
+                
+                // 發送驗證碼
+                await sendVerificationCode();
+            }
+            
+            document.getElementById(`step${currentStep}Content`).style.display = 'none';
+            currentStep++;
+            document.getElementById(`step${currentStep}Content`).style.display = 'block';
+            
+            updateStepIndicator();
+            
+            // 如果是第二步，設置電子郵件顯示
+            if (currentStep === 2) {
+                document.getElementById('verificationEmail').value = userData.email;
+            }
+        }
+
+        // 上一步
+        function prevStep() {
+            document.getElementById(`step${currentStep}Content`).style.display = 'none';
+            currentStep--;
+            document.getElementById(`step${currentStep}Content`).style.display = 'block';
+            updateStepIndicator();
+        }
+
+        // 更新步驟指示器
+        function updateStepIndicator() {
+            for (let i = 1; i <= 2; i++) {
+                const step = document.getElementById(`step${i}`);
+                if (step) {
+                    step.classList.remove('active', 'completed');
+                    if (i < currentStep) {
+                        step.classList.add('completed');
+                    } else if (i === currentStep) {
+                        step.classList.add('active');
+                    }
+                }
+            }
+        }
+
+        // 驗證基本資料
+        function validateBasicInfo() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showAlert('密碼確認不符', 'danger');
+                return false;
+            }
+            
+            if (password.length < 6) {
+                showAlert('密碼至少需要6個字元', 'danger');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // 顯示警告訊息
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        }
+
+        // 發送驗證碼
+        async function sendVerificationCode() {
+            try {
+                const response = await fetch(`${API_BASE}/send-verification-code`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: userData.email
+                    })
+                });
+                const result = await response.json().catch(() => ({}));
+                
+                if (response.ok) {
+                    let message = result.message || '驗證碼已發送到您的電子郵件';
+                    if (result.code) {
+                        message += `（暫存驗證碼：${result.code}）`;
+                    }
+                    showAlert(message, 'success');
+                    startCountdown();
+                } else {
+                    showAlert(result.error || '發送驗證碼失敗', 'danger');
+                    throw new Error('Send verification failed');
+                }
+            } catch (error) {
+                showAlert('發送驗證碼失敗，請稍後再試', 'danger');
+                throw error;
+            }
+        }
+        
+        // 重新發送驗證碼
+        async function resendVerificationCode() {
+            const resendBtn = document.getElementById('resendCodeBtn');
+            resendBtn.disabled = true;
+            resendBtn.innerHTML = '<span class="loading"></span> 發送中...';
+            
+            try {
+                await sendVerificationCode();
+            } catch (error) {
+                // Error already handled in sendVerificationCode
+            } finally {
+                resendBtn.disabled = false;
+                resendBtn.innerHTML = '<i class="fas fa-redo me-2"></i>重新發送驗證碼';
+            }
+        }
+        
+        // 倒數計時
+        function startCountdown() {
+            let timeLeft = 60;
+            const countdownElement = document.getElementById('countdown');
+            const resendBtn = document.getElementById('resendCodeBtn');
+            
+            resendBtn.disabled = true;
+            
+            const timer = setInterval(() => {
+                countdownElement.textContent = `${timeLeft}秒後可重新發送`;
+                timeLeft--;
+                
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    countdownElement.textContent = '';
+                    resendBtn.disabled = false;
+                }
+            }, 1000);
+        }
+        
+        // 驗證電子郵件驗證碼
+        async function verifyEmailCode() {
+            const code = document.getElementById('verificationCode').value;
+            if (!code || code.length !== 6) {
+                showAlert('請輸入6位數驗證碼', 'warning');
+                return;
+            }
+            
+            const verifyBtn = document.getElementById('verifyBtn');
+            verifyBtn.innerHTML = '<span class="loading"></span> 驗證中...';
+            verifyBtn.disabled = true;
+            
+            try {
+                // 驗證驗證碼
+                const verifyResponse = await fetch(`${API_BASE}/verify-code`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: userData.email,
+                        code: code
+                    })
+                });
+                
+                const verifyResult = await verifyResponse.json().catch(() => ({}));
+                if (!verifyResponse.ok) {
+                    showAlert(verifyResult.error || '驗證碼錯誤', 'danger');
+                    return;
+                }
+                
+                // 註冊用戶
+                const registerResponse = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: userData.username,
+                        email: userData.email,
+                        password: userData.password,
+                        name: userData.displayName
+                    })
+                });
+                
+                const registerResult = await registerResponse.json().catch(() => ({}));
+                if (registerResponse.ok) {
+                    showAlert('註冊成功！正在跳轉到登入頁面...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 2000);
+                } else {
+                    showAlert(registerResult.error || '註冊失敗', 'danger');
+                }
+            } catch (error) {
+                showAlert('驗證失敗，請稍後再試', 'danger');
+            } finally {
+                verifyBtn.innerHTML = '<i class="fas fa-check me-2"></i>驗證並註冊';
+                verifyBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html> 

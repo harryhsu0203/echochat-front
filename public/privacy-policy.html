@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="privacy.title">隱私政策 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="navbar.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+
+
+        /* 主要內容區域 */
+        .main-content {
+            background: white;
+            margin-top: 0;
+            min-height: calc(100vh - 180px);
+            border-radius: 20px 20px 0 0;
+            padding: 40px 0;
+        }
+
+        /* 頁面標題區域 */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        /* 內容區域樣式 */
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .policy-content {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .policy-content p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .policy-content h3 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+
+        .policy-content ul {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        .policy-content li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .policy-content strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .policy-content code {
+            background: #f8f9fa;
+            color: #667eea;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* 表格樣式 */
+        .cookie-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .cookie-table thead {
+            background: #667eea;
+            color: white;
+        }
+
+        .cookie-table th,
+        .cookie-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .cookie-table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .cookie-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .cookie-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* 返回按鈕 */
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+            color: white;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .content-section {
+                padding: 25px;
+                margin-bottom: 20px;
+            }
+            
+            .section-title {
+                font-size: 1.4rem;
+            }
+            
+            .policy-content {
+                font-size: 0.95rem;
+            }
+            
+            .cookie-table {
+                font-size: 0.85rem;
+            }
+            
+            .cookie-table th,
+            .cookie-table td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+    <script src="js/i18n.js"></script>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- 頁面標題 -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title" data-i18n="privacy.page_title">隱私政策</h1>
+            <p class="page-subtitle" data-i18n="privacy.page_subtitle">保護您的個人資料是我們的首要任務</p>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content">
+        <div class="container">
+        <div class="content-section">
+            <h2 class="section-title">隱私政策概述</h2>
+            <div class="policy-content">
+                <p>最後更新日期：2025年1月1日</p>
+                <p>EchoChat（以下簡稱「我們」）致力於保護您的隱私權。本隱私政策說明我們如何收集、使用、儲存和保護您的個人資料。使用我們的服務即表示您同意本政策的條款。</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">我們收集的資料</h2>
+            <div class="policy-content">
+                <h3>個人識別資料</h3>
+                <ul>
+                    <li>姓名、電子郵件地址、電話號碼</li>
+                    <li>公司名稱、職位、部門</li>
+                    <li>帳戶登入資訊和密碼</li>
+                    <li>付款資訊（透過安全的第三方支付處理商）</li>
+                </ul>
+
+                <h3>使用資料</h3>
+                <ul>
+                    <li>服務使用記錄和統計資料</li>
+                    <li>AI對話記錄和互動內容</li>
+                    <li>客戶服務請求記錄</li>
+                    <li>系統錯誤和技術支援記錄</li>
+                </ul>
+
+                <h3>技術資料</h3>
+                <ul>
+                    <li>IP地址、瀏覽器類型、作業系統</li>
+                    <li>裝置資訊、地理位置（經您同意）</li>
+                    <li>Cookie和類似技術收集的資料</li>
+                    <li>網站使用分析和行為資料</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">資料使用目的</h2>
+            <div class="policy-content">
+                <h3>服務提供</h3>
+                <ul>
+                    <li>提供AI客服平台和相關服務</li>
+                    <li>處理客戶服務請求</li>
+                    <li>改善服務品質和用戶體驗</li>
+                    <li>提供技術支援和維護</li>
+                </ul>
+
+                <h3>業務運營</h3>
+                <ul>
+                    <li>帳戶管理和客戶關係維護</li>
+                    <li>付款處理和帳單管理</li>
+                    <li>法律合規和風險管理</li>
+                    <li>內部管理和統計分析</li>
+                </ul>
+
+                <h3>改進和創新</h3>
+                <ul>
+                    <li>AI模型訓練和優化</li>
+                    <li>產品功能開發和改進</li>
+                    <li>市場研究和趨勢分析</li>
+                    <li>個性化服務和推薦</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">資料分享和披露</h2>
+            <div class="policy-content">
+                <h3>我們不會出售您的個人資料</h3>
+                <p>我們承諾不會將您的個人資料出售給第三方。我們只在以下情況下分享您的資料：</p>
+
+                <h3>服務提供商</h3>
+                <ul>
+                    <li>雲端服務提供商（AWS、Google Cloud等）</li>
+                    <li>支付處理商（Stripe、PayPal等）</li>
+                    <li>客戶服務和支援工具提供商</li>
+                    <li>分析和監控服務提供商</li>
+                </ul>
+
+                <h3>法律要求</h3>
+                <ul>
+                    <li>回應法律程序或政府要求</li>
+                    <li>保護我們的權利和財產</li>
+                    <li>防止欺詐或安全威脅</li>
+                    <li>遵守適用的法律法規</li>
+                </ul>
+
+                <h3>業務轉讓</h3>
+                <p>在合併、收購或資產轉讓的情況下，您的資料可能會轉移給新的實體，但我們會確保新實體繼續遵守本隱私政策。</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">資料安全</h2>
+            <div class="policy-content">
+                <h3>安全措施</h3>
+                <ul>
+                    <li>使用SSL/TLS加密保護資料傳輸</li>
+                    <li>實施多層次的安全防護措施</li>
+                    <li>定期安全審計和漏洞掃描</li>
+                    <li>員工安全培訓和背景調查</li>
+                </ul>
+
+                <h3>資料儲存</h3>
+                <ul>
+                    <li>資料儲存在安全的雲端環境中</li>
+                    <li>實施資料備份和災難恢復計劃</li>
+                    <li>定期更新和維護安全系統</li>
+                    <li>監控和記錄所有資料存取活動</li>
+                </ul>
+
+                <h3>資料保留</h3>
+                <p>我們只會在實現收集目的所需的時間內保留您的個人資料，或根據法律要求保留。當不再需要時，我們會安全地刪除或匿名化您的資料。</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">您的權利</h2>
+            <div class="policy-content">
+                <h3>存取和更正</h3>
+                <ul>
+                    <li>要求存取您的個人資料</li>
+                    <li>更正不準確或過時的資料</li>
+                    <li>要求刪除您的個人資料</li>
+                    <li>限制或反對資料處理</li>
+                </ul>
+
+                <h3>資料可攜性</h3>
+                <ul>
+                    <li>以結構化格式接收您的資料</li>
+                    <li>將資料傳輸給其他服務提供商</li>
+                    <li>下載您的資料副本</li>
+                </ul>
+
+                <h3>撤回同意</h3>
+                <p>您有權隨時撤回對資料處理的同意。撤回同意不會影響在撤回前基於同意進行的資料處理的合法性。</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Cookie和追蹤技術</h2>
+            <div class="policy-content">
+                <h3>我們使用的Cookie類型</h3>
+                <ul>
+                    <li><strong>必要Cookie：</strong>確保網站基本功能正常運作</li>
+                    <li><strong>功能Cookie：</strong>記住您的偏好設定和選擇</li>
+                    <li><strong>分析Cookie：</strong>幫助我們了解網站使用情況</li>
+                    <li><strong>行銷Cookie：</strong>提供相關廣告和內容</li>
+                </ul>
+
+                <h3>管理Cookie</h3>
+                <p>您可以透過瀏覽器設定管理Cookie偏好。請注意，禁用某些Cookie可能會影響網站功能。</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">國際資料傳輸</h2>
+            <div class="policy-content">
+                <p>我們的服務可能涉及將您的資料傳輸到其他國家。我們確保所有國際資料傳輸都符合適用的資料保護法律，並實施適當的安全措施保護您的資料。</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">兒童隱私</h2>
+            <div class="policy-content">
+                <p>我們的服務不針對13歲以下的兒童。我們不會故意收集13歲以下兒童的個人資料。如果您發現我們可能收集了兒童的個人資料，請立即聯繫我們。</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">政策更新</h2>
+            <div class="policy-content">
+                <p>我們可能會不時更新本隱私政策。重大變更時，我們會透過電子郵件或網站公告通知您。建議您定期查看本政策以了解最新的隱私保護措施。</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">聯繫我們</h2>
+            <div class="policy-content">
+                <p>如果您對本隱私政策有任何問題或疑慮，請透過以下方式聯繫我們：</p>
+                <ul>
+                    <li><strong>電子郵件：</strong>privacy@echochat.com</li>
+                    <li><strong>電話：</strong>+886 2 1234 5678</li>
+                    <li><strong>地址：</strong>台中市東區復興路五段178號</li>
+                    <li><strong>資料保護官：</strong>dpo@echochat.com</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- 返回按鈕 -->
+    <a href="/index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html> 

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>挽回優惠 - EchoChat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body { background: #f7f9fc; }
+    .card-retention { max-width: 720px; margin: 60px auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card card-retention shadow-sm">
+      <div class="card-header bg-warning">
+        <strong><i class="fas fa-hand-holding-heart me-2"></i>等等！我們有專屬優惠給您</strong>
+      </div>
+      <div class="card-body">
+        <p class="text-muted mb-3">為了感謝您的支持，我們提供您<strong>下個月 9 折</strong>的專屬優惠（僅一次）。您可以選擇保留訂閱並套用優惠，或繼續取消訂閱。</p>
+        <div class="mb-3 p-3 rounded bg-light">
+          <div id="planLine" class="small text-muted">目前方案：讀取中...</div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <button class="btn btn-primary" id="btnKeep"><i class="fas fa-badge-percent me-1"></i>保留並套用 9 折</button>
+          <button class="btn btn-outline-danger" id="btnCancel"><i class="fas fa-ban me-1"></i>仍要取消訂閱</button>
+          <a href="/dashboard.html#tab=plans" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i>返回方案頁</a>
+        </div>
+
+        <div id="cancelBox" class="border rounded p-3" style="display:none;">
+          <label class="form-label">取消原因（選填）</label>
+          <textarea id="cancelReason" class="form-control mb-2" rows="3" placeholder="請告訴我們可以改進的地方"></textarea>
+          <button class="btn btn-danger" id="btnConfirmCancel"><i class="fas fa-check me-1"></i>確認取消（到期後生效）</button>
+        </div>
+
+        <div id="alertBox" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const baseUrl = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
+    function showMsg(msg, type='info'){ const el=document.createElement('div'); el.className=`alert alert-${type} alert-dismissible fade show`; el.innerHTML=`${msg}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`; document.getElementById('alertBox').appendChild(el); setTimeout(()=>{ el.remove(); }, 4000); }
+    function needAuth(){ const t = localStorage.getItem('token') || localStorage.getItem('authToken'); if (!t){ window.location.href='/login.html'; return null; } return t; }
+
+    (async ()=>{
+      const token = needAuth(); if (!token) return;
+      try{
+        const r = await fetch(`${baseUrl}/ai-assistant-config`, { headers:{ 'Authorization':`Bearer ${token}` }});
+        const d = await r.json();
+        const plan = d && d.token && d.token.plan ? d.token.plan : 'free';
+        const map = { premium:'尊榮版', enterprise:'企業版', free:'免費版' };
+        document.getElementById('planLine').textContent = `目前方案：${map[String(plan).toLowerCase()] || plan}`;
+      }catch{}
+    })();
+
+    document.getElementById('btnKeep').addEventListener('click', async()=>{
+      const token = needAuth(); if (!token) return;
+      try{
+        const r = await fetch(`${baseUrl}/subscription/retention-offer`, { method:'POST', headers:{ 'Authorization':`Bearer ${token}` }});
+        const d = await r.json();
+        if (r.ok && d.success){ showMsg('已套用 9 折優惠（僅下期一次）', 'success'); setTimeout(()=>{ window.location.href='/dashboard.html#tab=plans'; }, 1200); }
+        else { showMsg(d.error || '套用優惠失敗', 'danger'); }
+      }catch{ showMsg('套用優惠失敗', 'danger'); }
+    });
+
+    document.getElementById('btnCancel').addEventListener('click', ()=>{
+      document.getElementById('cancelBox').style.display = 'block';
+    });
+
+    document.getElementById('btnConfirmCancel').addEventListener('click', async()=>{
+      const token = needAuth(); if (!token) return;
+      const reason = (document.getElementById('cancelReason').value||'').trim();
+      try{
+        if (reason){ await fetch(`${baseUrl}/subscription/cancel-feedback`, { method:'POST', headers:{ 'Authorization':`Bearer ${token}`, 'Content-Type':'application/json' }, body: JSON.stringify({ reason }) }); }
+        const r = await fetch(`${baseUrl}/subscription/cancel`, { method:'POST', headers:{ 'Authorization':`Bearer ${token}` }});
+        const d = await r.json();
+        if (r.ok && d.success){ showMsg('已設定於週期結束後取消訂閱', 'success'); setTimeout(()=>{ window.location.href='/dashboard.html#tab=plans'; }, 1200); }
+        else { showMsg(d.error || '取消訂閱失敗', 'danger'); }
+      }catch{ showMsg('取消訂閱失敗', 'danger'); }
+    });
+  </script>
+</body>
+</html>
+
+

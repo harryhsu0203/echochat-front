@@ -1,0 +1,1726 @@
+{
+  "staff_accounts": [
+    {
+      "id": 1,
+      "username": "sunnyharry1",
+      "password": "$2a$10$2KFiydLjEnO/4LI9SwqFP.2j2G/YQUwT0IZi5TbLLtTFBJj.RCuiu",
+      "name": "系統管理員",
+      "role": "admin",
+      "email": "admin@example.com",
+      "created_at": "2025-08-01T15:48:09.009557",
+      "line_config": {
+        "channel_access_token": "",
+        "channel_secret": "",
+        "webhook_url": "",
+        "enabled": false
+      },
+      "updated_at": "2025-08-06T06:53:54.570Z"
+    },
+    {
+      "id": 2,
+      "username": "admin",
+      "password": "$2a$10$LxfhgUq8pvyBFzurz91iXOBtvrjJFUrg80HxiDJEDJYbjLnAXpkvu",
+      "name": "管理員",
+      "role": "admin",
+      "email": "admin@echochat.com",
+      "created_at": "2025-08-04T07:35:22.663Z",
+      "updated_at": "2025-08-06T06:53:34.374Z"
+    },
+    {
+      "id": 3,
+      "username": "user",
+      "password": "$2a$10$fBfvPfCkaXRnnWaHR8AJ2eUYgcwjl/.fpeMScNcIJkg1lz36psj4G",
+      "name": "測試用戶",
+      "role": "user",
+      "email": "user@echochat.com",
+      "created_at": "2025-08-04T07:35:22.668Z",
+      "updated_at": "2025-08-06T06:54:10.821Z"
+    },
+    {
+      "id": 1754407679399,
+      "username": "test",
+      "password": "$2a$10$Suu7gw0fYfQWx/orGAGlU.CKz.7s9jvKL9gnnzALUbc55B2dsiUF6",
+      "name": "測試用戶",
+      "role": "staff",
+      "email": "test@echochat.com",
+      "created_at": "2025-08-05T15:27:59.398Z",
+      "updated_at": "2025-08-05T15:27:59.399Z"
+    }
+  ],
+  "user_questions": [
+    {
+      "id": 1754408151390,
+      "username": "user1",
+      "name": "張小明",
+      "question": "如何重置密碼？",
+      "created_at": "2025-07-31T20:30:51.390Z",
+      "timestamp": "2025-07-31T20:30:51.390Z"
+    },
+    {
+      "id": 1754408151392,
+      "username": "user2",
+      "name": "李美玲",
+      "question": "系統使用問題",
+      "created_at": "2025-08-02T14:53:51.390Z",
+      "timestamp": "2025-08-02T14:53:51.390Z"
+    },
+    {
+      "id": 1754408151393,
+      "username": "user3",
+      "name": "王大華",
+      "question": "帳號登入問題",
+      "created_at": "2025-08-01T09:09:51.390Z",
+      "timestamp": "2025-08-01T09:09:51.390Z"
+    },
+    {
+      "id": 1754408151394,
+      "username": "user4",
+      "name": "陳小芳",
+      "question": "功能操作說明",
+      "created_at": "2025-08-05T12:52:51.390Z",
+      "timestamp": "2025-08-05T12:52:51.390Z"
+    },
+    {
+      "id": 1754408151395,
+      "username": "user5",
+      "name": "林志明",
+      "question": "技術支援需求",
+      "created_at": "2025-08-02T15:17:51.390Z",
+      "timestamp": "2025-08-02T15:17:51.390Z"
+    },
+    {
+      "id": 1754408151396,
+      "username": "user6",
+      "name": "黃雅婷",
+      "question": "產品諮詢",
+      "created_at": "2025-08-03T07:41:51.390Z",
+      "timestamp": "2025-08-03T07:41:51.390Z"
+    },
+    {
+      "id": 1754408151397,
+      "username": "user7",
+      "name": "劉建國",
+      "question": "服務問題",
+      "created_at": "2025-08-05T14:24:51.390Z",
+      "timestamp": "2025-08-05T14:24:51.390Z"
+    },
+    {
+      "id": 1754408151398,
+      "username": "user8",
+      "name": "周淑芬",
+      "question": "系統錯誤報告",
+      "created_at": "2025-08-01T01:50:51.390Z",
+      "timestamp": "2025-08-01T01:50:51.390Z"
+    },
+    {
+      "id": 1754408151399,
+      "username": "user9",
+      "name": "張小明",
+      "question": "如何重置密碼？",
+      "created_at": "2025-08-02T11:22:51.390Z",
+      "timestamp": "2025-08-02T11:22:51.390Z"
+    },
+    {
+      "id": 1754408151400,
+      "username": "user10",
+      "name": "李美玲",
+      "question": "系統使用問題",
+      "created_at": "2025-08-03T18:23:51.390Z",
+      "timestamp": "2025-08-03T18:23:51.390Z"
+    },
+    {
+      "id": 1754408151401,
+      "username": "user11",
+      "name": "王大華",
+      "question": "帳號登入問題",
+      "created_at": "2025-08-04T16:10:51.390Z",
+      "timestamp": "2025-08-04T16:10:51.390Z"
+    },
+    {
+      "id": 1754408151402,
+      "username": "user12",
+      "name": "陳小芳",
+      "question": "功能操作說明",
+      "created_at": "2025-08-05T04:27:51.390Z",
+      "timestamp": "2025-08-05T04:27:51.390Z"
+    },
+    {
+      "id": 1754408151403,
+      "username": "user13",
+      "name": "林志明",
+      "question": "技術支援需求",
+      "created_at": "2025-07-31T18:54:51.390Z",
+      "timestamp": "2025-07-31T18:54:51.390Z"
+    },
+    {
+      "id": 1754408151404,
+      "username": "user14",
+      "name": "黃雅婷",
+      "question": "產品諮詢",
+      "created_at": "2025-07-31T06:26:51.390Z",
+      "timestamp": "2025-07-31T06:26:51.390Z"
+    },
+    {
+      "id": 1754408151405,
+      "username": "user15",
+      "name": "劉建國",
+      "question": "服務問題",
+      "created_at": "2025-07-29T23:09:51.390Z",
+      "timestamp": "2025-07-29T23:09:51.390Z"
+    },
+    {
+      "id": 1754408151406,
+      "username": "user16",
+      "name": "周淑芬",
+      "question": "系統錯誤報告",
+      "created_at": "2025-08-02T08:08:51.390Z",
+      "timestamp": "2025-08-02T08:08:51.390Z"
+    },
+    {
+      "id": 1754408151407,
+      "username": "user17",
+      "name": "張小明",
+      "question": "如何重置密碼？",
+      "created_at": "2025-08-03T02:49:51.390Z",
+      "timestamp": "2025-08-03T02:49:51.390Z"
+    },
+    {
+      "id": 1754408151408,
+      "username": "user18",
+      "name": "李美玲",
+      "question": "系統使用問題",
+      "created_at": "2025-08-02T09:58:51.390Z",
+      "timestamp": "2025-08-02T09:58:51.390Z"
+    },
+    {
+      "id": 1754408151409,
+      "username": "user19",
+      "name": "王大華",
+      "question": "帳號登入問題",
+      "created_at": "2025-07-29T21:08:51.390Z",
+      "timestamp": "2025-07-29T21:08:51.390Z"
+    },
+    {
+      "id": 1754408151410,
+      "username": "user20",
+      "name": "陳小芳",
+      "question": "功能操作說明",
+      "created_at": "2025-07-31T20:41:51.390Z",
+      "timestamp": "2025-07-31T20:41:51.390Z"
+    },
+    {
+      "id": 1754408151411,
+      "username": "user21",
+      "name": "林志明",
+      "question": "技術支援需求",
+      "created_at": "2025-08-02T13:53:51.390Z",
+      "timestamp": "2025-08-02T13:53:51.390Z"
+    },
+    {
+      "id": 1754408151412,
+      "username": "user22",
+      "name": "黃雅婷",
+      "question": "產品諮詢",
+      "created_at": "2025-08-03T21:41:51.390Z",
+      "timestamp": "2025-08-03T21:41:51.390Z"
+    },
+    {
+      "id": 1754408151413,
+      "username": "user23",
+      "name": "劉建國",
+      "question": "服務問題",
+      "created_at": "2025-07-30T22:34:51.390Z",
+      "timestamp": "2025-07-30T22:34:51.390Z"
+    },
+    {
+      "id": 1754408151414,
+      "username": "user24",
+      "name": "周淑芬",
+      "question": "系統錯誤報告",
+      "created_at": "2025-08-04T19:40:51.390Z",
+      "timestamp": "2025-08-04T19:40:51.390Z"
+    },
+    {
+      "id": 1754408151415,
+      "username": "user25",
+      "name": "張小明",
+      "question": "如何重置密碼？",
+      "created_at": "2025-08-03T22:58:51.390Z",
+      "timestamp": "2025-08-03T22:58:51.390Z"
+    },
+    {
+      "id": 1754408151416,
+      "username": "user26",
+      "name": "李美玲",
+      "question": "系統使用問題",
+      "created_at": "2025-07-30T01:01:51.390Z",
+      "timestamp": "2025-07-30T01:01:51.390Z"
+    },
+    {
+      "id": 1754408151417,
+      "username": "user27",
+      "name": "王大華",
+      "question": "帳號登入問題",
+      "created_at": "2025-08-05T05:29:51.390Z",
+      "timestamp": "2025-08-05T05:29:51.390Z"
+    },
+    {
+      "id": 1754408151418,
+      "username": "user28",
+      "name": "陳小芳",
+      "question": "功能操作說明",
+      "created_at": "2025-08-01T21:18:51.390Z",
+      "timestamp": "2025-08-01T21:18:51.390Z"
+    },
+    {
+      "id": 1754408151419,
+      "username": "user29",
+      "name": "林志明",
+      "question": "技術支援需求",
+      "created_at": "2025-08-02T18:40:51.390Z",
+      "timestamp": "2025-08-02T18:40:51.390Z"
+    },
+    {
+      "id": 1754408151420,
+      "username": "user30",
+      "name": "黃雅婷",
+      "question": "產品諮詢",
+      "created_at": "2025-08-02T22:48:51.390Z",
+      "timestamp": "2025-08-02T22:48:51.390Z"
+    },
+    {
+      "id": 1754408151421,
+      "username": "user31",
+      "name": "劉建國",
+      "question": "服務問題",
+      "created_at": "2025-07-30T16:51:51.390Z",
+      "timestamp": "2025-07-30T16:51:51.390Z"
+    },
+    {
+      "id": 1754408151422,
+      "username": "user32",
+      "name": "周淑芬",
+      "question": "系統錯誤報告",
+      "created_at": "2025-08-01T10:42:51.390Z",
+      "timestamp": "2025-08-01T10:42:51.390Z"
+    },
+    {
+      "id": 1754408151423,
+      "username": "user33",
+      "name": "張小明",
+      "question": "如何重置密碼？",
+      "created_at": "2025-08-02T09:43:51.390Z",
+      "timestamp": "2025-08-02T09:43:51.390Z"
+    },
+    {
+      "id": 1754408151424,
+      "username": "user34",
+      "name": "李美玲",
+      "question": "系統使用問題",
+      "created_at": "2025-08-03T23:56:51.390Z",
+      "timestamp": "2025-08-03T23:56:51.390Z"
+    },
+    {
+      "id": 1754408151425,
+      "username": "user35",
+      "name": "王大華",
+      "question": "帳號登入問題",
+      "created_at": "2025-07-31T17:29:51.390Z",
+      "timestamp": "2025-07-31T17:29:51.390Z"
+    },
+    {
+      "id": 1754408151426,
+      "username": "user36",
+      "name": "陳小芳",
+      "question": "功能操作說明",
+      "created_at": "2025-08-02T10:06:51.390Z",
+      "timestamp": "2025-08-02T10:06:51.390Z"
+    },
+    {
+      "id": 1754408151427,
+      "username": "user37",
+      "name": "林志明",
+      "question": "技術支援需求",
+      "created_at": "2025-07-30T10:53:51.390Z",
+      "timestamp": "2025-07-30T10:53:51.390Z"
+    },
+    {
+      "id": 1754408151428,
+      "username": "user38",
+      "name": "黃雅婷",
+      "question": "產品諮詢",
+      "created_at": "2025-07-31T08:35:51.390Z",
+      "timestamp": "2025-07-31T08:35:51.390Z"
+    },
+    {
+      "id": 1754408151429,
+      "username": "user39",
+      "name": "劉建國",
+      "question": "服務問題",
+      "created_at": "2025-08-02T21:52:51.390Z",
+      "timestamp": "2025-08-02T21:52:51.390Z"
+    },
+    {
+      "id": 1754408151430,
+      "username": "user40",
+      "name": "周淑芬",
+      "question": "系統錯誤報告",
+      "created_at": "2025-08-01T06:57:51.390Z",
+      "timestamp": "2025-08-01T06:57:51.390Z"
+    },
+    {
+      "id": 1754408151431,
+      "username": "user41",
+      "name": "張小明",
+      "question": "如何重置密碼？",
+      "created_at": "2025-07-30T22:31:51.390Z",
+      "timestamp": "2025-07-30T22:31:51.390Z"
+    },
+    {
+      "id": 1754408151432,
+      "username": "user42",
+      "name": "李美玲",
+      "question": "系統使用問題",
+      "created_at": "2025-08-03T19:27:51.390Z",
+      "timestamp": "2025-08-03T19:27:51.390Z"
+    },
+    {
+      "id": 1754408151433,
+      "username": "user43",
+      "name": "王大華",
+      "question": "帳號登入問題",
+      "created_at": "2025-07-29T16:14:51.390Z",
+      "timestamp": "2025-07-29T16:14:51.390Z"
+    },
+    {
+      "id": 1754408151434,
+      "username": "user44",
+      "name": "陳小芳",
+      "question": "功能操作說明",
+      "created_at": "2025-08-04T01:13:51.390Z",
+      "timestamp": "2025-08-04T01:13:51.390Z"
+    },
+    {
+      "id": 1754408151435,
+      "username": "user45",
+      "name": "林志明",
+      "question": "技術支援需求",
+      "created_at": "2025-07-29T18:36:51.390Z",
+      "timestamp": "2025-07-29T18:36:51.390Z"
+    },
+    {
+      "id": 1754408151436,
+      "username": "user46",
+      "name": "黃雅婷",
+      "question": "產品諮詢",
+      "created_at": "2025-07-31T00:39:51.390Z",
+      "timestamp": "2025-07-31T00:39:51.390Z"
+    },
+    {
+      "id": 1754408151437,
+      "username": "user47",
+      "name": "劉建國",
+      "question": "服務問題",
+      "created_at": "2025-08-01T16:09:51.390Z",
+      "timestamp": "2025-08-01T16:09:51.390Z"
+    },
+    {
+      "id": 1754408151438,
+      "username": "user48",
+      "name": "周淑芬",
+      "question": "系統錯誤報告",
+      "created_at": "2025-07-30T11:27:51.390Z",
+      "timestamp": "2025-07-30T11:27:51.390Z"
+    },
+    {
+      "id": 1754408151439,
+      "username": "user49",
+      "name": "張小明",
+      "question": "如何重置密碼？",
+      "created_at": "2025-08-05T04:39:51.390Z",
+      "timestamp": "2025-08-05T04:39:51.390Z"
+    },
+    {
+      "id": 1754408151440,
+      "username": "user50",
+      "name": "李美玲",
+      "question": "系統使用問題",
+      "created_at": "2025-08-03T10:14:51.390Z",
+      "timestamp": "2025-08-03T10:14:51.390Z"
+    }
+  ],
+  "knowledge": [
+    {
+      "id": 1754408151392,
+      "question": "如何重置密碼？",
+      "answer": "請點擊登入頁面的「忘記密碼」連結，輸入您的電子郵件地址，系統會發送重設密碼的連結給您。",
+      "category": "帳號管理",
+      "usage_count": 23,
+      "created_at": "2025-07-28T10:27:51.392Z",
+      "updated_at": "2025-07-28T10:27:51.392Z"
+    },
+    {
+      "id": 1754408151393,
+      "question": "系統使用問題",
+      "answer": "請先查看使用手冊，如果仍有問題請聯繫技術支援。",
+      "category": "系統使用",
+      "usage_count": 11,
+      "created_at": "2025-08-03T14:11:51.392Z",
+      "updated_at": "2025-08-03T14:11:51.392Z"
+    },
+    {
+      "id": 1754408151394,
+      "question": "帳號登入問題",
+      "answer": "請確認您的用戶名和密碼是否正確，如果忘記密碼請使用重設功能。",
+      "category": "帳號管理",
+      "usage_count": 47,
+      "created_at": "2025-07-20T01:24:51.392Z",
+      "updated_at": "2025-07-20T01:24:51.392Z"
+    },
+    {
+      "id": 1754408151395,
+      "question": "功能操作說明",
+      "answer": "詳細的功能操作說明請參考系統內的使用指南。",
+      "category": "系統使用",
+      "usage_count": 19,
+      "created_at": "2025-07-18T10:59:51.392Z",
+      "updated_at": "2025-07-18T10:59:51.392Z"
+    },
+    {
+      "id": 1754408151396,
+      "question": "技術支援需求",
+      "answer": "請提供詳細的問題描述，我們的技術團隊會盡快為您處理。",
+      "category": "技術支援",
+      "usage_count": 11,
+      "created_at": "2025-07-07T10:50:51.392Z",
+      "updated_at": "2025-07-07T10:50:51.392Z"
+    },
+    {
+      "id": 1754408151397,
+      "question": "產品諮詢",
+      "answer": "關於產品功能的詳細資訊，請參考產品說明書或聯繫銷售團隊。",
+      "category": "產品資訊",
+      "usage_count": 32,
+      "created_at": "2025-07-18T09:43:51.392Z",
+      "updated_at": "2025-07-18T09:43:51.392Z"
+    },
+    {
+      "id": 1754408151398,
+      "question": "服務問題",
+      "answer": "如果您遇到服務相關問題，請聯繫客服團隊。",
+      "category": "客戶服務",
+      "usage_count": 6,
+      "created_at": "2025-07-29T06:07:51.392Z",
+      "updated_at": "2025-07-29T06:07:51.392Z"
+    },
+    {
+      "id": 1754408151399,
+      "question": "系統錯誤報告",
+      "answer": "請提供錯誤的詳細資訊，包括錯誤訊息和操作步驟。",
+      "category": "技術支援",
+      "usage_count": 26,
+      "created_at": "2025-07-26T15:18:51.392Z",
+      "updated_at": "2025-07-26T15:18:51.392Z"
+    },
+    {
+      "id": 1754408151400,
+      "question": "如何重置密碼？",
+      "answer": "請點擊登入頁面的「忘記密碼」連結，輸入您的電子郵件地址，系統會發送重設密碼的連結給您。",
+      "category": "帳號管理",
+      "usage_count": 23,
+      "created_at": "2025-07-15T19:53:51.392Z",
+      "updated_at": "2025-07-15T19:53:51.392Z"
+    },
+    {
+      "id": 1754408151401,
+      "question": "系統使用問題",
+      "answer": "請先查看使用手冊，如果仍有問題請聯繫技術支援。",
+      "category": "系統使用",
+      "usage_count": 11,
+      "created_at": "2025-07-22T04:23:51.392Z",
+      "updated_at": "2025-07-22T04:23:51.392Z"
+    },
+    {
+      "id": 1754408151402,
+      "question": "帳號登入問題",
+      "answer": "請確認您的用戶名和密碼是否正確，如果忘記密碼請使用重設功能。",
+      "category": "帳號管理",
+      "usage_count": 47,
+      "created_at": "2025-07-22T10:03:51.392Z",
+      "updated_at": "2025-07-22T10:03:51.392Z"
+    },
+    {
+      "id": 1754408151403,
+      "question": "功能操作說明",
+      "answer": "詳細的功能操作說明請參考系統內的使用指南。",
+      "category": "系統使用",
+      "usage_count": 19,
+      "created_at": "2025-07-31T05:00:51.392Z",
+      "updated_at": "2025-07-31T05:00:51.392Z"
+    },
+    {
+      "id": 1754408151404,
+      "question": "技術支援需求",
+      "answer": "請提供詳細的問題描述，我們的技術團隊會盡快為您處理。",
+      "category": "技術支援",
+      "usage_count": 11,
+      "created_at": "2025-08-02T15:17:51.392Z",
+      "updated_at": "2025-08-02T15:17:51.392Z"
+    },
+    {
+      "id": 1754408151405,
+      "question": "產品諮詢",
+      "answer": "關於產品功能的詳細資訊，請參考產品說明書或聯繫銷售團隊。",
+      "category": "產品資訊",
+      "usage_count": 32,
+      "created_at": "2025-07-23T17:04:51.392Z",
+      "updated_at": "2025-07-23T17:04:51.392Z"
+    },
+    {
+      "id": 1754408151406,
+      "question": "服務問題",
+      "answer": "如果您遇到服務相關問題，請聯繫客服團隊。",
+      "category": "客戶服務",
+      "usage_count": 6,
+      "created_at": "2025-08-01T22:01:51.392Z",
+      "updated_at": "2025-08-01T22:01:51.392Z"
+    },
+    {
+      "id": 1754408151407,
+      "question": "系統錯誤報告",
+      "answer": "請提供錯誤的詳細資訊，包括錯誤訊息和操作步驟。",
+      "category": "技術支援",
+      "usage_count": 26,
+      "created_at": "2025-08-01T10:45:51.392Z",
+      "updated_at": "2025-08-01T10:45:51.392Z"
+    },
+    {
+      "id": 1754408151408,
+      "question": "如何重置密碼？",
+      "answer": "請點擊登入頁面的「忘記密碼」連結，輸入您的電子郵件地址，系統會發送重設密碼的連結給您。",
+      "category": "帳號管理",
+      "usage_count": 23,
+      "created_at": "2025-07-25T02:14:51.392Z",
+      "updated_at": "2025-07-25T02:14:51.392Z"
+    },
+    {
+      "id": 1754408151409,
+      "question": "系統使用問題",
+      "answer": "請先查看使用手冊，如果仍有問題請聯繫技術支援。",
+      "category": "系統使用",
+      "usage_count": 11,
+      "created_at": "2025-07-07T16:54:51.392Z",
+      "updated_at": "2025-07-07T16:54:51.392Z"
+    },
+    {
+      "id": 1754408151410,
+      "question": "帳號登入問題",
+      "answer": "請確認您的用戶名和密碼是否正確，如果忘記密碼請使用重設功能。",
+      "category": "帳號管理",
+      "usage_count": 47,
+      "created_at": "2025-07-20T21:22:51.392Z",
+      "updated_at": "2025-07-20T21:22:51.392Z"
+    },
+    {
+      "id": 1754408151411,
+      "question": "功能操作說明",
+      "answer": "詳細的功能操作說明請參考系統內的使用指南。",
+      "category": "系統使用",
+      "usage_count": 19,
+      "created_at": "2025-08-05T08:02:51.392Z",
+      "updated_at": "2025-08-05T08:02:51.392Z"
+    }
+  ],
+  "user_states": [
+    {
+      "id": 1754408151392,
+      "userId": "user1",
+      "status": "busy",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151393,
+      "userId": "user2",
+      "status": "offline",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151394,
+      "userId": "user3",
+      "status": "busy",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151395,
+      "userId": "user4",
+      "status": "offline",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151396,
+      "userId": "user5",
+      "status": "busy",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151397,
+      "userId": "user6",
+      "status": "away",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151398,
+      "userId": "user7",
+      "status": "online",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151399,
+      "userId": "user8",
+      "status": "offline",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151400,
+      "userId": "user9",
+      "status": "online",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151401,
+      "userId": "user10",
+      "status": "away",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151402,
+      "userId": "user11",
+      "status": "online",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151403,
+      "userId": "user12",
+      "status": "online",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151404,
+      "userId": "user13",
+      "status": "online",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151405,
+      "userId": "user14",
+      "status": "busy",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151406,
+      "userId": "user15",
+      "status": "away",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151407,
+      "userId": "user16",
+      "status": "online",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151408,
+      "userId": "user17",
+      "status": "busy",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151409,
+      "userId": "user18",
+      "status": "away",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151410,
+      "userId": "user19",
+      "status": "busy",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    },
+    {
+      "id": 1754408151411,
+      "userId": "user20",
+      "status": "offline",
+      "lastActivity": "2025-08-05T15:35:51.392Z",
+      "created_at": "2025-08-05T15:35:51.392Z"
+    }
+  ],
+  "chat_history": [
+    {
+      "id": "line_conv_001",
+      "platform": "line",
+      "messages": [
+        {
+          "role": "user",
+          "content": "你好，我想詢問染髮的價格",
+          "timestamp": "2025-08-01T15:46:09.009561"
+        },
+        {
+          "role": "assistant",
+          "content": "您好！歡迎詢問染髮服務。我們有不同價位的染髮套餐，請問您想要什麼顏色的染髮呢？",
+          "timestamp": "2025-08-01T15:47:09.009564"
+        }
+      ],
+      "createdAt": "2025-08-01T15:46:09.009565",
+      "updatedAt": "2025-08-01T15:47:09.009566"
+    },
+    {
+      "id": "line_conv_002",
+      "platform": "line",
+      "messages": [
+        {
+          "role": "user",
+          "content": "會員卡怎麼使用?有積分嗎?",
+          "timestamp": "2025-08-01T15:43:09.009567"
+        },
+        {
+          "role": "assistant",
+          "content": "您好！我們的會員卡可以累積積分，每消費  可獲得 1 點積分。積分可以兌換免費服務或折扣券。",
+          "timestamp": "2025-08-01T15:44:09.009568"
+        }
+      ],
+      "createdAt": "2025-08-01T15:43:09.009569",
+      "updatedAt": "2025-08-01T15:44:09.009569"
+    },
+    {
+      "id": 1754408151391,
+      "userId": "user48",
+      "content": "您好，我想詢問關於系統使用的問題",
+      "response": "感謝您的詢問，我們會盡快為您處理",
+      "responseTime": 5.5,
+      "timestamp": "2025-07-31T03:33:51.391Z",
+      "created_at": "2025-07-31T03:33:51.391Z"
+    },
+    {
+      "id": 1754408151392,
+      "userId": "user9",
+      "content": "如何重置我的密碼？",
+      "response": "請按照以下步驟重置密碼...",
+      "responseTime": 5.9,
+      "timestamp": "2025-08-04T11:14:51.391Z",
+      "created_at": "2025-08-04T11:14:51.391Z"
+    },
+    {
+      "id": 1754408151393,
+      "userId": "user18",
+      "content": "系統出現錯誤，請協助處理",
+      "response": "我們已收到您的錯誤報告，正在處理中",
+      "responseTime": 2.2,
+      "timestamp": "2025-08-03T07:51:51.391Z",
+      "created_at": "2025-08-03T07:51:51.391Z"
+    },
+    {
+      "id": 1754408151394,
+      "userId": "user29",
+      "content": "我需要技術支援",
+      "response": "技術支援團隊會與您聯繫",
+      "responseTime": 4.6,
+      "timestamp": "2025-08-03T20:10:51.391Z",
+      "created_at": "2025-08-03T20:10:51.391Z"
+    },
+    {
+      "id": 1754408151395,
+      "userId": "user22",
+      "content": "產品功能諮詢",
+      "response": "產品功能說明如下...",
+      "responseTime": 4.5,
+      "timestamp": "2025-07-31T22:32:51.391Z",
+      "created_at": "2025-07-31T22:32:51.391Z"
+    },
+    {
+      "id": 1754408151396,
+      "userId": "user6",
+      "content": "帳號登入有問題",
+      "response": "請檢查您的登入資訊",
+      "responseTime": 4.6,
+      "timestamp": "2025-07-30T01:54:51.391Z",
+      "created_at": "2025-07-30T01:54:51.391Z"
+    },
+    {
+      "id": 1754408151397,
+      "userId": "user47",
+      "content": "如何使用新功能？",
+      "response": "新功能使用說明...",
+      "responseTime": 5.1,
+      "timestamp": "2025-07-30T02:24:51.391Z",
+      "created_at": "2025-07-30T02:24:51.391Z"
+    },
+    {
+      "id": 1754408151398,
+      "userId": "user47",
+      "content": "系統設定問題",
+      "response": "系統設定可以透過以下方式調整...",
+      "responseTime": 2.3,
+      "timestamp": "2025-08-03T07:39:51.391Z",
+      "created_at": "2025-08-03T07:39:51.391Z"
+    },
+    {
+      "id": 1754408151399,
+      "userId": "user22",
+      "content": "資料匯出功能",
+      "response": "資料匯出功能位於...",
+      "responseTime": 4.2,
+      "timestamp": "2025-08-03T10:08:51.391Z",
+      "created_at": "2025-08-03T10:08:51.391Z"
+    },
+    {
+      "id": 1754408151400,
+      "userId": "user31",
+      "content": "權限設定問題",
+      "response": "權限設定請聯繫管理員",
+      "responseTime": 1.6,
+      "timestamp": "2025-08-04T00:44:51.391Z",
+      "created_at": "2025-08-04T00:44:51.391Z"
+    },
+    {
+      "id": 1754408151401,
+      "userId": "user12",
+      "content": "您好，我想詢問關於系統使用的問題",
+      "response": "感謝您的詢問，我們會盡快為您處理",
+      "responseTime": 3.6,
+      "timestamp": "2025-08-04T19:08:51.391Z",
+      "created_at": "2025-08-04T19:08:51.391Z"
+    },
+    {
+      "id": 1754408151402,
+      "userId": "user17",
+      "content": "如何重置我的密碼？",
+      "response": "請按照以下步驟重置密碼...",
+      "responseTime": 3.1,
+      "timestamp": "2025-08-03T19:48:51.391Z",
+      "created_at": "2025-08-03T19:48:51.391Z"
+    },
+    {
+      "id": 1754408151403,
+      "userId": "user4",
+      "content": "系統出現錯誤，請協助處理",
+      "response": "我們已收到您的錯誤報告，正在處理中",
+      "responseTime": 3.8,
+      "timestamp": "2025-08-04T21:03:51.391Z",
+      "created_at": "2025-08-04T21:03:51.391Z"
+    },
+    {
+      "id": 1754408151404,
+      "userId": "user35",
+      "content": "我需要技術支援",
+      "response": "技術支援團隊會與您聯繫",
+      "responseTime": 2.1,
+      "timestamp": "2025-08-04T11:52:51.391Z",
+      "created_at": "2025-08-04T11:52:51.391Z"
+    },
+    {
+      "id": 1754408151405,
+      "userId": "user3",
+      "content": "產品功能諮詢",
+      "response": "產品功能說明如下...",
+      "responseTime": 3.7,
+      "timestamp": "2025-08-01T14:11:51.391Z",
+      "created_at": "2025-08-01T14:11:51.391Z"
+    },
+    {
+      "id": 1754408151406,
+      "userId": "user38",
+      "content": "帳號登入有問題",
+      "response": "請檢查您的登入資訊",
+      "responseTime": 3.9,
+      "timestamp": "2025-08-05T10:54:51.391Z",
+      "created_at": "2025-08-05T10:54:51.391Z"
+    },
+    {
+      "id": 1754408151407,
+      "userId": "user29",
+      "content": "如何使用新功能？",
+      "response": "新功能使用說明...",
+      "responseTime": 2.9,
+      "timestamp": "2025-08-01T13:07:51.391Z",
+      "created_at": "2025-08-01T13:07:51.391Z"
+    },
+    {
+      "id": 1754408151408,
+      "userId": "user22",
+      "content": "系統設定問題",
+      "response": "系統設定可以透過以下方式調整...",
+      "responseTime": 2.6,
+      "timestamp": "2025-08-03T16:49:51.391Z",
+      "created_at": "2025-08-03T16:49:51.391Z"
+    },
+    {
+      "id": 1754408151409,
+      "userId": "user30",
+      "content": "資料匯出功能",
+      "response": "資料匯出功能位於...",
+      "responseTime": 1.7,
+      "timestamp": "2025-08-02T04:49:51.391Z",
+      "created_at": "2025-08-02T04:49:51.391Z"
+    },
+    {
+      "id": 1754408151410,
+      "userId": "user32",
+      "content": "權限設定問題",
+      "response": "權限設定請聯繫管理員",
+      "responseTime": 5.4,
+      "timestamp": "2025-08-02T20:18:51.391Z",
+      "created_at": "2025-08-02T20:18:51.391Z"
+    },
+    {
+      "id": 1754408151411,
+      "userId": "user31",
+      "content": "您好，我想詢問關於系統使用的問題",
+      "response": "感謝您的詢問，我們會盡快為您處理",
+      "responseTime": 5.2,
+      "timestamp": "2025-08-02T17:30:51.391Z",
+      "created_at": "2025-08-02T17:30:51.391Z"
+    },
+    {
+      "id": 1754408151412,
+      "userId": "user33",
+      "content": "如何重置我的密碼？",
+      "response": "請按照以下步驟重置密碼...",
+      "responseTime": 2.6,
+      "timestamp": "2025-07-30T07:36:51.391Z",
+      "created_at": "2025-07-30T07:36:51.391Z"
+    },
+    {
+      "id": 1754408151413,
+      "userId": "user8",
+      "content": "系統出現錯誤，請協助處理",
+      "response": "我們已收到您的錯誤報告，正在處理中",
+      "responseTime": 5.9,
+      "timestamp": "2025-07-29T18:33:51.391Z",
+      "created_at": "2025-07-29T18:33:51.391Z"
+    },
+    {
+      "id": 1754408151414,
+      "userId": "user50",
+      "content": "我需要技術支援",
+      "response": "技術支援團隊會與您聯繫",
+      "responseTime": 4.2,
+      "timestamp": "2025-07-31T13:55:51.391Z",
+      "created_at": "2025-07-31T13:55:51.391Z"
+    },
+    {
+      "id": 1754408151415,
+      "userId": "user35",
+      "content": "產品功能諮詢",
+      "response": "產品功能說明如下...",
+      "responseTime": 4.3,
+      "timestamp": "2025-08-02T09:36:51.391Z",
+      "created_at": "2025-08-02T09:36:51.391Z"
+    },
+    {
+      "id": 1754408151416,
+      "userId": "user2",
+      "content": "帳號登入有問題",
+      "response": "請檢查您的登入資訊",
+      "responseTime": 5,
+      "timestamp": "2025-08-01T07:17:51.391Z",
+      "created_at": "2025-08-01T07:17:51.391Z"
+    },
+    {
+      "id": 1754408151417,
+      "userId": "user17",
+      "content": "如何使用新功能？",
+      "response": "新功能使用說明...",
+      "responseTime": 4.9,
+      "timestamp": "2025-08-02T01:23:51.391Z",
+      "created_at": "2025-08-02T01:23:51.391Z"
+    },
+    {
+      "id": 1754408151418,
+      "userId": "user8",
+      "content": "系統設定問題",
+      "response": "系統設定可以透過以下方式調整...",
+      "responseTime": 2.8,
+      "timestamp": "2025-08-04T22:47:51.391Z",
+      "created_at": "2025-08-04T22:47:51.391Z"
+    },
+    {
+      "id": 1754408151419,
+      "userId": "user6",
+      "content": "資料匯出功能",
+      "response": "資料匯出功能位於...",
+      "responseTime": 4.9,
+      "timestamp": "2025-08-01T16:32:51.391Z",
+      "created_at": "2025-08-01T16:32:51.391Z"
+    },
+    {
+      "id": 1754408151420,
+      "userId": "user48",
+      "content": "權限設定問題",
+      "response": "權限設定請聯繫管理員",
+      "responseTime": 1.4,
+      "timestamp": "2025-08-01T07:42:51.391Z",
+      "created_at": "2025-08-01T07:42:51.391Z"
+    },
+    {
+      "id": 1754408151421,
+      "userId": "user13",
+      "content": "您好，我想詢問關於系統使用的問題",
+      "response": "感謝您的詢問，我們會盡快為您處理",
+      "responseTime": 2.7,
+      "timestamp": "2025-08-04T08:09:51.391Z",
+      "created_at": "2025-08-04T08:09:51.391Z"
+    },
+    {
+      "id": 1754408151422,
+      "userId": "user5",
+      "content": "如何重置我的密碼？",
+      "response": "請按照以下步驟重置密碼...",
+      "responseTime": 3.8,
+      "timestamp": "2025-08-04T04:32:51.391Z",
+      "created_at": "2025-08-04T04:32:51.391Z"
+    },
+    {
+      "id": 1754408151423,
+      "userId": "user28",
+      "content": "系統出現錯誤，請協助處理",
+      "response": "我們已收到您的錯誤報告，正在處理中",
+      "responseTime": 3.9,
+      "timestamp": "2025-08-04T18:23:51.391Z",
+      "created_at": "2025-08-04T18:23:51.391Z"
+    },
+    {
+      "id": 1754408151424,
+      "userId": "user1",
+      "content": "我需要技術支援",
+      "response": "技術支援團隊會與您聯繫",
+      "responseTime": 3.7,
+      "timestamp": "2025-08-01T21:18:51.391Z",
+      "created_at": "2025-08-01T21:18:51.391Z"
+    },
+    {
+      "id": 1754408151425,
+      "userId": "user45",
+      "content": "產品功能諮詢",
+      "response": "產品功能說明如下...",
+      "responseTime": 5.6,
+      "timestamp": "2025-07-31T07:18:51.391Z",
+      "created_at": "2025-07-31T07:18:51.391Z"
+    },
+    {
+      "id": 1754408151426,
+      "userId": "user41",
+      "content": "帳號登入有問題",
+      "response": "請檢查您的登入資訊",
+      "responseTime": 2.9,
+      "timestamp": "2025-08-04T17:41:51.391Z",
+      "created_at": "2025-08-04T17:41:51.391Z"
+    },
+    {
+      "id": 1754408151427,
+      "userId": "user20",
+      "content": "如何使用新功能？",
+      "response": "新功能使用說明...",
+      "responseTime": 4.2,
+      "timestamp": "2025-08-03T12:37:51.391Z",
+      "created_at": "2025-08-03T12:37:51.391Z"
+    },
+    {
+      "id": 1754408151428,
+      "userId": "user43",
+      "content": "系統設定問題",
+      "response": "系統設定可以透過以下方式調整...",
+      "responseTime": 2.9,
+      "timestamp": "2025-08-03T16:59:51.391Z",
+      "created_at": "2025-08-03T16:59:51.391Z"
+    },
+    {
+      "id": 1754408151429,
+      "userId": "user33",
+      "content": "資料匯出功能",
+      "response": "資料匯出功能位於...",
+      "responseTime": 1.1,
+      "timestamp": "2025-08-01T01:42:51.391Z",
+      "created_at": "2025-08-01T01:42:51.391Z"
+    },
+    {
+      "id": 1754408151430,
+      "userId": "user25",
+      "content": "權限設定問題",
+      "response": "權限設定請聯繫管理員",
+      "responseTime": 2.9,
+      "timestamp": "2025-08-01T18:54:51.391Z",
+      "created_at": "2025-08-01T18:54:51.391Z"
+    },
+    {
+      "id": 1754408151431,
+      "userId": "user31",
+      "content": "您好，我想詢問關於系統使用的問題",
+      "response": "感謝您的詢問，我們會盡快為您處理",
+      "responseTime": 5.2,
+      "timestamp": "2025-07-30T08:43:51.391Z",
+      "created_at": "2025-07-30T08:43:51.391Z"
+    },
+    {
+      "id": 1754408151432,
+      "userId": "user25",
+      "content": "如何重置我的密碼？",
+      "response": "請按照以下步驟重置密碼...",
+      "responseTime": 5.4,
+      "timestamp": "2025-08-02T00:12:51.391Z",
+      "created_at": "2025-08-02T00:12:51.391Z"
+    },
+    {
+      "id": 1754408151433,
+      "userId": "user23",
+      "content": "系統出現錯誤，請協助處理",
+      "response": "我們已收到您的錯誤報告，正在處理中",
+      "responseTime": 5.5,
+      "timestamp": "2025-08-05T09:26:51.391Z",
+      "created_at": "2025-08-05T09:26:51.391Z"
+    },
+    {
+      "id": 1754408151434,
+      "userId": "user15",
+      "content": "我需要技術支援",
+      "response": "技術支援團隊會與您聯繫",
+      "responseTime": 4.2,
+      "timestamp": "2025-08-02T10:03:51.391Z",
+      "created_at": "2025-08-02T10:03:51.391Z"
+    },
+    {
+      "id": 1754408151435,
+      "userId": "user36",
+      "content": "產品功能諮詢",
+      "response": "產品功能說明如下...",
+      "responseTime": 2.7,
+      "timestamp": "2025-08-04T16:02:51.391Z",
+      "created_at": "2025-08-04T16:02:51.391Z"
+    },
+    {
+      "id": 1754408151436,
+      "userId": "user10",
+      "content": "帳號登入有問題",
+      "response": "請檢查您的登入資訊",
+      "responseTime": 1.9,
+      "timestamp": "2025-07-31T18:53:51.391Z",
+      "created_at": "2025-07-31T18:53:51.391Z"
+    },
+    {
+      "id": 1754408151437,
+      "userId": "user44",
+      "content": "如何使用新功能？",
+      "response": "新功能使用說明...",
+      "responseTime": 3.8,
+      "timestamp": "2025-08-02T13:22:51.391Z",
+      "created_at": "2025-08-02T13:22:51.391Z"
+    },
+    {
+      "id": 1754408151438,
+      "userId": "user18",
+      "content": "系統設定問題",
+      "response": "系統設定可以透過以下方式調整...",
+      "responseTime": 4.1,
+      "timestamp": "2025-08-04T00:44:51.391Z",
+      "created_at": "2025-08-04T00:44:51.391Z"
+    },
+    {
+      "id": 1754408151439,
+      "userId": "user32",
+      "content": "資料匯出功能",
+      "response": "資料匯出功能位於...",
+      "responseTime": 2.6,
+      "timestamp": "2025-07-29T22:58:51.391Z",
+      "created_at": "2025-07-29T22:58:51.391Z"
+    },
+    {
+      "id": 1754408151440,
+      "userId": "user2",
+      "content": "權限設定問題",
+      "response": "權限設定請聯繫管理員",
+      "responseTime": 4.1,
+      "timestamp": "2025-07-30T14:47:51.391Z",
+      "created_at": "2025-07-30T14:47:51.391Z"
+    },
+    {
+      "id": 1754408151441,
+      "userId": "user37",
+      "content": "您好，我想詢問關於系統使用的問題",
+      "response": "感謝您的詢問，我們會盡快為您處理",
+      "responseTime": 4.1,
+      "timestamp": "2025-08-01T16:52:51.391Z",
+      "created_at": "2025-08-01T16:52:51.391Z"
+    },
+    {
+      "id": 1754408151442,
+      "userId": "user36",
+      "content": "如何重置我的密碼？",
+      "response": "請按照以下步驟重置密碼...",
+      "responseTime": 1.9,
+      "timestamp": "2025-08-01T07:54:51.391Z",
+      "created_at": "2025-08-01T07:54:51.391Z"
+    },
+    {
+      "id": 1754408151443,
+      "userId": "user2",
+      "content": "系統出現錯誤，請協助處理",
+      "response": "我們已收到您的錯誤報告，正在處理中",
+      "responseTime": 3.1,
+      "timestamp": "2025-08-04T15:29:51.391Z",
+      "created_at": "2025-08-04T15:29:51.391Z"
+    },
+    {
+      "id": 1754408151444,
+      "userId": "user21",
+      "content": "我需要技術支援",
+      "response": "技術支援團隊會與您聯繫",
+      "responseTime": 4.2,
+      "timestamp": "2025-08-01T22:59:51.391Z",
+      "created_at": "2025-08-01T22:59:51.391Z"
+    },
+    {
+      "id": 1754408151445,
+      "userId": "user7",
+      "content": "產品功能諮詢",
+      "response": "產品功能說明如下...",
+      "responseTime": 2.3,
+      "timestamp": "2025-08-04T06:52:51.391Z",
+      "created_at": "2025-08-04T06:52:51.391Z"
+    },
+    {
+      "id": 1754408151446,
+      "userId": "user15",
+      "content": "帳號登入有問題",
+      "response": "請檢查您的登入資訊",
+      "responseTime": 2.8,
+      "timestamp": "2025-08-05T11:57:51.391Z",
+      "created_at": "2025-08-05T11:57:51.391Z"
+    },
+    {
+      "id": 1754408151447,
+      "userId": "user11",
+      "content": "如何使用新功能？",
+      "response": "新功能使用說明...",
+      "responseTime": 2.1,
+      "timestamp": "2025-08-04T16:08:51.391Z",
+      "created_at": "2025-08-04T16:08:51.391Z"
+    },
+    {
+      "id": 1754408151448,
+      "userId": "user12",
+      "content": "系統設定問題",
+      "response": "系統設定可以透過以下方式調整...",
+      "responseTime": 1.4,
+      "timestamp": "2025-08-01T22:58:51.391Z",
+      "created_at": "2025-08-01T22:58:51.391Z"
+    },
+    {
+      "id": 1754408151449,
+      "userId": "user22",
+      "content": "資料匯出功能",
+      "response": "資料匯出功能位於...",
+      "responseTime": 4.3,
+      "timestamp": "2025-08-04T21:03:51.391Z",
+      "created_at": "2025-08-04T21:03:51.391Z"
+    },
+    {
+      "id": 1754408151450,
+      "userId": "user33",
+      "content": "權限設定問題",
+      "response": "權限設定請聯繫管理員",
+      "responseTime": 2.1,
+      "timestamp": "2025-08-05T03:29:51.391Z",
+      "created_at": "2025-08-05T03:29:51.391Z"
+    },
+    {
+      "id": 1754408151451,
+      "userId": "user10",
+      "content": "您好，我想詢問關於系統使用的問題",
+      "response": "感謝您的詢問，我們會盡快為您處理",
+      "responseTime": 3.8,
+      "timestamp": "2025-08-03T02:53:51.391Z",
+      "created_at": "2025-08-03T02:53:51.391Z"
+    },
+    {
+      "id": 1754408151452,
+      "userId": "user24",
+      "content": "如何重置我的密碼？",
+      "response": "請按照以下步驟重置密碼...",
+      "responseTime": 3.3,
+      "timestamp": "2025-08-05T09:34:51.391Z",
+      "created_at": "2025-08-05T09:34:51.391Z"
+    },
+    {
+      "id": 1754408151453,
+      "userId": "user13",
+      "content": "系統出現錯誤，請協助處理",
+      "response": "我們已收到您的錯誤報告，正在處理中",
+      "responseTime": 4.1,
+      "timestamp": "2025-08-05T10:17:51.391Z",
+      "created_at": "2025-08-05T10:17:51.391Z"
+    },
+    {
+      "id": 1754408151454,
+      "userId": "user30",
+      "content": "我需要技術支援",
+      "response": "技術支援團隊會與您聯繫",
+      "responseTime": 3.3,
+      "timestamp": "2025-08-01T20:25:51.391Z",
+      "created_at": "2025-08-01T20:25:51.391Z"
+    },
+    {
+      "id": 1754408151455,
+      "userId": "user1",
+      "content": "產品功能諮詢",
+      "response": "產品功能說明如下...",
+      "responseTime": 5.9,
+      "timestamp": "2025-08-02T22:22:51.391Z",
+      "created_at": "2025-08-02T22:22:51.391Z"
+    },
+    {
+      "id": 1754408151456,
+      "userId": "user8",
+      "content": "帳號登入有問題",
+      "response": "請檢查您的登入資訊",
+      "responseTime": 4.9,
+      "timestamp": "2025-07-31T07:03:51.391Z",
+      "created_at": "2025-07-31T07:03:51.391Z"
+    },
+    {
+      "id": 1754408151457,
+      "userId": "user29",
+      "content": "如何使用新功能？",
+      "response": "新功能使用說明...",
+      "responseTime": 5.2,
+      "timestamp": "2025-07-30T11:31:51.391Z",
+      "created_at": "2025-07-30T11:31:51.391Z"
+    },
+    {
+      "id": 1754408151458,
+      "userId": "user7",
+      "content": "系統設定問題",
+      "response": "系統設定可以透過以下方式調整...",
+      "responseTime": 2.5,
+      "timestamp": "2025-08-01T02:36:51.391Z",
+      "created_at": "2025-08-01T02:36:51.391Z"
+    },
+    {
+      "id": 1754408151459,
+      "userId": "user1",
+      "content": "資料匯出功能",
+      "response": "資料匯出功能位於...",
+      "responseTime": 1.5,
+      "timestamp": "2025-08-04T21:55:51.391Z",
+      "created_at": "2025-08-04T21:55:51.391Z"
+    },
+    {
+      "id": 1754408151460,
+      "userId": "user14",
+      "content": "權限設定問題",
+      "response": "權限設定請聯繫管理員",
+      "responseTime": 2.1,
+      "timestamp": "2025-08-04T02:27:51.391Z",
+      "created_at": "2025-08-04T02:27:51.391Z"
+    },
+    {
+      "id": 1754408151461,
+      "userId": "user37",
+      "content": "您好，我想詢問關於系統使用的問題",
+      "response": "感謝您的詢問，我們會盡快為您處理",
+      "responseTime": 2.6,
+      "timestamp": "2025-08-04T18:18:51.391Z",
+      "created_at": "2025-08-04T18:18:51.391Z"
+    },
+    {
+      "id": 1754408151462,
+      "userId": "user19",
+      "content": "如何重置我的密碼？",
+      "response": "請按照以下步驟重置密碼...",
+      "responseTime": 2.5,
+      "timestamp": "2025-08-05T12:16:51.391Z",
+      "created_at": "2025-08-05T12:16:51.391Z"
+    },
+    {
+      "id": 1754408151463,
+      "userId": "user43",
+      "content": "系統出現錯誤，請協助處理",
+      "response": "我們已收到您的錯誤報告，正在處理中",
+      "responseTime": 3.6,
+      "timestamp": "2025-08-04T15:50:51.391Z",
+      "created_at": "2025-08-04T15:50:51.391Z"
+    },
+    {
+      "id": 1754408151464,
+      "userId": "user11",
+      "content": "我需要技術支援",
+      "response": "技術支援團隊會與您聯繫",
+      "responseTime": 1.2,
+      "timestamp": "2025-08-01T23:33:51.391Z",
+      "created_at": "2025-08-01T23:33:51.391Z"
+    },
+    {
+      "id": 1754408151465,
+      "userId": "user3",
+      "content": "產品功能諮詢",
+      "response": "產品功能說明如下...",
+      "responseTime": 5.8,
+      "timestamp": "2025-07-31T18:41:51.391Z",
+      "created_at": "2025-07-31T18:41:51.391Z"
+    },
+    {
+      "id": 1754408151466,
+      "userId": "user24",
+      "content": "帳號登入有問題",
+      "response": "請檢查您的登入資訊",
+      "responseTime": 1.9,
+      "timestamp": "2025-08-01T06:35:51.391Z",
+      "created_at": "2025-08-01T06:35:51.391Z"
+    },
+    {
+      "id": 1754408151467,
+      "userId": "user20",
+      "content": "如何使用新功能？",
+      "response": "新功能使用說明...",
+      "responseTime": 4.9,
+      "timestamp": "2025-07-31T04:35:51.391Z",
+      "created_at": "2025-07-31T04:35:51.391Z"
+    },
+    {
+      "id": 1754408151468,
+      "userId": "user34",
+      "content": "系統設定問題",
+      "response": "系統設定可以透過以下方式調整...",
+      "responseTime": 2,
+      "timestamp": "2025-08-03T17:40:51.391Z",
+      "created_at": "2025-08-03T17:40:51.391Z"
+    },
+    {
+      "id": 1754408151469,
+      "userId": "user39",
+      "content": "資料匯出功能",
+      "response": "資料匯出功能位於...",
+      "responseTime": 2.7,
+      "timestamp": "2025-08-02T16:12:51.391Z",
+      "created_at": "2025-08-02T16:12:51.391Z"
+    },
+    {
+      "id": 1754408151470,
+      "userId": "user14",
+      "content": "權限設定問題",
+      "response": "權限設定請聯繫管理員",
+      "responseTime": 2.4,
+      "timestamp": "2025-08-04T01:18:51.391Z",
+      "created_at": "2025-08-04T01:18:51.391Z"
+    },
+    {
+      "id": 1754408151471,
+      "userId": "user21",
+      "content": "您好，我想詢問關於系統使用的問題",
+      "response": "感謝您的詢問，我們會盡快為您處理",
+      "responseTime": 3.6,
+      "timestamp": "2025-07-30T10:43:51.391Z",
+      "created_at": "2025-07-30T10:43:51.391Z"
+    },
+    {
+      "id": 1754408151472,
+      "userId": "user16",
+      "content": "如何重置我的密碼？",
+      "response": "請按照以下步驟重置密碼...",
+      "responseTime": 3.2,
+      "timestamp": "2025-07-30T05:27:51.391Z",
+      "created_at": "2025-07-30T05:27:51.391Z"
+    },
+    {
+      "id": 1754408151473,
+      "userId": "user8",
+      "content": "系統出現錯誤，請協助處理",
+      "response": "我們已收到您的錯誤報告，正在處理中",
+      "responseTime": 4.8,
+      "timestamp": "2025-07-31T06:41:51.391Z",
+      "created_at": "2025-07-31T06:41:51.391Z"
+    },
+    {
+      "id": 1754408151474,
+      "userId": "user13",
+      "content": "我需要技術支援",
+      "response": "技術支援團隊會與您聯繫",
+      "responseTime": 2.2,
+      "timestamp": "2025-07-31T16:51:51.391Z",
+      "created_at": "2025-07-31T16:51:51.391Z"
+    },
+    {
+      "id": 1754408151475,
+      "userId": "user46",
+      "content": "產品功能諮詢",
+      "response": "產品功能說明如下...",
+      "responseTime": 1.5,
+      "timestamp": "2025-08-05T10:26:51.391Z",
+      "created_at": "2025-08-05T10:26:51.391Z"
+    },
+    {
+      "id": 1754408151476,
+      "userId": "user47",
+      "content": "帳號登入有問題",
+      "response": "請檢查您的登入資訊",
+      "responseTime": 2.3,
+      "timestamp": "2025-08-02T06:05:51.391Z",
+      "created_at": "2025-08-02T06:05:51.391Z"
+    },
+    {
+      "id": 1754408151477,
+      "userId": "user24",
+      "content": "如何使用新功能？",
+      "response": "新功能使用說明...",
+      "responseTime": 2.9,
+      "timestamp": "2025-08-05T13:27:51.391Z",
+      "created_at": "2025-08-05T13:27:51.391Z"
+    },
+    {
+      "id": 1754408151478,
+      "userId": "user34",
+      "content": "系統設定問題",
+      "response": "系統設定可以透過以下方式調整...",
+      "responseTime": 1.5,
+      "timestamp": "2025-08-02T20:59:51.391Z",
+      "created_at": "2025-08-02T20:59:51.391Z"
+    },
+    {
+      "id": 1754408151479,
+      "userId": "user33",
+      "content": "資料匯出功能",
+      "response": "資料匯出功能位於...",
+      "responseTime": 4.2,
+      "timestamp": "2025-08-03T01:10:51.391Z",
+      "created_at": "2025-08-03T01:10:51.391Z"
+    },
+    {
+      "id": 1754408151480,
+      "userId": "user5",
+      "content": "權限設定問題",
+      "response": "權限設定請聯繫管理員",
+      "responseTime": 2.1,
+      "timestamp": "2025-07-31T15:36:51.391Z",
+      "created_at": "2025-07-31T15:36:51.391Z"
+    },
+    {
+      "id": 1754408151481,
+      "userId": "user13",
+      "content": "您好，我想詢問關於系統使用的問題",
+      "response": "感謝您的詢問，我們會盡快為您處理",
+      "responseTime": 2.9,
+      "timestamp": "2025-08-01T06:06:51.391Z",
+      "created_at": "2025-08-01T06:06:51.391Z"
+    },
+    {
+      "id": 1754408151482,
+      "userId": "user42",
+      "content": "如何重置我的密碼？",
+      "response": "請按照以下步驟重置密碼...",
+      "responseTime": 3.2,
+      "timestamp": "2025-08-03T14:10:51.391Z",
+      "created_at": "2025-08-03T14:10:51.391Z"
+    },
+    {
+      "id": 1754408151483,
+      "userId": "user34",
+      "content": "系統出現錯誤，請協助處理",
+      "response": "我們已收到您的錯誤報告，正在處理中",
+      "responseTime": 1.4,
+      "timestamp": "2025-07-30T23:50:51.391Z",
+      "created_at": "2025-07-30T23:50:51.391Z"
+    },
+    {
+      "id": 1754408151484,
+      "userId": "user45",
+      "content": "我需要技術支援",
+      "response": "技術支援團隊會與您聯繫",
+      "responseTime": 4.7,
+      "timestamp": "2025-08-03T00:33:51.391Z",
+      "created_at": "2025-08-03T00:33:51.391Z"
+    },
+    {
+      "id": 1754408151485,
+      "userId": "user21",
+      "content": "產品功能諮詢",
+      "response": "產品功能說明如下...",
+      "responseTime": 3.5,
+      "timestamp": "2025-08-02T13:02:51.391Z",
+      "created_at": "2025-08-02T13:02:51.391Z"
+    },
+    {
+      "id": 1754408151486,
+      "userId": "user46",
+      "content": "帳號登入有問題",
+      "response": "請檢查您的登入資訊",
+      "responseTime": 5.6,
+      "timestamp": "2025-08-01T23:39:51.391Z",
+      "created_at": "2025-08-01T23:39:51.391Z"
+    },
+    {
+      "id": 1754408151487,
+      "userId": "user12",
+      "content": "如何使用新功能？",
+      "response": "新功能使用說明...",
+      "responseTime": 4,
+      "timestamp": "2025-08-03T02:36:51.391Z",
+      "created_at": "2025-08-03T02:36:51.391Z"
+    },
+    {
+      "id": 1754408151488,
+      "userId": "user33",
+      "content": "系統設定問題",
+      "response": "系統設定可以透過以下方式調整...",
+      "responseTime": 2.7,
+      "timestamp": "2025-08-02T11:38:51.391Z",
+      "created_at": "2025-08-02T11:38:51.391Z"
+    },
+    {
+      "id": 1754408151489,
+      "userId": "user19",
+      "content": "資料匯出功能",
+      "response": "資料匯出功能位於...",
+      "responseTime": 5,
+      "timestamp": "2025-08-04T21:26:51.391Z",
+      "created_at": "2025-08-04T21:26:51.391Z"
+    },
+    {
+      "id": 1754408151490,
+      "userId": "user41",
+      "content": "權限設定問題",
+      "response": "權限設定請聯繫管理員",
+      "responseTime": 2.3,
+      "timestamp": "2025-07-30T16:44:51.391Z",
+      "created_at": "2025-07-30T16:44:51.391Z"
+    }
+  ],
+  "ai_assistant_config": [
+    {
+      "assistant_name": "EchoChat AI 助理",
+      "llm": "gpt-3.5-turbo",
+      "use_case": "customer-service",
+      "description": "OBJECTIVE(目標任務):\n你的目標是客戶服務與美容美髮發行錄，創造一個良好的對話體驗，讓客戶感到舒適，願意分享他們的真實想法及需求。\n\nSTYLE(風格/個性):\n你的個性是很健談並且很直率人保學會存在，樂於創造一個放鬆和友好的氣圍。\n\nTONE(語調):\n親性、溫柔、深情人心。",
+      "created_at": "2025-08-05T15:35:51.392Z",
+      "updated_at": "2025-08-06T09:00:15.490Z"
+    }
+  ],
+  "email_verifications": [],
+  "password_reset_requests": []
+}

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="news.title">新聞 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="navbar.css" rel="stylesheet">
+    <script src="js/i18n.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* 導航欄樣式 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea !important;
+            text-decoration: none;
+        }
+
+        .navbar-brand i {
+            margin-right: 8px;
+            color: #667eea;
+        }
+
+        .nav-link {
+            color: #2c3e50 !important;
+            font-weight: 600;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+
+        .nav-link:hover {
+            color: #667eea !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .btn-login {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .language-selector {
+            border: none;
+            background: transparent;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-left: 15px;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+
+        /* 主要內容區域 */
+        .main-content {
+            background: white;
+            margin-top: 0;
+            min-height: calc(100vh - 180px);
+            border-radius: 20px 20px 0 0;
+            padding: 40px 0;
+        }
+
+        /* 頁面標題區域 */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        /* 新聞卡片 */
+        .news-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .news-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .news-meta i {
+            margin-right: 5px;
+            color: #667eea;
+        }
+
+        .news-meta span {
+            margin-right: 20px;
+        }
+
+        .news-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .news-excerpt {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .news-category {
+            background: #f8f9fa;
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .btn-read-more {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-read-more:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        /* 側邊欄 */
+        .sidebar {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .category-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .category-list li {
+            margin-bottom: 10px;
+        }
+
+        .category-list a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .category-list a:hover {
+            color: #667eea;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .news-card {
+                padding: 20px;
+            }
+        }
+
+        /* 頁面載入動畫 */
+        body.loaded {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 頁面標題 -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title" data-i18n="news.page_title">新聞</h1>
+            <p class="page-subtitle" data-i18n="news.page_subtitle">最新公司動態與行業趨勢</p>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- 新聞文章列表 -->
+                    <div class="news-card">
+                        <div class="news-meta">
+                            <span><i class="fas fa-calendar"></i><span data-i18n="news.post1.date">2024年1月20日</span></span>
+                            <span><i class="fas fa-user"></i><span data-i18n="news.post1.author">EchoChat 團隊</span></span>
+                            <span><i class="fas fa-tag"></i><span data-i18n="news.post1.category">公司動態</span></span>
+                        </div>
+                        
+                        <span class="news-category" data-i18n="news.category.company">公司動態</span>
+                        
+                        <h2 class="news-title" data-i18n="news.post1.title">EchoChat 完成 A 輪融資，加速 AI 客服技術發展</h2>
+                        
+                        <p class="news-excerpt" data-i18n="news.post1.excerpt">
+                            我們很高興地宣布，EchoChat 已成功完成 A 輪融資，獲得 500 萬美元投資。這筆資金將用於加速我們的 AI 客服技術研發，擴大團隊規模，並進一步提升產品功能。
+                        </p>
+                        
+                        <a href="#" class="btn btn-read-more" data-i18n="news.read_more">閱讀更多</a>
+                    </div>
+                    
+                    <div class="news-card">
+                        <div class="news-meta">
+                            <span><i class="fas fa-calendar"></i><span data-i18n="news.post2.date">2024年1月18日</span></span>
+                            <span><i class="fas fa-user"></i><span data-i18n="news.post2.author">技術團隊</span></span>
+                            <span><i class="fas fa-tag"></i><span data-i18n="news.post2.category">技術創新</span></span>
+                        </div>
+                        
+                        <span class="news-category" data-i18n="news.category.technology">技術創新</span>
+                        
+                        <h2 class="news-title" data-i18n="news.post2.title">EchoChat 推出新一代自然語言處理引擎</h2>
+                        
+                        <p class="news-excerpt" data-i18n="news.post2.excerpt">
+                            EchoChat 今日宣布推出新一代自然語言處理引擎，該引擎在理解能力、回應準確性和多語言支援方面都有顯著提升。新引擎將為客戶提供更智能、更自然的對話體驗。
+                        </p>
+                        
+                        <a href="#" class="btn btn-read-more" data-i18n="news.read_more">閱讀更多</a>
+                    </div>
+                    
+                    <div class="news-card">
+                        <div class="news-meta">
+                            <span><i class="fas fa-calendar"></i><span data-i18n="news.post3.date">2024年1月15日</span></span>
+                            <span><i class="fas fa-user"></i><span data-i18n="news.post3.author">市場團隊</span></span>
+                            <span><i class="fas fa-tag"></i><span data-i18n="news.post3.category">合作夥伴</span></span>
+                        </div>
+                        
+                        <span class="news-category" data-i18n="news.category.partnership">合作夥伴</span>
+                        
+                        <h2 class="news-title" data-i18n="news.post3.title">EchoChat 與多家知名企業建立戰略合作</h2>
+                        
+                        <p class="news-excerpt" data-i18n="news.post3.excerpt">
+                            我們很高興地宣布與多家知名企業建立戰略合作關係，這些合作將幫助我們進一步擴大市場影響力，並為客戶提供更全面的解決方案。
+                        </p>
+                        
+                        <a href="#" class="btn btn-read-more" data-i18n="news.read_more">閱讀更多</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <!-- 側邊欄 -->
+                    <div class="sidebar">
+                        <h3 data-i18n="news.sidebar.categories">新聞分類</h3>
+                        <ul class="category-list">
+                            <li><a href="#" data-i18n="news.category.company">公司動態</a></li>
+                            <li><a href="#" data-i18n="news.category.technology">技術創新</a></li>
+                            <li><a href="#" data-i18n="news.category.partnership">合作夥伴</a></li>
+                            <li><a href="#" data-i18n="news.category.product">產品更新</a></li>
+                            <li><a href="#" data-i18n="news.category.industry">行業趨勢</a></li>
+                        </ul>
+                        
+                        <h3 data-i18n="news.sidebar.latest_news">最新新聞</h3>
+                        <div class="latest-news">
+                            <div class="news-item mb-3">
+                                <h5 data-i18n="news.latest1.title">EchoChat 榮獲最佳 AI 客服平台獎</h5>
+                                <small data-i18n="news.latest1.date">2024年1月12日</small>
+                            </div>
+                            <div class="news-item mb-3">
+                                <h5 data-i18n="news.latest2.title">新功能：多語言語音客服支援</h5>
+                                <small data-i18n="news.latest2.date">2024年1月10日</small>
+                            </div>
+                            <div class="news-item mb-3">
+                                <h5 data-i18n="news.latest3.title">客戶成功案例：提升客服效率 80%</h5>
+                                <small data-i18n="news.latest3.date">2024年1月8日</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁腳 -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 data-i18n="footer.company">公司</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="about-us.html" class="text-white-50" data-i18n="nav.about">關於我們</a></li>
+                        <li><a href="careers.html" class="text-white-50" data-i18n="nav.careers">徵才</a></li>
+                        <li><a href="contact-us.html" class="text-white-50" data-i18n="nav.contact">聯絡我們</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5 data-i18n="footer.product">產品</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="products.html" class="text-white-50" data-i18n="nav.products">產品</a></li>
+                        <li><a href="pricing.html" class="text-white-50" data-i18n="nav.pricing">資費方案</a></li>
+                        <li><a href="use-cases.html" class="text-white-50" data-i18n="nav.use_cases">使用場景</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0" data-i18n="footer.copyright">© 2024 EchoChat. 保留所有權利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+
+</body>
+</html> 

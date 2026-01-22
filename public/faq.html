@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="faq.title">常見問題 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="navbar.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+
+
+        /* 主要內容區域 */
+        .main-content {
+            background: white;
+            margin-top: 0;
+            min-height: calc(100vh - 180px);
+            border-radius: 20px 20px 0 0;
+            padding: 40px 0;
+        }
+
+        /* 頁面標題區域 */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        /* 搜尋框樣式 */
+        .search-box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .search-box h3 {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            outline: none;
+            background: white;
+        }
+
+        /* FAQ 分類樣式 */
+        .faq-category {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            color: #667eea;
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .category-title i {
+            margin-right: 15px;
+            font-size: 1.4rem;
+        }
+
+        /* FAQ 項目樣式 */
+        .faq-item {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .faq-item.active {
+            border: 2px solid #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-question {
+            background: #667eea;
+            color: white;
+        }
+
+        .faq-question span {
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .faq-question i.fas.fa-question-circle {
+            margin-right: 15px;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .faq-toggle {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 20px 25px;
+            max-height: 500px;
+        }
+
+        /* 返回按鈕 */
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+            color: white;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .search-box {
+                padding: 20px;
+            }
+            
+            .search-input {
+                padding: 12px 15px;
+            }
+            
+            .category-title {
+                font-size: 1.4rem;
+            }
+            
+            .faq-question {
+                padding: 15px 20px;
+            }
+            
+            .faq-question span {
+                font-size: 1rem;
+            }
+            
+            .faq-item.active .faq-answer {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+    <script src="js/i18n.js"></script>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- 頁面標題 -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title" data-i18n="faq.page_title">常見問題</h1>
+            <p class="page-subtitle" data-i18n="faq.page_subtitle">找到您需要的答案</p>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 搜尋框 -->
+            <div class="search-box">
+                <h3 data-i18n="faq.search.title">搜尋問題</h3>
+                <input type="text" class="search-input" placeholder="輸入關鍵字搜尋問題..." data-i18n-placeholder="faq.search.placeholder" id="searchInput">
+            </div>
+
+            <!-- 帳戶和訂閱 -->
+            <div class="faq-category">
+                <h2 class="category-title">
+                    <i class="fas fa-user"></i><span data-i18n="faq.category.account">帳戶和訂閱</span>
+                </h2>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i><span data-i18n="faq.account.q1">如何註冊 EchoChat 帳號？</span></span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.account.a1">
+                        在 EchoChat 官網點擊「立即註冊」，填寫基本資料並選擇適合的訂閱方案。完成付款後即可開始使用。我們提供 7 天免費試用期。
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i><span data-i18n="faq.account.q2">如何升級或降級訂閱方案？</span></span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.account.a2">
+                        在「帳戶設定」頁面選擇「管理訂閱」，可以隨時升級或降級方案。升級立即生效，降級在當前計費週期結束後生效。費用會按比例計算。
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i><span data-i18n="faq.account.q3">如何取消訂閱？</span></span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.account.a3">
+                        在「帳戶設定」頁面選擇「取消訂閱」，您的服務會在當前計費週期結束後停止。您可以隨時重新啟用訂閱。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 平台串接 -->
+            <div class="faq-category">
+                <h2 class="category-title">
+                    <i class="fas fa-plug"></i><span data-i18n="faq.category.integration">平台串接</span>
+                </h2>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i>支援哪些社交媒體平台？</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        我們支援 LINE、Instagram、Telegram、Facebook、WhatsApp、Discord、WeChat 等主流平台。2025年新增支援 TikTok、Threads 等新興平台。
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i>串接需要技術背景嗎？</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        不需要！我們提供詳細的圖文指引，按照步驟操作即可完成串接。如果遇到問題，我們的技術支援團隊隨時協助您。
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i>可以同時串接多個平台嗎？</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        可以！基礎版支援 2 個平台，專業版支援 5 個平台，企業版支援無限平台串接。所有平台的對話都會統一管理。
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI 功能 -->
+            <div class="faq-category">
+                <h2 class="category-title">
+                    <i class="fas fa-brain"></i><span data-i18n="faq.category.ai">AI 功能</span>
+                </h2>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i><span data-i18n="faq.ai.q1">如何訓練 AI 客服？</span></span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.ai.a1">
+                        在「知識庫管理」頁面上傳您的產品資料、常見問題、服務流程等文件。AI 會自動學習並建立知識庫。您也可以手動添加問答對來優化回答。
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i><span data-i18n="faq.ai.q2">AI 支援哪些語言？</span></span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.ai.a2">
+                        基礎版支援中文和英文，專業版支援中文、英文、日文、韓文，企業版支援全語言。AI 會自動識別客戶使用的語言並以相同語言回覆。
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i><span data-i18n="faq.ai.q3">如何處理複雜問題？</span></span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.ai.a3">
+                        當 AI 無法處理複雜問題時，會自動轉接給人工客服。您可以在後台設定轉接條件和優先級，確保客戶得到最佳服務。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 數據和分析 -->
+            <div class="faq-category">
+                <h2 class="category-title">
+                    <i class="fas fa-chart-line"></i><span data-i18n="faq.category.data">數據和分析</span>
+                </h2>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i><span data-i18n="faq.data.q1">可以查看哪些數據？</span></span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.data.a1">
+                        您可以查看對話數量、客戶滿意度、熱門問題、回應時間、平台使用情況等詳細數據。專業版和企業版還提供進階分析功能。
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i><span data-i18n="faq.data.q2">如何匯出數據？</span></span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.data.a2">
+                        在「數據分析」頁面可以匯出對話記錄、統計報告等數據，支援 CSV、Excel、PDF 等格式。企業版還提供 API 存取功能。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 安全和隱私 -->
+            <div class="faq-category">
+                <h2 class="category-title">
+                    <i class="fas fa-shield-alt"></i><span data-i18n="faq.category.security">安全和隱私</span>
+                </h2>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i><span data-i18n="faq.security.q1">如何保護客戶數據？</span></span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.security.a1">
+                        我們採用企業級安全標準，所有資料都經過加密傳輸和儲存。符合 GDPR、CCPA 等國際隱私法規，支援端到端加密和數據本地化部署。
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span><i class="fas fa-question-circle"></i><span data-i18n="faq.security.q2">可以刪除客戶數據嗎？</span></span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer" data-i18n="faq.security.a2">
+                        可以！在「數據管理」頁面可以刪除特定客戶的對話記錄。您也可以設定自動刪除規則，定期清理舊數據。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 返回按鈕 -->
+    <a href="/index.html" class="back-btn">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleFaq(element) {
+            const isActive = element.classList.contains('active');
+            
+            // 關閉所有其他 FAQ
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 切換當前 FAQ
+            if (!isActive) {
+                element.classList.add('active');
+            }
+        }
+        
+        // 搜尋功能
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

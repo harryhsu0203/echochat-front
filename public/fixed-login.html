@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修復後登入測試 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+        .btn-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        .test-accounts {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .test-accounts h6 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        .account-info {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-left: 4px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-bug me-2"></i>修復後登入測試
+        </h2>
+        
+        <div class="test-accounts">
+            <h6><i class="fas fa-info-circle me-2"></i>可用測試帳號：</h6>
+            <div class="account-info">
+                <strong>sunnyharry1</strong> / admin123<br>
+                <small class="text-muted">您的主要管理員帳號（暫時密碼）</small>
+            </div>
+            <div class="account-info">
+                <strong>admin</strong> / admin123<br>
+                <small class="text-muted">預設管理員帳號</small>
+            </div>
+            <div class="account-info">
+                <strong>user</strong> / admin123<br>
+                <small class="text-muted">預設用戶帳號</small>
+            </div>
+        </div>
+        
+        <form id="loginForm">
+            <div class="mb-3">
+                <label for="username" class="form-label">用戶名</label>
+                <input type="text" class="form-control" id="username" value="sunnyharry1" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">密碼</label>
+                <input type="password" class="form-control" id="password" value="admin123" required>
+            </div>
+            <button type="submit" class="btn btn-custom w-100 mb-3">
+                <i class="fas fa-sign-in-alt me-2"></i>登入
+            </button>
+        </form>
+        
+        <div class="row">
+            <div class="col-6">
+                <button class="btn btn-outline-secondary w-100 btn-sm" onclick="testAllAccounts()">
+                    <i class="fas fa-vial me-2"></i>測試所有帳號
+                </button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-outline-info w-100 btn-sm" onclick="checkApiStatus()">
+                    <i class="fas fa-heartbeat me-2"></i>API 狀態
+                </button>
+            </div>
+        </div>
+        
+        <div id="result" class="mt-4"></div>
+        <div id="testResults" class="mt-3"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'https://echochat-api.onrender.com';
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await testLogin();
+        });
+        
+        async function testLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>登入中...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('staffName', data.user.name);
+                    localStorage.setItem('staffRole', data.user.role);
+                    
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <h6><i class="fas fa-check-circle me-2"></i>登入成功！</h6>
+                            <p class="mb-2"><strong>用戶：</strong> ${data.user.name} (${data.user.username})</p>
+                            <p class="mb-2"><strong>角色：</strong> ${data.user.role}</p>
+                            <p class="mb-0"><strong>Token：</strong> ${data.token.substring(0, 20)}...</p>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <a href="dashboard-no-redirect.html" class="btn btn-success">
+                                <i class="fas fa-tachometer-alt me-2"></i>進入儀表板
+                            </a>
+                            <a href="account-management.html" class="btn btn-primary">
+                                <i class="fas fa-users me-2"></i>帳號管理
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <h6><i class="fas fa-times-circle me-2"></i>登入失敗</h6>
+                            <p class="mb-2"><strong>錯誤：</strong> ${data.error || '未知錯誤'}</p>
+                            <p class="mb-0"><strong>狀態碼：</strong> ${response.status}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>網路錯誤</h6>
+                        <p class="mb-0">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testAllAccounts() {
+            const testAccounts = [
+                { username: 'sunnyharry1', password: 'admin123' },
+                { username: 'admin', password: 'admin123' },
+                { username: 'user', password: 'admin123' }
+            ];
+            
+            const testResultsDiv = document.getElementById('testResults');
+            testResultsDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>測試所有帳號中...</div>';
+            
+            let results = '<div class="alert alert-secondary"><h6><i class="fas fa-vial me-2"></i>帳號測試結果：</h6>';
+            
+            for (const account of testAccounts) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(account)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        results += `<p class="mb-1 text-success"><i class="fas fa-check me-2"></i><strong>${account.username}</strong>: 登入成功 (${data.user.role})</p>`;
+                    } else {
+                        results += `<p class="mb-1 text-danger"><i class="fas fa-times me-2"></i><strong>${account.username}</strong>: 登入失敗 - ${data.error}</p>`;
+                    }
+                } catch (error) {
+                    results += `<p class="mb-1 text-warning"><i class="fas fa-exclamation me-2"></i><strong>${account.username}</strong>: 網路錯誤 - ${error.message}</p>`;
+                }
+            }
+            
+            results += '</div>';
+            testResultsDiv.innerHTML = results;
+        }
+        
+        async function checkApiStatus() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>檢查 API 狀態...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/health`);
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <h6><i class="fas fa-heartbeat me-2"></i>API 狀態正常</h6>
+                            <p class="mb-2"><strong>訊息：</strong> ${data.message}</p>
+                            <p class="mb-0"><strong>時間：</strong> ${new Date(data.timestamp).toLocaleString('zh-TW')}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>API 狀態異常</h6>
+                            <p class="mb-0">狀態碼：${response.status}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h6><i class="fas fa-times-circle me-2"></i>無法連接 API</h6>
+                        <p class="mb-0">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // 自動填入帳號按鈕
+        function fillAccount(username, password) {
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+        }
+        
+        // 頁面載入時檢查 API 狀態
+        window.addEventListener('load', () => {
+            checkApiStatus();
+        });
+    </script>
+</body>
+</html>

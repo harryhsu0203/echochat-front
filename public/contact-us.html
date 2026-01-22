@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="contact.title">聯繫我們 - EchoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="navbar.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+
+
+        /* 主要內容區域 */
+        .main-content {
+            background: white;
+            margin-top: 0;
+            min-height: calc(100vh - 180px);
+            border-radius: 20px 20px 0 0;
+            padding: 40px 0;
+        }
+
+        /* 頁面標題區域 */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        /* 聯繫區域樣式 */
+        .contact-section {
+            margin: 40px 0;
+        }
+
+        .contact-form {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .form-title {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            outline: none;
+            background: white;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* 聯繫方式卡片 */
+        .contact-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .contact-card h3 {
+            color: #667eea;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-card h3 i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 0;
+        }
+
+        .contact-info i {
+            color: #667eea;
+            margin-right: 15px;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .contact-info div {
+            flex: 1;
+        }
+
+        .contact-info strong {
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .contact-info span {
+            color: #555;
+        }
+
+        /* 辦公室資訊 */
+        .office-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .office-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .office-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .office-item i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* 返回按鈕 */
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+            color: white;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .contact-form {
+                padding: 25px;
+            }
+            
+            .contact-card {
+                padding: 20px;
+            }
+            
+            .office-info {
+                padding: 25px;
+            }
+            
+            .form-control {
+                padding: 10px 12px;
+            }
+            
+            .btn-submit {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <script src="js/i18n.js"></script>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- 頁面標題 -->
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title" data-i18n="contact.page_title">聯繫我們</h1>
+            <p class="page-subtitle" data-i18n="contact.page_subtitle">我們隨時為您提供支援</p>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 聯繫表單 -->
+            <div class="contact-section">
+                <div class="contact-form">
+                    <h2 class="form-title" data-i18n="contact.form.title">發送訊息給我們</h2>
+                    <form id="contactForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="contact.form.name">姓名 *</label>
+                                    <input type="text" class="form-control" data-i18n-placeholder="contact.form.name_placeholder" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="contact.form.email">電子郵件 *</label>
+                                    <input type="email" class="form-control" data-i18n-placeholder="contact.form.email_placeholder" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="contact.form.company">公司名稱</label>
+                            <input type="text" class="form-control" data-i18n-placeholder="contact.form.company_placeholder">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="contact.form.subject">主題 *</label>
+                            <select class="form-control" required>
+                                <option value="" data-i18n="contact.form.subject_placeholder">請選擇主題</option>
+                                <option value="general" data-i18n="contact.form.subject_general">一般諮詢</option>
+                                <option value="technical" data-i18n="contact.form.subject_technical">技術支援</option>
+                                <option value="billing" data-i18n="contact.form.subject_billing">帳單問題</option>
+                                <option value="feature" data-i18n="contact.form.subject_feature">功能建議</option>
+                                <option value="partnership" data-i18n="contact.form.subject_partnership">合作提案</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="contact.form.message">訊息內容 *</label>
+                            <textarea class="form-control" rows="6" data-i18n-placeholder="contact.form.message_placeholder" required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-submit">
+                                <i class="fas fa-paper-plane me-2"></i><span data-i18n="contact.form.submit">發送訊息</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 聯繫方式 -->
+            <div class="contact-section">
+                <h2 class="form-title">聯繫方式</h2>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="contact-card">
+                            <h3><i class="fas fa-envelope"></i>電子郵件</h3>
+                            <div class="contact-info">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <strong>一般諮詢</strong><br>
+                                    <span>info@echochat.com</span>
+                                </div>
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <strong>技術支援</strong><br>
+                                    <span>contact@echochat.com.tw</span>
+                                </div>
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <strong>商務合作</strong><br>
+                                    <span>business@echochat.com</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="contact-card">
+                            <h3><i class="fas fa-phone"></i>電話聯繫</h3>
+                            <div class="contact-info">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <strong>客服專線</strong><br>
+                                    <span>+886 2 2345 6789</span>
+                                </div>
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <strong>服務時間</strong><br>
+                                    <span>週一至週五 9:00-18:00</span>
+                                </div>
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-comments"></i>
+                                <div>
+                                    <strong>線上客服</strong><br>
+                                    <span>24/7 即時支援</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 辦公室資訊 -->
+            <div class="office-info">
+                <h3>辦公室地址</h3>
+                <div class="office-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>台中市東區復興路五段178號</span>
+                </div>
+                <div class="office-item">
+                    <i class="fas fa-building"></i>
+                    <span>EchoChat 台灣總部</span>
+                </div>
+                <div class="office-item">
+                    <i class="fas fa-subway"></i>
+                    <span>捷運信義安和站 2號出口步行5分鐘</span>
+                </div>
+                <div class="office-item">
+                    <i class="fas fa-car"></i>
+                    <span>地下停車場可停車</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 返回按鈕 -->
+    <a href="/index.html" class="back-btn">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 表單提交處理
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 這裡可以添加實際的表單提交邏輯
+            alert('感謝您的訊息！我們會盡快回覆您。');
+            
+            // 清空表單
+            this.reset();
+        });
+    </script>
+</body>
+</html> 

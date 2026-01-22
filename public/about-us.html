@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-title="about.title">關於我們 - EchoChat | AI 客服系統公司</title>
+    <meta name="description" content="EchoChat 是專業的 AI 客服系統提供商，致力於為企業提供智慧客服解決方案，包括 LINE 聊天機器人、自動回覆、多渠道整合等服務。">
+    <meta name="keywords" content="EchoChat 公司, AI 客服公司, 智慧客服提供商, LINE Bot 開發, 客服系統開發, 台灣 AI 客服公司">
+    <link rel="canonical" href="https://echochat-web.onrender.com/about-us.html">
+    <meta name="robots" content="index,follow">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+    <meta name="theme-color" content="#667eea">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="navbar.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+
+
+        /* 頁面標題區域 */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .page-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .page-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            color: #ffffff;
+            animation: fadeInUp 1.2s ease-out 0.3s both;
+        }
+
+        .page-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            font-weight: 300;
+            animation: fadeInUp 1.2s ease-out 0.6s both;
+        }
+
+        /* 浮動圖標動畫 */
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255,255,255,0.15);
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.8;
+            filter: blur(0.5px);
+        }
+
+        .floating-icon:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 65%; left: 85%; animation-delay: 2s; }
+        .floating-icon:nth-child(3) { top: 85%; left: 25%; animation-delay: 4s; }
+        .floating-icon:nth-child(4) { top: 25%; left: 75%; animation-delay: 1s; }
+        .floating-icon:nth-child(5) { top: 75%; left: 85%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1); 
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateY(-15px) rotate(3deg) scale(1.05); 
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 主要內容區域 */
+        .main-content {
+            background: white;
+            padding: 60px 0;
+        }
+
+        /* 內容動畫 */
+        .card, .mission-item, .team-member, .stat-item {
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.2s; }
+        .card:nth-child(2) { animation-delay: 0.4s; }
+        
+        .mission-item:nth-child(1) { animation-delay: 0.6s; }
+        .mission-item:nth-child(2) { animation-delay: 0.8s; }
+        .mission-item:nth-child(3) { animation-delay: 1.0s; }
+        
+        .team-member:nth-child(1) { animation-delay: 0.2s; }
+        .team-member:nth-child(2) { animation-delay: 0.4s; }
+        .team-member:nth-child(3) { animation-delay: 0.6s; }
+        
+        .stat-item:nth-child(1) { animation-delay: 0.8s; }
+        .stat-item:nth-child(2) { animation-delay: 1.0s; }
+        .stat-item:nth-child(3) { animation-delay: 1.2s; }
+        .stat-item:nth-child(4) { animation-delay: 1.4s; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 卡片樣式 */
+        .card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card h2 i {
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        /* 使命與願景 */
+        .mission-section {
+            margin: 60px 0;
+        }
+
+        .mission-section h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .mission-item {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mission-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .mission-item h3 {
+            color: #667eea;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .mission-item h3 i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .mission-item p {
+            color: #555;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* 團隊區域 */
+        .team-section {
+            margin: 60px 0;
+        }
+
+        .team-title {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .team-member {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .member-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .member-title {
+            font-size: 1rem;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .member-bio {
+            color: #555;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        /* 數據統計 */
+        .stats-section {
+            margin: 60px 0;
+        }
+
+        .stats-title {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* 返回按鈕 */
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+            color: white;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+            
+            .mission-item {
+                padding: 20px;
+            }
+            
+            .team-member {
+                padding: 20px;
+            }
+            
+            .member-avatar {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <script src="js/i18n.js"></script>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i>EchoChat
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html" data-i18n="nav.products">產品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="use-cases.html" data-i18n="nav.use_cases">使用場景</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="about-us.html" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html" data-i18n="nav.pricing">資費方案</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a href="login.html" class="btn btn-login" data-i18n="nav.login">登入</a>
+                    <select class="language-selector">
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 頁面標題 -->
+    <div class="page-header">
+        <div class="floating-icons">
+            <div class="floating-icon"><i class="fab fa-line"></i></div>
+            <div class="floating-icon"><i class="fab fa-instagram"></i></div>
+            <div class="floating-icon"><i class="fab fa-telegram"></i></div>
+            <div class="floating-icon"><i class="fab fa-facebook"></i></div>
+            <div class="floating-icon"><i class="fab fa-whatsapp"></i></div>
+        </div>
+        <div class="container">
+            <div class="page-content">
+                <h1 class="page-title" data-i18n="about.hero.title">關於我們</h1>
+                <p class="page-subtitle" data-i18n="about.hero.subtitle">用 AI 技術改變客服體驗</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 公司介紹 -->
+            <div class="card">
+                <h2 data-i18n="about.company.title"><i class="fas fa-building"></i>公司簡介</h2>
+                <p data-i18n="about.company.desc1">
+                    EchoChat 成立於 2025 年，是一家專注於 AI 客服技術的創新公司。我們致力於為企業提供智能化的客戶服務解決方案，
+                    透過最先進的人工智能技術，幫助企業提升客戶體驗，降低運營成本，實現 24/7 全天候客戶服務。
+                </p>
+                <p data-i18n="about.company.desc2">
+                    我們整合了最新的自然語言處理技術、多平台串接能力和深度學習算法，為客戶提供更加智能、個性化和高效的客服體驗。
+                </p>
+            </div>
+
+            <!-- 使命與願景 -->
+            <div class="mission-section">
+                <h2 data-i18n="about.mission.title">我們的使命與願景</h2>
+                
+                <div class="mission-item">
+                    <h3 data-i18n="about.mission.mission"><i class="fas fa-bullseye"></i>使命</h3>
+                    <p data-i18n="about.mission.mission_desc">
+                        透過 AI 技術 democratize 客戶服務，讓每個企業都能擁有專業級的智能客服系統，
+                        提升客戶滿意度，創造更好的商業價值。
+                    </p>
+                </div>
+                
+                <div class="mission-item">
+                    <h3 data-i18n="about.mission.vision"><i class="fas fa-eye"></i>願景</h3>
+                    <p data-i18n="about.mission.vision_desc">
+                        成為全球領先的 AI 客服平台，連接企業與客戶，創造無縫的溝通體驗，
+                        讓 AI 技術真正服務於人類，提升整體社會的服務品質。
+                    </p>
+                </div>
+                
+                <div class="mission-item">
+                    <h3 data-i18n="about.mission.values"><i class="fas fa-heart"></i>價值觀</h3>
+                    <p data-i18n="about.mission.values_desc">
+                        創新、誠信、客戶至上、持續改進。我們相信技術的力量，更相信服務的溫度，
+                        致力於在科技與人文之間找到完美的平衡。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 企業精神 -->
+            <div class="mission-section">
+                <h2 data-i18n="about.spirit.title">企業精神</h2>
+                <div class="mission-item" style="max-width: 100%;">
+                    <h3 data-i18n="about.spirit.spirit"><i class="fas fa-lightbulb"></i>服務精神</h3>
+                    <p data-i18n="about.spirit.spirit_desc" style="font-size: 1.1rem; line-height: 1.8;">
+                        我們深信，技術的價值在於服務民眾、便捷客戶。EchoChat 不僅是一個 AI 客服平台，更是連接企業與客戶的橋樑。我們致力於透過創新科技，讓每一位客戶都能享受到便捷、高效、貼心的服務體驗。無論是大型企業還是小型商家，我們都秉持著「以客戶為中心」的服務精神，用心傾聽客戶需求，持續優化產品功能，讓 AI 技術真正成為服務民眾、便捷客戶的得力助手。我們相信，只有真正站在客戶的角度思考，才能創造出真正有價值的產品與服務。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 核心團隊 -->
+            <div class="team-section">
+                <h2 class="team-title" data-i18n="about.team.title">核心團隊</h2>
+                
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <img src="/images/team/ceo-photo.jpg?v=1" alt="Ian" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-user-tie fa-3x\' style=\'color: #667eea;\'></i>'">
+                    </div>
+                    <div class="member-name" data-i18n="about.team.ceo.name">Ian</div>
+                    <div class="member-bio" data-i18n="about.team.ceo.bio">
+                        擁有天馬行空的創新思維和卓越的領導能力，秉持著追求卓越、持續創新的精神。在AI技術領域深耕多年，專注於自然語言處理和機器學習的商業化應用，致力於讓每個企業都能享受智能客服的便利。帶領團隊從零開始，打造出業界領先的智能客服平台，成功整合多個主流通訊平台，包括LINE、Instagram、Telegram、Facebook、WhatsApp等。憑藉對市場趨勢的敏銳洞察和對技術發展的前瞻性思考，帶領EchoChat成為台灣AI客服領域的領導品牌。
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <img src="/images/team/tech.jpg?v=1" alt="HARRY" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-laptop-code fa-3x\' style=\'color: #667eea;\'></i>'">
+                    </div>
+                    <div class="member-name" data-i18n="about.team.cto.name">HARRY</div>
+                    <div class="member-bio" data-i18n="about.team.cto.bio">
+                        擁有紮實的技術功底和豐富的實戰經驗，秉持著精益求精、追求完美的精神。在AI系統架構設計和機器學習模型優化方面有深入研究，對大規模分散式系統和雲端技術有豐富的實戰經驗。負責EchoChat的技術架構設計和核心算法開發，包括自然語言處理引擎、智能對話系統、多平台整合技術等關鍵技術模組。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 公司數據 -->
+            <div class="stats-section">
+                <h2 class="stats-title">我們的成就</h2>
+                
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">企業客戶</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">1000萬+</div>
+                            <div class="stat-label">處理訊息</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">99.9%</div>
+                            <div class="stat-label">系統可用性</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">支援平台</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 發展歷程 -->
+            <div class="card">
+                <h2><i class="fas fa-history"></i>發展歷程</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>2023年 - 創立階段</h4>
+                        <p>公司成立，開始研發 AI 客服技術，獲得天使輪投資。</p>
+                        
+                        <h4>2024年 - 產品推出</h4>
+                        <p>推出第一代 EchoChat 平台，支援 LINE 和 Facebook 串接。</p>
+                        
+                        <h4>2025年 - 全面升級</h4>
+                        <p>推出 2025 年全新版本，支援更多平台，AI 能力大幅提升。</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>技術創新</h4>
+                        <p>持續投入 AI 技術研發，在自然語言處理、情感分析等領域取得突破。</p>
+                        
+                        <h4>客戶成長</h4>
+                        <p>服務客戶數量快速增長，涵蓋電商、金融、教育等多個行業。</p>
+                        
+                        <h4>未來規劃</h4>
+                        <p>計劃進軍國際市場，為全球企業提供 AI 客服解決方案。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 返回按鈕 -->
+    <a href="/index.html" class="back-btn">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+</body>
+</html> 
