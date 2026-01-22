@@ -209,6 +209,16 @@
             overflow: hidden;
         }
 
+        #conversationsPage #conversationList {
+            max-height: calc(70vh - 80px);
+            overflow-y: auto;
+        }
+
+        #conversationsPage #chatMessages {
+            max-height: calc(70vh - 220px);
+            overflow-y: auto;
+        }
+
         .conversation-layout .card {
             height: 100%;
         }
@@ -7666,6 +7676,14 @@ TONE(語調):
                                         <label class="form-label">確認新密碼</label>
                                         <input type="password" class="form-control" id="confirmNewPassword" autocomplete="new-password">
                                     </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Email 驗證碼</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="changePasswordCode" placeholder="輸入驗證碼">
+                                            <button class="btn btn-outline-primary" type="button" onclick="requestChangePasswordCode()">寄送驗證碼</button>
+                                        </div>
+                                        <small class="text-muted">驗證碼有效 10 分鐘</small>
+                                    </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -7719,16 +7737,6 @@ TONE(語調):
                                         <label class="form-label">自動登出時間</label>
                                         <div class="form-control-plaintext">固定 15 分鐘</div>
                                         <small class="text-muted">系統固定 15 分鐘未操作即自動登出。</small>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <h6>API 安全</h6>
-                                    <div class="mb-3">
-                                        <label class="form-label">API 金鑰</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="apiKey" readonly>
-                                            <button class="btn btn-outline-secondary" type="button" onclick="generateApiKey()">重新生成</button>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -8206,6 +8214,13 @@ TONE(語調):
                     return;
                 }
                 
+                const code = document.getElementById('changePasswordCode')?.value.trim() || '';
+
+                if (!code) {
+                    showAlert('請輸入驗證碼', 'warning');
+                    return;
+                }
+                
                 try {
                     const token = localStorage.getItem('token') || localStorage.getItem('authToken');
                     if (!token) {
@@ -8222,7 +8237,7 @@ TONE(語調):
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`
                         },
-                        body: JSON.stringify({ oldPassword: currentPassword, newPassword })
+                        body: JSON.stringify({ oldPassword: currentPassword, newPassword, code })
                     });
                     
                     if (response.ok) {
@@ -8244,6 +8259,36 @@ TONE(語調):
                 } catch (error) {
                     console.error('修改密碼失敗:', error);
                     showAlert('修改密碼失敗', 'danger');
+                }
+            }
+
+            async function requestChangePasswordCode() {
+                try {
+                    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                    if (!token) {
+                        showAlert('請先登入', 'warning');
+                        return;
+                    }
+
+                    const apiBase = (window.API_BASE_URL && window.API_BASE_URL.endsWith('/api'))
+                        ? window.API_BASE_URL
+                        : (window.API_BASE_URL || 'https://echochat-api.onrender.com/api');
+                    const response = await fetch(`${apiBase}/change-password/request-code`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const result = await response.json();
+                    if (response.ok && result.success) {
+                        showAlert('驗證碼已寄送到您的電子郵件', 'success');
+                    } else {
+                        showAlert(result.error || '發送驗證碼失敗', 'danger');
+                    }
+                } catch (error) {
+                    console.error('發送驗證碼失敗:', error);
+                    showAlert('發送驗證碼失敗', 'danger');
                 }
             }
             
@@ -8269,13 +8314,6 @@ TONE(語調):
                 // 這裡可以添加保存通知設定的邏輯
                 showAlert('通知設定已儲存', 'success');
                 bootstrap.Modal.getInstance(document.getElementById('notificationSettingsModal')).hide();
-            }
-            
-            // 生成 API 金鑰
-            function generateApiKey() {
-                const apiKey = 'ech_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
-                document.getElementById('apiKey').value = apiKey;
-                showAlert('API 金鑰已重新生成', 'success');
             }
             
             // 確認刪除帳戶
