@@ -4923,77 +4923,64 @@ TONE(語調):
                             description: '最新旗艦模型，適合最高品質與高準確度場景',
                             features: ['最高準確度', '強推理能力', '多語言支援', '適合複雜任務'],
                             pricing: '頂級',
-                            speed: '中等'
+                            speed: '中等',
+                            provider: 'OpenAI'
                         },
                         'gpt-5.1': {
                             name: 'GPT-5.1',
                             description: '高品質旗艦模型，適合關鍵任務與專業場景',
                             features: ['高準確度', '穩定回覆', '多語言支援', '適合專業任務'],
                             pricing: '高階',
-                            speed: '中等'
+                            speed: '中等',
+                            provider: 'OpenAI'
                         },
                         'gpt-5.0': {
                             name: 'GPT-5.0',
                             description: '新一代高品質模型，兼顧品質與效率',
                             features: ['高品質回覆', '多語言支援', '通用能力強'],
                             pricing: '高階',
-                            speed: '中等'
+                            speed: '中等',
+                            provider: 'OpenAI'
                         },
                         'gpt-4.1': {
                             name: 'GPT-4.1',
                             description: '最新旗艦模型，適合高品質與高準確度場景',
                             features: ['高準確度', '強推理能力', '多語言支援', '適合複雜任務'],
                             pricing: '高階',
-                            speed: '中等'
-                        },
-                        'gpt-4.1-mini': {
-                            name: 'GPT-4.1 Mini',
-                            description: '高效能與成本平衡的新版模型，適合主流客服需求',
-                            features: ['高性價比', '穩定回覆', '多語言支援', '適合日常對話'],
-                            pricing: '中等',
-                            speed: '快速'
-                        },
-                        'gpt-4.1-nano': {
-                            name: 'GPT-4.1 Nano',
-                            description: '輕量快速的新模型，適合大量即時回覆',
-                            features: ['極速回應', '成本最低', '多語言支援'],
-                            pricing: '經濟實惠',
-                            speed: '極速'
+                            speed: '中等',
+                            provider: 'OpenAI'
                         },
                         'gpt-4o-mini': {
                             name: 'GPT-4o Mini',
                             description: '快速且經濟實惠的對話體驗，適合一般客服需求',
                             features: ['快速回應', '成本效益高', '支援多語言', '適合日常對話'],
                             pricing: '經濟實惠',
-                            speed: '快速'
+                            speed: '快速',
+                            provider: 'OpenAI'
                         },
                         'gpt-4o': {
                             name: 'GPT-4o',
                             description: '高品質通用模型，適合需要更佳理解力的場景',
                             features: ['高品質回覆', '多語言支援', '通用能力強'],
                             pricing: '高階',
-                            speed: '中等'
+                            speed: '中等',
+                            provider: 'OpenAI'
                         },
                         'gpt-4-turbo': {
                             name: 'GPT-4 Turbo',
                             description: '高級模型，適合較複雜的任務與內容生成',
                             features: ['強推理能力', '高準確度', '適合複雜任務'],
                             pricing: '高階',
-                            speed: '中等'
+                            speed: '中等',
+                            provider: 'OpenAI'
                         },
                         'gpt-3.5-turbo': {
                             name: 'GPT-3.5 Turbo',
                             description: '經典入門模型，速度快且成本較低',
                             features: ['快速回應', '成本效益高', '穩定可靠'],
                             pricing: '經濟實惠',
-                            speed: '快速'
-                        },
-                        'gpt-3.5-turbo-16k': {
-                            name: 'GPT-3.5 Turbo 16K',
-                            description: '支援更長上下文的 3.5 版本',
-                            features: ['較長上下文', '成本較低', '穩定可靠'],
-                            pricing: '經濟實惠',
-                            speed: '快速'
+                            speed: '快速',
+                            provider: 'OpenAI'
                         }
                     };
                 }
@@ -5100,7 +5087,17 @@ TONE(語調):
             // 顯示模型比較
             function showModelComparison() {
                 const selectedModel = document.getElementById('llmModel').value;
-                const models = Object.keys(modelInfo);
+                const allowedComparison = [
+                    'gpt-5.2',
+                    'gpt-5.1',
+                    'gpt-5.0',
+                    'gpt-4',
+                    'gpt-4.1',
+                    'gpt-4o',
+                    'gpt-4-turbo',
+                    'gpt-3.5-turbo'
+                ];
+                const models = allowedComparison.filter(model => modelInfo[model]);
                 const currentModel = modelInfo[selectedModel];
                 
                 if (!currentModel) return;
@@ -5148,7 +5145,7 @@ TONE(語調):
                                     <p class="text-muted small">${model.description}</p>
                                     
                                     <div class="mb-3">
-                                        <strong>供應商:</strong> ${model.provider || '未知'}
+                                        <strong>供應商:</strong> ${model.provider || 'OpenAI'}
                                     </div>
                                     
                                     <div class="mb-3">
