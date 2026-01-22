@@ -7591,6 +7591,102 @@ TONE(語調):
                 alert('模板儲存成功！');
             }
             
+            // 帳戶資訊模態框
+            function showAccountInfoModal() {
+                const modal = `
+                <div class="modal fade" id="accountInfoModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><i class="fas fa-user me-2"></i>帳戶資訊</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="accountInfoForm" class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">帳號</label>
+                                        <input type="text" class="form-control" id="accountUsername" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">角色</label>
+                                        <input type="text" class="form-control" id="accountRole" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">顯示名稱</label>
+                                        <input type="text" class="form-control" id="accountName" placeholder="請輸入顯示名稱">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="accountEmail" placeholder="請輸入 Email">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" onclick="saveAccountInfo()">儲存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+                const existingModal = document.getElementById('accountInfoModal');
+                if (existingModal) {
+                    existingModal.remove();
+                }
+
+                document.body.insertAdjacentHTML('beforeend', modal);
+
+                const modalInstance = new bootstrap.Modal(document.getElementById('accountInfoModal'));
+                modalInstance.show();
+
+                loadAccountInfo();
+            }
+
+            // 更改密碼模態框
+            function showChangePasswordModal() {
+                const modal = `
+                <div class="modal fade" id="changePasswordModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><i class="fas fa-key me-2"></i>更改密碼</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="changePasswordForm" class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label">目前密碼</label>
+                                        <input type="password" class="form-control" id="currentPassword" autocomplete="current-password">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">新密碼</label>
+                                        <input type="password" class="form-control" id="newPassword" autocomplete="new-password">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">確認新密碼</label>
+                                        <input type="password" class="form-control" id="confirmNewPassword" autocomplete="new-password">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" onclick="saveNewPassword()">更新密碼</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+                const existingModal = document.getElementById('changePasswordModal');
+                if (existingModal) {
+                    existingModal.remove();
+                }
+
+                document.body.insertAdjacentHTML('beforeend', modal);
+
+                const modalInstance = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+                modalInstance.show();
+            }
+
             // 安全性設定模態框
             function showSecuritySettingsModal() {
                 const modal = `
@@ -7621,12 +7717,8 @@ TONE(語調):
                                     <h6>會話管理</h6>
                                     <div class="mb-3">
                                         <label class="form-label">自動登出時間</label>
-                                        <select class="form-select" id="autoLogout">
-                                            <option value="30">30 分鐘</option>
-                                            <option value="60">1 小時</option>
-                                            <option value="120">2 小時</option>
-                                            <option value="0">永不</option>
-                                        </select>
+                                        <div class="form-control-plaintext">固定 15 分鐘</div>
+                                        <small class="text-muted">系統固定 15 分鐘未操作即自動登出。</small>
                                     </div>
                                 </div>
                                 <div class="mb-4">
@@ -7974,6 +8066,11 @@ TONE(語調):
             }
             // 將函式暴露為全域，確保 inline onclick 可呼叫
             window.showPlanManagementModal = showPlanManagementModal;
+            window.showAccountInfoModal = showAccountInfoModal;
+            window.showChangePasswordModal = showChangePasswordModal;
+            window.showSecuritySettingsModal = showSecuritySettingsModal;
+            window.showNotificationSettingsModal = showNotificationSettingsModal;
+            window.showDeleteAccountModal = showDeleteAccountModal;
             
             // 載入帳戶資訊
             async function loadAccountInfo() {
@@ -7984,7 +8081,10 @@ TONE(語調):
                         return;
                     }
                     
-                    const response = await fetch('/api/me', {
+                    const apiBase = (window.API_BASE_URL && window.API_BASE_URL.endsWith('/api'))
+                        ? window.API_BASE_URL
+                        : (window.API_BASE_URL || 'https://echochat-api.onrender.com/api');
+                    const response = await fetch(`${apiBase}/profile`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
@@ -7993,11 +8093,15 @@ TONE(語調):
                     
                     if (response.ok) {
                         const data = await response.json();
-                        const user = data.user || {};
-                        document.getElementById('accountUsername').value = user.username;
-                        document.getElementById('accountRole').value = user.role;
-                        document.getElementById('accountName').value = user.name || '';
-                        document.getElementById('accountEmail').value = user.email || '';
+                        const user = data.user || data.profile || {};
+                        const usernameEl = document.getElementById('accountUsername');
+                        const roleEl = document.getElementById('accountRole');
+                        const nameEl = document.getElementById('accountName');
+                        const emailEl = document.getElementById('accountEmail');
+                        if (usernameEl) usernameEl.value = user.username || '';
+                        if (roleEl) roleEl.value = user.role || '';
+                        if (nameEl) nameEl.value = user.name || '';
+                        if (emailEl) emailEl.value = user.email || '';
 
                         // 側欄問候與方案顯示
                         const greet = document.getElementById('greetingLine');
@@ -8048,7 +8152,10 @@ TONE(語調):
                         return;
                     }
                     
-                    const response = await fetch('/api/profile', {
+                    const apiBase = (window.API_BASE_URL && window.API_BASE_URL.endsWith('/api'))
+                        ? window.API_BASE_URL
+                        : (window.API_BASE_URL || 'https://echochat-api.onrender.com/api');
+                    const response = await fetch(`${apiBase}/profile`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -8106,7 +8213,10 @@ TONE(語調):
                         return;
                     }
                     
-                    const response = await fetch('/api/change-password', {
+                    const apiBase = (window.API_BASE_URL && window.API_BASE_URL.endsWith('/api'))
+                        ? window.API_BASE_URL
+                        : (window.API_BASE_URL || 'https://echochat-api.onrender.com/api');
+                    const response = await fetch(`${apiBase}/change-password`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -8141,8 +8251,6 @@ TONE(語調):
             function saveSecuritySettings() {
                 const twoFactorAuth = document.getElementById('twoFactorAuth').checked;
                 const loginNotifications = document.getElementById('loginNotifications').checked;
-                const autoLogout = document.getElementById('autoLogout').value;
-                
                 // 這裡可以添加保存安全性設定的邏輯
                 showAlert('安全性設定已儲存', 'success');
                 bootstrap.Modal.getInstance(document.getElementById('securitySettingsModal')).hide();
