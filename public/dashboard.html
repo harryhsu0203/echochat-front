@@ -3459,7 +3459,11 @@ TONE(語調):
                                                         <small class="text-muted" id="currentConversationStatus">等待回覆</small>
                                                     </div>
                                                 </div>
-                                                <div class="d-flex gap-2">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="form-check form-switch mb-0">
+                                                        <input class="form-check-input" type="checkbox" id="autoReplySwitch" onchange="toggleAutoReply()">
+                                                        <label class="form-check-label" for="autoReplySwitch" id="autoReplyLabel">自動回覆</label>
+                                                    </div>
                                                     <button class="btn btn-sm btn-outline-success" onclick="markAsRead()" title="標記為已讀">
                                                         <i class="fas fa-check-double"></i>
                                                     </button>
@@ -3495,41 +3499,6 @@ TONE(語調):
                                                         <span id="replyHint">手動回覆模式：輸入訊息後按 Enter 或點擊發送按鈕</span>
                                                     </small>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 對話設定彈窗 -->
-                                <div class="modal fade" id="autoReplySettingsModal" tabindex="-1" aria-labelledby="autoReplySettingsModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content border-0 shadow">
-                                            <div class="modal-header bg-primary text-white">
-                                                <h5 class="modal-title" id="autoReplySettingsModalLabel">
-                                                    <i class="fas fa-sliders-h me-2"></i>對話設定
-                                                </h5>
-                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="d-flex justify-content-between align-items-start">
-                                                    <div>
-                                                        <h6 class="mb-1">自動回覆</h6>
-                                                        <p class="text-muted small mb-0">控制此對話是否自動回覆客戶訊息。</p>
-                                                    </div>
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="autoReplySwitch" onchange="toggleAutoReply()">
-                                                        <label class="form-check-label" for="autoReplySwitch" id="autoReplyLabel">
-                                                            關閉自動回覆
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <hr class="my-3">
-                                                <div class="small text-muted">
-                                                    <i class="fas fa-info-circle me-1"></i>開啟時將停用手動輸入並由 AI 自動回覆。
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer border-0 pt-0">
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">關閉</button>
                                             </div>
                                         </div>
                                     </div>
@@ -6559,7 +6528,12 @@ TONE(語調):
                     // 根據對話設定更新開關狀態
                     const autoReplyEnabled = conversation.autoReplyEnabled !== false; // 預設為開啟
                     autoReplySwitch.checked = autoReplyEnabled;
-                    autoReplyLabel.textContent = autoReplyEnabled ? '開啟自動回覆' : '關閉自動回覆';
+                    autoReplyLabel.textContent = autoReplyEnabled ? '自動回覆' : '轉人工';
+                    const statusText = document.getElementById('autoReplyStatusText');
+                    if (statusText) {
+                        statusText.textContent = autoReplyEnabled ? '自動回覆中' : '已轉人工';
+                        statusText.className = `badge ${autoReplyEnabled ? 'bg-success' : 'bg-secondary'}`;
+                    }
                     
                     // 更新提示文字和輸入框狀態
                     hintElement.textContent = autoReplyEnabled ? 
@@ -6699,7 +6673,12 @@ TONE(語調):
                         const data = await response.json();
                         if (data.success) {
                             // 更新 UI
-                            labelElement.textContent = autoReplyEnabled ? '開啟自動回覆' : '關閉自動回覆';
+                            labelElement.textContent = autoReplyEnabled ? '自動回覆' : '轉人工';
+                            const statusText = document.getElementById('autoReplyStatusText');
+                            if (statusText) {
+                                statusText.textContent = autoReplyEnabled ? '自動回覆中' : '已轉人工';
+                                statusText.className = `badge ${autoReplyEnabled ? 'bg-success' : 'bg-secondary'}`;
+                            }
                             hintElement.textContent = autoReplyEnabled ? 
                                 '自動回覆模式：AI 會自動回覆客戶訊息' : 
                                 '手動回覆模式：輸入訊息後按 Enter 或點擊發送按鈕';
@@ -8690,5 +8669,34 @@ TONE(語調):
                 });
             });
         </script>
+        <!-- 對話設定彈窗（放在 body 底部，避免被容器裁切） -->
+        <div class="modal fade" id="autoReplySettingsModal" tabindex="-1" aria-labelledby="autoReplySettingsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="autoReplySettingsModalLabel">
+                            <i class="fas fa-sliders-h me-2"></i>對話設定
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">自動回覆</h6>
+                                <p class="text-muted small mb-0">控制此對話是否自動回覆客戶訊息。</p>
+                            </div>
+                            <span id="autoReplyStatusText" class="badge bg-success">自動回覆中</span>
+                        </div>
+                        <hr class="my-3">
+                        <div class="small text-muted">
+                            <i class="fas fa-info-circle me-1"></i>開啟自動回覆時將停用手動輸入。
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">關閉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
