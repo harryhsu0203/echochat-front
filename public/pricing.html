@@ -251,6 +251,30 @@
             animation: pulse 2s infinite;
         }
 
+        .currency-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0 10px;
+            flex-wrap: wrap;
+        }
+
+        .currency-toggle label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .currency-select {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            background: #ffffff;
+        }
+
         @keyframes pulse {
             0%, 100% {
                 transform: scale(1);
@@ -398,10 +422,11 @@
         }
 
         .plan-price {
-            font-size: 3rem;
+            font-size: clamp(2.2rem, 4vw, 3rem);
             font-weight: 800;
             margin-bottom: 10px;
             color: #667eea;
+            white-space: nowrap;
         }
 
         .plan-price.premium {
@@ -849,6 +874,15 @@
                 <h2 class="section-title" data-i18n="pricing.plans.title">選擇您的方案</h2>
                 <p class="section-subtitle" data-i18n="pricing.plans.subtitle">從個人使用到企業級應用，我們提供多種方案滿足不同需求</p>
                 
+                <div class="currency-toggle">
+                    <label for="currencySelect">幣別</label>
+                    <select id="currencySelect" class="currency-select">
+                        <option value="twd">TWD（NT$）</option>
+                        <option value="usd">USD（$）</option>
+                        <option value="cny">CNY（¥）</option>
+                    </select>
+                </div>
+
                 <!-- 付款週期切換 -->
                 <div class="billing-toggle">
                     <button class="toggle-btn active" data-period="monthly">每月付款</button>
@@ -880,8 +914,8 @@
                 <div class="pricing-card premium featured">
                     <h3 class="plan-name">尊榮版</h3>
                     <div class="plan-price premium">
-                        <span class="monthly-price" data-price-twd="NT$900" data-price-usd="$29.99" data-price-jpy="¥3,900">NT$900</span>
-                        <span class="yearly-price" style="display: none;" data-price-twd="NT$9,000" data-price-usd="$299.99" data-price-jpy="¥39,000">NT$9,000</span>
+                        <span class="monthly-price" data-price-twd="NT$900" data-price-usd="$29.99" data-price-cny="CN¥219" data-price-jpy="¥3,900">NT$900</span>
+                        <span class="yearly-price" style="display: none;" data-price-twd="NT$9,000" data-price-usd="$299.99" data-price-cny="CN¥2,190" data-price-jpy="¥39,000">NT$9,000</span>
                     </div>
                     <div class="plan-period">
                         <span class="monthly-period">每月</span>
@@ -999,26 +1033,41 @@
             const yearlyPrices = document.querySelectorAll('.yearly-price');
             const monthlyPeriods = document.querySelectorAll('.monthly-period');
             const yearlyPeriods = document.querySelectorAll('.yearly-period');
-            // 根據語言切換幣別
-            (function applyCurrencyByLocale(){
-                const lang = (document.documentElement.lang || navigator.language || 'zh-TW').toLowerCase();
-                const isTWD = lang.includes('zh');
-                const isJPY = lang.includes('ja');
+            function applyCurrency(currency) {
                 const monthly = document.querySelector('.monthly-price');
                 const yearly = document.querySelector('.yearly-price');
-                if (monthly && yearly) {
-                    if (isTWD) {
-                        monthly.textContent = monthly.getAttribute('data-price-twd') || 'NT$900';
-                        yearly.textContent = yearly.getAttribute('data-price-twd') || 'NT$9,000';
-                    } else if (isJPY) {
-                        monthly.textContent = monthly.getAttribute('data-price-jpy') || '¥3,900';
-                        yearly.textContent = yearly.getAttribute('data-price-jpy') || '¥39,000';
-                    } else {
-                        monthly.textContent = monthly.getAttribute('data-price-usd') || '$29.99';
-                        yearly.textContent = yearly.getAttribute('data-price-usd') || '$299.99';
-                    }
+                if (!monthly || !yearly) return;
+
+                const key = `data-price-${currency}`;
+                monthly.textContent = monthly.getAttribute(key) || monthly.textContent;
+                yearly.textContent = yearly.getAttribute(key) || yearly.textContent;
+            }
+
+            // 預設幣別：從 localStorage 或語系判斷
+            (function initCurrency(){
+                const saved = localStorage.getItem('pricingCurrency');
+                if (saved) {
+                    const select = document.getElementById('currencySelect');
+                    if (select) select.value = saved;
+                    applyCurrency(saved);
+                    return;
                 }
+                const lang = (document.documentElement.lang || navigator.language || 'zh-TW').toLowerCase();
+                const isCN = lang.includes('zh-cn') || lang.includes('zh-hans') || lang.includes('cn');
+                const defaultCurrency = isCN ? 'cny' : (lang.includes('zh') ? 'twd' : 'usd');
+                const select = document.getElementById('currencySelect');
+                if (select) select.value = defaultCurrency;
+                applyCurrency(defaultCurrency);
             })();
+
+            const currencySelect = document.getElementById('currencySelect');
+            if (currencySelect) {
+                currencySelect.addEventListener('change', (e) => {
+                    const currency = e.target.value;
+                    localStorage.setItem('pricingCurrency', currency);
+                    applyCurrency(currency);
+                });
+            }
 
             toggleBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
