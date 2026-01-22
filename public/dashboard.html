@@ -203,7 +203,8 @@
         }
 
         .conversation-layout {
-            min-height: 60vh;
+            height: calc(100vh - 260px);
+            min-height: 520px;
         }
 
         .conversation-layout .card {
@@ -563,15 +564,30 @@
 
             #conversationsPage .row,
             #conversationsPage .card,
-            #conversationsPage .card-body,
-            #conversationsPage #chatMessages,
-            #conversationsPage .conversation-list {
+            #conversationsPage .card-body {
                 height: auto !important;
                 max-height: none !important;
             }
 
             #conversationsPage .conversation-list {
                 max-height: 400px !important;
+            }
+
+            #conversationsPage .conversation-layout {
+                height: auto !important;
+                min-height: 0 !important;
+            }
+
+            #conversationsPage .conversation-list-body {
+                max-height: 45vh !important;
+            }
+
+            #conversationsPage .chat-panel-body {
+                height: auto !important;
+            }
+
+            #conversationsPage #chatMessages {
+                max-height: 45vh !important;
             }
         }
 
