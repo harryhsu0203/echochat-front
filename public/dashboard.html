@@ -201,6 +201,37 @@
             max-height: calc(100vh - 200px);
             overflow: hidden;
         }
+
+        .conversation-layout {
+            min-height: 60vh;
+        }
+
+        .conversation-layout .card {
+            height: 100%;
+        }
+
+        .conversation-layout .card-body {
+            min-height: 0;
+        }
+
+        .conversation-list-body {
+            height: 100%;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        .chat-panel-body {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 0;
+        }
+
+        .chat-messages-panel {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+        }
         
 
         
@@ -3372,7 +3403,7 @@ TONE(語調):
                                 </div>
 
                                 <!-- 聊天介面 -->
-                                <div class="row" style="height: calc(100vh - 200px);">
+                                <div class="row conversation-layout">
                                     <!-- 對話列表 -->
                                     <div class="col-md-4">
                                         <div class="card border-0 shadow-sm h-100">
@@ -3380,7 +3411,7 @@ TONE(語調):
                                                 <h6 class="mb-0">對話列表</h6>
                                             </div>
                                             <div class="card-body p-0">
-                                                <div class="conversation-list" id="conversationList" style="height: 100%; overflow-y: auto;">
+                                                <div class="conversation-list conversation-list-body" id="conversationList">
                                                     <!-- 對話列表將由 JavaScript 動態載入 -->
                                                 </div>
                                             </div>
@@ -3412,9 +3443,9 @@ TONE(語調):
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="card-body p-0 d-flex flex-column" style="height: calc(100vh - 350px);">
+                                            <div class="card-body p-0 chat-panel-body">
                                                 <!-- 聊天訊息區域 -->
-                                                <div class="flex-grow-1 p-4" id="chatMessages" style="height: calc(100% - 100px); overflow-y: auto; max-height: calc(100vh - 400px);">
+                                                <div class="flex-grow-1 p-4 chat-messages-panel" id="chatMessages">
                                                     <div class="text-center text-muted py-5" id="noConversationMessage">
                                                         <i class="fas fa-comments fa-3x mb-3"></i>
                                                         <p>選擇一個對話開始聊天</p>
@@ -4531,7 +4562,9 @@ TONE(語調):
                         },
                         body: JSON.stringify({
                             message: message,
-                            conversationId: conversationId
+                            conversationId: conversationId,
+                            no_store: true,
+                            source: 'dashboard_test'
                         })
                     });
                     
