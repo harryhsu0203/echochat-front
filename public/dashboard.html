@@ -1510,7 +1510,7 @@
                         <div id="dashboardPage">
                             <!-- 統計卡片 -->
                             <div class="row mb-4">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="stats-card text-center">
                                         <div class="stats-icon bg-primary mx-auto mb-3">
                                             <i class="fas fa-users"></i>
@@ -1519,7 +1519,7 @@
                                         <p class="text-muted mb-0" data-i18n="dashboard.stats.total_users">總用戶數</p>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="stats-card text-center">
                                         <div class="stats-icon bg-success mx-auto mb-3">
                                             <i class="fas fa-comments"></i>
@@ -1528,22 +1528,13 @@
                                         <p class="text-muted mb-0" data-i18n="dashboard.stats.total_messages">總訊息數</p>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="stats-card text-center">
                                         <div class="stats-icon bg-warning mx-auto mb-3">
                                             <i class="fas fa-brain"></i>
                                         </div>
                                         <h3 id="knowledgeItems">0</h3>
                                         <p class="text-muted mb-0" data-i18n="dashboard.stats.knowledge_items">知識庫項目</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="stats-card text-center">
-                                        <div class="stats-icon bg-info mx-auto mb-3">
-                                            <i class="fas fa-chart-line"></i>
-                                        </div>
-                                        <h3 id="avgResponse">0s</h3>
-                                        <p class="text-muted mb-0">平均回應時間</p>
                                     </div>
                                 </div>
                             </div>
@@ -4123,7 +4114,6 @@ TONE(語調):
                         document.getElementById('totalUsers').textContent = stats.totalUsers.toLocaleString();
                         document.getElementById('totalMessages').textContent = stats.totalMessages.toLocaleString();
                         document.getElementById('knowledgeItems').textContent = stats.knowledgeItems.toLocaleString();
-                        document.getElementById('avgResponse').textContent = stats.avgResponseTime;
                         
                         // 添加最後更新時間
                         const lastUpdated = new Date(stats.lastUpdated).toLocaleString('zh-TW');
@@ -4135,14 +4125,12 @@ TONE(語調):
                         const defaultStats = {
                             totalUsers: 0,
                             totalMessages: 0,
-                            knowledgeItems: 0,
-                            avgResponseTime: '2.3s'
+                            knowledgeItems: 0
                         };
                         
                         document.getElementById('totalUsers').textContent = defaultStats.totalUsers.toLocaleString();
                         document.getElementById('totalMessages').textContent = defaultStats.totalMessages.toLocaleString();
                         document.getElementById('knowledgeItems').textContent = defaultStats.knowledgeItems.toLocaleString();
-                        document.getElementById('avgResponse').textContent = defaultStats.avgResponseTime;
                     }
                 } catch (error) {
                     console.error('❌ 載入統計數據錯誤:', error);
@@ -4150,14 +4138,12 @@ TONE(語調):
                     const defaultStats = {
                         totalUsers: 0,
                         totalMessages: 0,
-                        knowledgeItems: 0,
-                        avgResponseTime: '2.3s'
+                        knowledgeItems: 0
                     };
                     
                     document.getElementById('totalUsers').textContent = defaultStats.totalUsers.toLocaleString();
                     document.getElementById('totalMessages').textContent = defaultStats.totalMessages.toLocaleString();
                     document.getElementById('knowledgeItems').textContent = defaultStats.knowledgeItems.toLocaleString();
-                    document.getElementById('avgResponse').textContent = defaultStats.avgResponseTime;
                 }
             }
             
