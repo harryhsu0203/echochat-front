@@ -631,6 +631,17 @@
                 overflow-x: auto;
             }
         }
+
+        @media (max-width: 991.98px) {
+            .quick-action-row {
+                grid-template-columns: 1fr;
+            }
+
+            .quota-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
         
         .sidebar .nav-link {
             color: rgba(255,255,255,0.8);
@@ -686,6 +697,45 @@
             transition: all 0.3s;
             text-align: center;
             cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .quick-action-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .quota-bar {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 0 12px 26px rgba(0,0,0,0.08);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .quota-bar .quota-main {
+            flex: 1 1 320px;
+            min-width: 260px;
+        }
+
+        .quota-bar .quota-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .quota-bar .quota-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
         }
         
         .quick-action-card:hover {
@@ -1544,73 +1594,71 @@
                                 <div class="col-12">
                                     <h4 class="mb-3">快速操作</h4>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="quick-action-card" onclick="switchToKnowledge()">
-                                        <div class="quick-action-icon">
-                                            <i class="fas fa-cogs"></i>
-                                        </div>
-                                        <h5>知識庫管理</h5>
-                                        <p class="text-muted">管理問答對和知識庫</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="quick-action-card" onclick="switchTab('conversations')">
-                                        <div class="quick-action-icon">
-                                            <i class="fas fa-comments"></i>
-                                        </div>
-                                        <h5>對話管理</h5>
-                                        <p class="text-muted">管理客戶對話和回覆</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card border-0 shadow-sm">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <i class="fas fa-coins text-warning fa-2x me-3"></i>
-                                                <div class="flex-grow-1">
-                                                    <h6 class="mb-0">配額餘額</h6>
-                                                    <small class="text-muted d-block" id="quotaDisplay">載入中...</small>
-                                                    <small class="text-muted" id="planLabel">方案：--</small>
-                                                </div>
-                                                <button class="btn btn-sm btn-outline-primary" onclick="openTopUpModal()">
-                                                    <i class="fas fa-wallet me-1"></i>儲值
-                                                </button>
+                                <div class="col-12">
+                                    <div class="quick-action-row">
+                                        <div class="quick-action-card" onclick="switchToKnowledge()">
+                                            <div class="quick-action-icon">
+                                                <i class="fas fa-cogs"></i>
                                             </div>
+                                            <h5>知識庫管理</h5>
+                                            <p class="text-muted">管理問答對和知識庫</p>
+                                        </div>
+                                        <div class="quick-action-card" onclick="switchTab('conversations')">
+                                            <div class="quick-action-icon">
+                                                <i class="fas fa-comments"></i>
+                                            </div>
+                                            <h5>對話管理</h5>
+                                            <p class="text-muted">管理客戶對話和回覆</p>
+                                        </div>
+                                        <div class="quick-action-card" onclick="switchToAIAssistant()">
+                                            <div class="quick-action-icon">
+                                                <i class="fas fa-robot"></i>
+                                            </div>
+                                            <h5>AI 助理資訊</h5>
+                                            <p class="text-muted">查看 AI 助理狀態和設定</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 儲值橫條 -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="quota-bar">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <i class="fas fa-coins text-warning fa-2x"></i>
+                                            <div>
+                                                <h6 class="mb-0">配額餘額</h6>
+                                                <small class="text-muted d-block" id="quotaDisplay">載入中...</small>
+                                                <small class="text-muted" id="planLabel">方案：--</small>
+                                            </div>
+                                        </div>
+                                        <div class="quota-main">
                                             <h3 class="mb-1" id="tokenAvailable">載入中...</h3>
                                             <div class="text-muted small mb-2">儲值餘額：<span id="tokenBonus">0</span> tokens</div>
                                             <div class="progress mb-2" style="height: 8px;">
                                                 <div class="progress-bar bg-warning" role="progressbar" id="tokenUsageBar" style="width: 0%"></div>
                                             </div>
-                                            <div class="d-flex justify-content-between small text-muted">
+                                            <div class="quota-meta text-muted">
                                                 <span>已用 <span id="tokenUsed">0</span></span>
                                                 <span>月額 <span id="tokenAllowance">0</span></span>
-                                            </div>
-                                            <div class="d-flex justify-content-between small text-muted">
                                                 <span>對話已用 <span id="conversationUsed">--</span></span>
                                                 <span id="conversationLimitDisplay">--</span>
-                                            </div>
-                        <div class="d-flex justify-content-between small text-muted mb-3">
                                                 <span>下次重置 <span id="nextBillingDate">--</span></span>
                                                 <span>估每次約 <span id="tokensPerConversation">--</span> tokens</span>
                                             </div>
-                                            <div class="d-flex gap-2">
-                                                <button class="btn btn-sm btn-warning flex-grow-1" onclick="openTopUpModal()">
-                                                    <i class="fas fa-plus me-1"></i>快速儲值
-                                                </button>
-                                                <button class="btn btn-sm btn-outline-secondary" onclick="window.location.href='pricing.html'">
-                                                    方案升級
-                                                </button>
-                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="quick-action-card" onclick="switchToAIAssistant()">
-                                        <div class="quick-action-icon">
-                                            <i class="fas fa-robot"></i>
+                                        <div class="quota-actions">
+                                            <button class="btn btn-sm btn-outline-primary" onclick="openTopUpModal()">
+                                                <i class="fas fa-wallet me-1"></i>儲值
+                                            </button>
+                                            <button class="btn btn-sm btn-warning" onclick="openTopUpModal()">
+                                                <i class="fas fa-plus me-1"></i>快速儲值
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="window.location.href='pricing.html'">
+                                                方案升級
+                                            </button>
                                         </div>
-                                        <h5>AI 助理資訊</h5>
-                                        <p class="text-muted">查看 AI 助理狀態和設定</p>
                                     </div>
                                 </div>
                             </div>
