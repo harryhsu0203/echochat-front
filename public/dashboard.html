@@ -6422,6 +6422,42 @@ TONE(語調):
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
+            function getStickerUrl(message) {
+                if (message.stickerUrl) return message.stickerUrl;
+                if (message.stickerId) {
+                    return `https://stickershop.line-scdn.net/stickershop/v1/sticker/${message.stickerId}/android/sticker.png`;
+                }
+                return '';
+            }
+
+            function renderMessageContent(message) {
+                const contentText = escapeHtml(message.content || '');
+                if (message.type === 'sticker') {
+                    const stickerUrl = getStickerUrl(message);
+                    if (stickerUrl) {
+                        return `<img src="${stickerUrl}" alt="貼圖" style="max-width: 120px; height: auto;" onerror="this.style.display='none';" />` +
+                            (contentText ? `<div class="small text-muted mt-1">${contentText}</div>` : '');
+                    }
+                    return `<span>${contentText || '[貼圖]'}</span>`;
+                }
+                if (message.type === 'image') {
+                    return `<span>${contentText || '[圖片]'}</span>`;
+                }
+                if (message.type === 'video') {
+                    return `<span>${contentText || '[影片]'}</span>`;
+                }
+                if (message.type === 'audio') {
+                    return `<span>${contentText || '[語音]'}</span>`;
+                }
+                if (message.type === 'file') {
+                    return `<span>${contentText || '[檔案]'}</span>`;
+                }
+                if (message.type === 'location') {
+                    return `<span>${contentText || '[位置]'}</span>`;
+                }
+                return `<span>${contentText}</span>`;
+            }
+
             // 載入真實對話詳情
             async function loadRealConversation(conversationId) {
                 console.log('載入真實對話:', conversationId);
@@ -6511,7 +6547,7 @@ TONE(語調):
                                     </div>
                                 </div>
                                 <div class="bg-${isCustomer ? 'white' : 'primary'} text-${isCustomer ? 'dark' : 'white'} p-3 rounded-3 shadow-sm" style="max-width: 70%; border-radius: ${isCustomer ? '15px 15px 15px 5px' : '15px 15px 5px 15px'} !important;">
-                                    <span>${message.content}</span>
+                                    ${renderMessageContent(message)}
                                     <div class="small text-${isCustomer ? 'muted' : 'white-50'} mt-1">
                                         <i class="fas fa-clock me-1"></i>${time}${aiBadge}
                                     </div>
