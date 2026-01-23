@@ -6408,6 +6408,20 @@ TONE(語調):
                 return date.toLocaleDateString('zh-TW');
             }
 
+            function getConversationLastTimestamp(conversation) {
+                if (!conversation || !Array.isArray(conversation.messages) || !conversation.messages.length) {
+                    return conversation?.updatedAt || conversation?.createdAt || '';
+                }
+                const last = conversation.messages[conversation.messages.length - 1];
+                return last?.timestamp || conversation?.updatedAt || conversation?.createdAt || '';
+            }
+
+            function scrollChatToBottom() {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!chatMessages) return;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
             // 載入真實對話詳情
             async function loadRealConversation(conversationId) {
                 console.log('載入真實對話:', conversationId);
@@ -6467,12 +6481,19 @@ TONE(語調):
                 // 顯示訊息
                 const chatMessages = document.getElementById('chatMessages');
                 chatMessages.innerHTML = '';
+                const lastTimestamp = getConversationLastTimestamp(conversation);
+                if (lastTimestamp) {
+                    chatMessages.dataset.lastMessageTs = lastTimestamp;
+                }
                 
                 if (conversation.messages && conversation.messages.length > 0) {
                     conversation.messages.forEach(message => {
                         const messageDiv = document.createElement('div');
                         // 客戶傳來的(user)顯示在左邊，我方回覆(assistant)顯示在右邊
                         const isCustomer = message.role === 'user';
+                        const aiBadge = message.isAutoReply
+                            ? '<span class="badge bg-info text-dark ms-2">AI 回覆</span>'
+                            : '';
                         messageDiv.className = `d-flex ${isCustomer ? 'justify-content-start' : 'justify-content-end'} mb-3`;
                         
                         const time = formatTime(message.timestamp);
@@ -6487,7 +6508,7 @@ TONE(語調):
                                 <div class="bg-${isCustomer ? 'white' : 'primary'} text-${isCustomer ? 'dark' : 'white'} p-3 rounded-3 shadow-sm" style="max-width: 70%; border-radius: ${isCustomer ? '15px 15px 15px 5px' : '15px 15px 5px 15px'} !important;">
                                     <span>${message.content}</span>
                                     <div class="small text-${isCustomer ? 'muted' : 'white-50'} mt-1">
-                                        <i class="fas fa-clock me-1"></i>${time}
+                                        <i class="fas fa-clock me-1"></i>${time}${aiBadge}
                                     </div>
                                 </div>
                             </div>
@@ -6535,7 +6556,7 @@ TONE(語調):
                 document.getElementById('sendMessageBtn').disabled = false;
                 
                 // 滾動到底部
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                scrollChatToBottom();
             }
 
             // 發送人工回覆訊息
@@ -6755,10 +6776,10 @@ TONE(語調):
                                 if (data.success && data.conversation) {
                                     // 檢查是否有新訊息
                                     const chatMessages = document.getElementById('chatMessages');
-                                    const currentMessageCount = chatMessages.children.length;
-                                    const newMessageCount = data.conversation.messages ? data.conversation.messages.length : 0;
+                                    const currentLastTs = chatMessages.dataset.lastMessageTs || '';
+                                    const newLastTs = getConversationLastTimestamp(data.conversation);
                                     
-                                    if (newMessageCount > currentMessageCount) {
+                                    if (newLastTs && newLastTs !== currentLastTs) {
                                         console.log('🔄 檢測到新訊息，更新對話');
                                         displayRealMessages(data.conversation);
                                     }
