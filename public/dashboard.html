@@ -6588,8 +6588,7 @@ TONE(語調):
                             // 重新載入對話以顯示新訊息
                             await loadRealConversation(currentConversationId.value);
                             
-                            // 顯示成功訊息
-                            showToast('回覆已發送', 'success');
+                            // 不顯示浮動提示，避免干擾
                         } else {
                             alert('發送失敗：' + (data.error || '未知錯誤'));
                         }
