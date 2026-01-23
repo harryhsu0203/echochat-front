@@ -6484,7 +6484,12 @@ TONE(語調):
                 const lastTimestamp = getConversationLastTimestamp(conversation);
                 if (lastTimestamp) {
                     chatMessages.dataset.lastMessageTs = lastTimestamp;
+                } else {
+                    delete chatMessages.dataset.lastMessageTs;
                 }
+                chatMessages.dataset.messageCount = String(
+                    Array.isArray(conversation.messages) ? conversation.messages.length : 0
+                );
                 
                 if (conversation.messages && conversation.messages.length > 0) {
                     conversation.messages.forEach(message => {
@@ -6777,9 +6782,11 @@ TONE(語調):
                                     // 檢查是否有新訊息
                                     const chatMessages = document.getElementById('chatMessages');
                                     const currentLastTs = chatMessages.dataset.lastMessageTs || '';
+                                    const currentCount = parseInt(chatMessages.dataset.messageCount || '0', 10);
                                     const newLastTs = getConversationLastTimestamp(data.conversation);
+                                    const newCount = Array.isArray(data.conversation.messages) ? data.conversation.messages.length : 0;
                                     
-                                    if (newLastTs && newLastTs !== currentLastTs) {
+                                    if ((newLastTs && newLastTs !== currentLastTs) || newCount !== currentCount) {
                                         console.log('🔄 檢測到新訊息，更新對話');
                                         displayRealMessages(data.conversation);
                                     }
