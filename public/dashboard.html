@@ -6480,7 +6480,8 @@ TONE(語調):
 
             function renderMessageContent(message) {
                 const contentText = escapeHtml(message.content || '');
-                if (message.type === 'sticker') {
+                const isSticker = message.type === 'sticker' || !!message.stickerId || !!message.stickerUrl;
+                if (isSticker) {
                     const stickerUrl = getStickerUrl(message);
                     if (stickerUrl) {
                         return `<img src="${stickerUrl}" alt="貼圖" style="max-width: 120px; height: auto;" onerror="this.style.display='none';" />` +
