@@ -6478,9 +6478,36 @@ TONE(語調):
                 return '';
             }
 
+            function resolveMediaUrl(url) {
+                if (!url) return '';
+                if (url.startsWith('http')) return url;
+                if (url.startsWith('/uploads/')) {
+                    const apiBase = window.API_BASE_URL || '';
+                    const origin = apiBase.replace(/\/api\/?$/, '');
+                    return origin + url;
+                }
+                return url;
+            }
+
+            function renderAttachments(attachments) {
+                if (!Array.isArray(attachments) || attachments.length === 0) return '';
+                const items = attachments.map(att => {
+                    const url = resolveMediaUrl(att.url || att.mediaUrl || '');
+                    const type = att.type || '';
+                    const name = escapeHtml(att.name || att.fileName || '附件');
+                    if (type.startsWith('image') || type === 'image') {
+                        return `<img src="${url}" alt="${name}" style="max-width: 180px; height: auto; border-radius: 8px; margin-top: 6px;" />`;
+                    }
+                    return `<a href="${url}" target="_blank" rel="noopener" class="d-block mt-1">${name}</a>`;
+                });
+                return `<div class="mt-1">${items.join('')}</div>`;
+            }
+
             function renderMessageContent(message) {
                 const contentText = escapeHtml(message.content || '');
                 const isSticker = message.type === 'sticker' || !!message.stickerId || !!message.stickerUrl;
+                const mediaUrl = resolveMediaUrl(message.mediaUrl || '');
+                const mediaType = message.mediaType || message.type || '';
                 if (isSticker) {
                     const stickerUrl = getStickerUrl(message);
                     if (stickerUrl) {
@@ -6489,22 +6516,42 @@ TONE(語調):
                     }
                     return `<span>${contentText || '[貼圖]'}</span>`;
                 }
+                if (mediaUrl && (mediaType === 'image' || mediaType.startsWith('image'))) {
+                    return `<img src="${mediaUrl}" alt="圖片" style="max-width: 220px; height: auto; border-radius: 10px;" />` +
+                        (contentText ? `<div class="small text-muted mt-1">${contentText}</div>` : '') +
+                        renderAttachments(message.attachments);
+                }
+                if (mediaUrl && (mediaType === 'video' || mediaType.startsWith('video'))) {
+                    return `<video src="${mediaUrl}" controls style="max-width: 260px; border-radius: 10px;"></video>` +
+                        (contentText ? `<div class="small text-muted mt-1">${contentText}</div>` : '') +
+                        renderAttachments(message.attachments);
+                }
+                if (mediaUrl && (mediaType === 'audio' || mediaType.startsWith('audio'))) {
+                    return `<audio src="${mediaUrl}" controls></audio>` +
+                        (contentText ? `<div class="small text-muted mt-1">${contentText}</div>` : '') +
+                        renderAttachments(message.attachments);
+                }
+                if (mediaUrl && (mediaType === 'file' || mediaType.startsWith('application'))) {
+                    return `<a href="${mediaUrl}" target="_blank" rel="noopener">下載附件</a>` +
+                        (contentText ? `<div class="small text-muted mt-1">${contentText}</div>` : '') +
+                        renderAttachments(message.attachments);
+                }
                 if (message.type === 'image') {
-                    return `<span>${contentText || '[圖片]'}</span>`;
+                    return `<span>${contentText || '[圖片]'}</span>` + renderAttachments(message.attachments);
                 }
                 if (message.type === 'video') {
-                    return `<span>${contentText || '[影片]'}</span>`;
+                    return `<span>${contentText || '[影片]'}</span>` + renderAttachments(message.attachments);
                 }
                 if (message.type === 'audio') {
-                    return `<span>${contentText || '[語音]'}</span>`;
+                    return `<span>${contentText || '[語音]'}</span>` + renderAttachments(message.attachments);
                 }
                 if (message.type === 'file') {
-                    return `<span>${contentText || '[檔案]'}</span>`;
+                    return `<span>${contentText || '[檔案]'}</span>` + renderAttachments(message.attachments);
                 }
                 if (message.type === 'location') {
-                    return `<span>${contentText || '[位置]'}</span>`;
+                    return `<span>${contentText || '[位置]'}</span>` + renderAttachments(message.attachments);
                 }
-                return `<span>${contentText}</span>`;
+                return `<span>${contentText}</span>` + renderAttachments(message.attachments);
             }
 
             // 載入真實對話詳情
