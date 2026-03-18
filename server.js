@@ -417,6 +417,7 @@ let database = {
     user_states: [],
     chat_history: [],
     ai_assistant_config: [],
+    line_profiles: [],
     email_verifications: [], // 儲存電子郵件驗證碼
     password_reset_requests: [] // 儲存密碼重設請求
 };
@@ -436,6 +437,7 @@ const loadDatabase = () => {
                 user_states: loadedData.user_states || [],
                 chat_history: loadedData.chat_history || [],
                 ai_assistant_config: loadedData.ai_assistant_config || [],
+                line_profiles: loadedData.line_profiles || [],
                 email_verifications: loadedData.email_verifications || [],
                 password_reset_requests: loadedData.password_reset_requests || []
             };
@@ -498,6 +500,122 @@ const updateStaffPassword = (id, newPassword) => {
         return true;
     }
     return false;
+};
+
+const upsertLineProfile = (lineUserId, displayName, pictureUrl) => {
+    if (!lineUserId) return null;
+    if (!database.line_profiles) database.line_profiles = [];
+    const idx = database.line_profiles.findIndex(p => p.lineUserId === lineUserId);
+    const record = {
+        lineUserId,
+        displayName: displayName || 'LINE 使用者',
+        pictureUrl: pictureUrl || null,
+        updatedAt: new Date().toISOString()
+    };
+    if (idx === -1) {
+        database.line_profiles.push(record);
+    } else {
+        database.line_profiles[idx] = { ...database.line_profiles[idx], ...record };
+    }
+    return record;
+};
+
+const ensureLineConversation = ({ userId, lineUserId, displayName, pictureUrl }) => {
+    if (!database.chat_history) database.chat_history = [];
+    const convId = `line_${userId}_${lineUserId}`;
+    let conv = database.chat_history.find(c => c.id === convId);
+    if (!conv) {
+        conv = {
+            id: convId,
+            platform: 'line',
+            userId: parseInt(userId, 10),
+            customerName: displayName || 'LINE 使用者',
+            customerPicture: pictureUrl || null,
+            customerLineId: lineUserId,
+            messages: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+        database.chat_history.push(conv);
+    } else {
+        if (displayName) conv.customerName = displayName;
+        if (pictureUrl) conv.customerPicture = pictureUrl;
+        if (!conv.customerLineId) conv.customerLineId = lineUserId;
+        if (!conv.userId) conv.userId = parseInt(userId, 10);
+    }
+    return conv;
+};
+
+const appendConversationMessage = (conversation, message) => {
+    if (!conversation.messages) conversation.messages = [];
+    conversation.messages.push(message);
+    conversation.updatedAt = new Date().toISOString();
+};
+
+const sendLineTextAndLog = async ({ lineClient, replyToken, toUserId, conversation, text, sender, isAutoReply }) => {
+    const nowIso = new Date().toISOString();
+    const outgoing = {
+        role: 'assistant',
+        sender: sender || 'ai',
+        direction: 'outbound',
+        type: 'text',
+        content: text,
+        timestamp: nowIso,
+        isAutoReply: !!isAutoReply,
+        deliveryStatus: 'pending'
+    };
+    appendConversationMessage(conversation, outgoing);
+    saveDatabase();
+
+    try {
+        if (replyToken) {
+            await lineClient.replyMessage(replyToken, { type: 'text', text });
+        } else if (toUserId) {
+            await lineClient.pushMessage(toUserId, { type: 'text', text });
+        }
+        outgoing.deliveryStatus = 'sent';
+    } catch (err) {
+        outgoing.deliveryStatus = 'failed';
+        outgoing.deliveryError = err.message;
+        throw err;
+    } finally {
+        conversation.updatedAt = new Date().toISOString();
+        saveDatabase();
+    }
+};
+
+// 下載 LINE 圖片訊息到既有 uploads 目錄（修復圖片訊息在後台無法顯示）
+const saveLineImageToUploads = async ({ channelAccessToken, messageId }) => {
+    if (!channelAccessToken || !messageId) return null;
+    try {
+        const contentUrl = `https://api-data.line.me/v2/bot/message/${messageId}/content`;
+        const response = await axios.get(contentUrl, {
+            responseType: 'arraybuffer',
+            headers: {
+                Authorization: `Bearer ${channelAccessToken}`
+            },
+            timeout: 15000
+        });
+
+        const contentType = response.headers['content-type'] || 'image/jpeg';
+        const ext = contentType.includes('png') ? 'png' : (contentType.includes('webp') ? 'webp' : 'jpg');
+        const fileName = `line_${messageId}_${Date.now()}.${ext}`;
+        const filePath = path.join(uploadsDir, fileName);
+        fs.writeFileSync(filePath, Buffer.from(response.data));
+        return `/uploads/${fileName}`;
+    } catch (error) {
+        console.warn('下載 LINE 圖片失敗:', error.message);
+        return null;
+    }
+};
+
+const createInternalTokenForStaff = (staff) => {
+    if (!staff || !JWT_SECRET) return '';
+    return jwt.sign(
+        { id: staff.id, username: staff.username, name: staff.name, role: staff.role },
+        JWT_SECRET,
+        { expiresIn: '15m' }
+    );
 };
 
 const deleteStaffById = (id) => {
@@ -1354,7 +1472,7 @@ app.get('/api/ai-models', authenticateJWT, (req, res) => {
 // AI 聊天 API 端點 - 使用配置的 AI 模型生成回應
 app.post('/api/chat', authenticateJWT, async (req, res) => {
     try {
-        const { message, conversationId } = req.body;
+        const { message, conversationId, skipLog } = req.body;
         
         if (!message || typeof message !== 'string') {
             return res.status(400).json({
@@ -1415,41 +1533,50 @@ app.post('/api/chat', authenticateJWT, async (req, res) => {
         // 更新對話歷史
         const newMessage = {
             role: 'user',
+            sender: 'user',
+            direction: 'inbound',
+            type: 'text',
             content: message,
             timestamp: new Date().toISOString()
         };
 
         const aiMessage = {
             role: 'assistant',
+            sender: 'ai',
+            direction: 'outbound',
+            type: 'text',
             content: aiReply,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            isAutoReply: true
         };
 
-        // 保存對話歷史
-        if (!database.chat_history) {
-            database.chat_history = [];
+        if (!skipLog) {
+            // 保存對話歷史
+            if (!database.chat_history) {
+                database.chat_history = [];
+            }
+
+            let conversation;
+            if (conversationId) {
+                conversation = database.chat_history.find(conv => conv.id === conversationId);
+            }
+
+            if (!conversation) {
+                conversation = {
+                    id: conversationId || `conv_${Date.now()}`,
+                    messages: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                database.chat_history.push(conversation);
+            }
+
+            conversation.messages.push(newMessage, aiMessage);
+            conversation.updatedAt = new Date().toISOString();
+
+            // 保存到資料庫
+            saveDatabase();
         }
-
-        let conversation;
-        if (conversationId) {
-            conversation = database.chat_history.find(conv => conv.id === conversationId);
-        }
-
-        if (!conversation) {
-            conversation = {
-                id: conversationId || `conv_${Date.now()}`,
-                messages: [],
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            };
-            database.chat_history.push(conversation);
-        }
-
-        conversation.messages.push(newMessage, aiMessage);
-        conversation.updatedAt = new Date().toISOString();
-
-        // 保存到資料庫
-        saveDatabase();
 
         res.json({
             success: true,
@@ -1610,9 +1737,19 @@ app.get('/api/conversations/:conversationId', authenticateJWT, (req, res) => {
             });
         }
 
+        // 修復訊息順序：統一依時間升冪回傳，避免 AI 訊息在前端被錯位/看似缺失
+        const sortedConversation = {
+            ...conversation,
+            messages: [...(conversation.messages || [])].sort((a, b) => {
+                const ta = new Date(a.timestamp || 0).getTime();
+                const tb = new Date(b.timestamp || 0).getTime();
+                return ta - tb;
+            })
+        };
+
         res.json({
             success: true,
-            conversation: conversation
+            conversation: sortedConversation
         });
     } catch (error) {
         console.error('獲取對話詳情錯誤:', error);
@@ -1726,7 +1863,7 @@ app.post('/api/line-config', authenticateJWT, (req, res) => {
 });
 
 // LINE Webhook 端點
-app.post('/api/webhook/line/:userId', (req, res) => {
+app.post('/api/webhook/line/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
         loadDatabase();
@@ -1756,38 +1893,143 @@ app.post('/api/webhook/line/:userId', (req, res) => {
         });
 
         // 處理 LINE 事件
-        const events = req.body.events;
+        const events = req.body.events || [];
         
-        Promise.all(events.map(async (event) => {
-            if (event.type === 'message' && event.message.type === 'text') {
-                const userMessage = event.message.text;
-                
-                // 調用 AI 聊天 API
+        await Promise.all(events.map(async (event) => {
+            if (event.type !== 'message' || !event.message) return;
+            const sourceUserId = event.source?.userId;
+            if (!sourceUserId) return;
+
+            // 僅 1 對 1 對話取用戶資料
+            let displayName = 'LINE 使用者';
+            let pictureUrl = null;
+            if (event.source?.type === 'user') {
                 try {
+                    const profile = await lineClient.getProfile(sourceUserId);
+                    displayName = profile.displayName || displayName;
+                    pictureUrl = profile.pictureUrl || null;
+                } catch (profileError) {
+                    console.warn('取得 LINE Profile 失敗:', profileError.message);
+                }
+            }
+
+            // 儲存/更新 Profile
+            const profileRecord = upsertLineProfile(sourceUserId, displayName, pictureUrl);
+            const conv = ensureLineConversation({
+                userId,
+                lineUserId: sourceUserId,
+                displayName: profileRecord?.displayName || displayName,
+                pictureUrl: profileRecord?.pictureUrl || pictureUrl
+            });
+            saveDatabase();
+
+            const messageType = event.message.type;
+            const nowIso = new Date().toISOString();
+
+            if (messageType === 'sticker') {
+                const stickerId = event.message.stickerId || '';
+                const stickerPackageId = event.message.packageId || '';
+                const stickerUrl = stickerId
+                    ? `https://stickershop.line-scdn.net/stickershop/v1/sticker/${stickerId}/android/sticker.png`
+                    : '';
+                const inbound = {
+                    role: 'user',
+                    sender: 'user',
+                    direction: 'inbound',
+                    type: 'sticker',
+                    content: '[貼圖]',
+                    stickerId,
+                    stickerPackageId,
+                    stickerUrl,
+                    pictureUrl: pictureUrl || null,
+                    displayName: displayName || 'LINE 使用者',
+                    timestamp: nowIso,
+                    lineMessageId: event.message.id || null
+                };
+                appendConversationMessage(conv, inbound);
+                saveDatabase();
+                return;
+            }
+
+            if (messageType === 'image') {
+                const imageUrl = await saveLineImageToUploads({
+                    channelAccessToken: channel_access_token,
+                    messageId: event.message.id
+                });
+                const inbound = {
+                    role: 'user',
+                    sender: 'user',
+                    direction: 'inbound',
+                    type: 'image',
+                    mediaType: 'image',
+                    mediaUrl: imageUrl || '',
+                    content: '[圖片]',
+                    pictureUrl: pictureUrl || null,
+                    displayName: displayName || 'LINE 使用者',
+                    timestamp: nowIso,
+                    lineMessageId: event.message.id || null
+                };
+                appendConversationMessage(conv, inbound);
+                saveDatabase();
+                return;
+            }
+
+            if (messageType === 'text') {
+                const userMessage = event.message.text || '';
+                const inbound = {
+                    role: 'user',
+                    sender: 'user',
+                    direction: 'inbound',
+                    type: 'text',
+                    content: userMessage,
+                    pictureUrl: pictureUrl || null,
+                    displayName: displayName || 'LINE 使用者',
+                    timestamp: nowIso,
+                    lineMessageId: event.message.id || null
+                };
+                appendConversationMessage(conv, inbound);
+                saveDatabase();
+
+                try {
+                    const internalToken = createInternalTokenForStaff(user);
+                    const authHeader = req.headers.authorization || (internalToken ? `Bearer ${internalToken}` : '');
                     const aiResponse = await axios.post(`${req.protocol}://${req.get('host')}/api/chat`, {
                         message: userMessage,
-                        conversationId: `line_${event.source.userId}_${Date.now()}`
+                        conversationId: conv.id,
+                        skipLog: true
                     }, {
                         headers: {
-                            'Authorization': `Bearer ${req.headers.authorization}`,
+                            'Authorization': authHeader,
                             'Content-Type': 'application/json'
                         }
                     });
 
-                    if (aiResponse.data.success) {
-                        // 回覆 LINE 用戶
-                        await lineClient.replyMessage(event.replyToken, {
-                            type: 'text',
-                            text: aiResponse.data.reply
+                    if (aiResponse.data.success && aiResponse.data.reply) {
+                        await sendLineTextAndLog({
+                            lineClient,
+                            replyToken: event.replyToken,
+                            toUserId: sourceUserId,
+                            conversation: conv,
+                            text: aiResponse.data.reply,
+                            sender: 'ai',
+                            isAutoReply: true
                         });
                     }
                 } catch (error) {
                     console.error('LINE AI 回應錯誤:', error);
-                    // 回覆預設訊息
-                    await lineClient.replyMessage(event.replyToken, {
-                        type: 'text',
-                        text: '抱歉，我現在無法回應，請稍後再試。'
-                    });
+                    try {
+                        await sendLineTextAndLog({
+                            lineClient,
+                            replyToken: event.replyToken,
+                            toUserId: sourceUserId,
+                            conversation: conv,
+                            text: '抱歉，我現在無法回應，請稍後再試。',
+                            sender: 'ai',
+                            isAutoReply: true
+                        });
+                    } catch (sendError) {
+                        console.error('LINE 回覆失敗:', sendError.message);
+                    }
                 }
             }
         }));
@@ -1798,6 +2040,62 @@ app.post('/api/webhook/line/:userId', (req, res) => {
         res.status(500).json({
             success: false,
             error: 'LINE Webhook 處理失敗'
+        });
+    }
+});
+
+// 人工回覆 LINE 訊息 API
+app.post('/api/line/manual-reply', authenticateJWT, async (req, res) => {
+    try {
+        const { conversationId, message } = req.body || {};
+        if (!conversationId || !message) {
+            return res.status(400).json({
+                success: false,
+                error: '請提供對話ID和回覆訊息'
+            });
+        }
+
+        loadDatabase();
+        const conversation = database.chat_history.find(c => c.id === conversationId);
+        if (!conversation) {
+            return res.status(404).json({
+                success: false,
+                error: '找不到對話記錄'
+            });
+        }
+
+        const staff = database.staff_accounts.find(s => s.id === req.staff.id);
+        const lineConfig = staff?.line_config;
+        if (!lineConfig?.channel_access_token || !lineConfig?.channel_secret) {
+            return res.status(400).json({
+                success: false,
+                error: 'LINE 配置不完整'
+            });
+        }
+
+        const lineClient = new Client({
+            channelAccessToken: lineConfig.channel_access_token,
+            channelSecret: lineConfig.channel_secret
+        });
+
+        await sendLineTextAndLog({
+            lineClient,
+            toUserId: conversation.customerLineId,
+            conversation,
+            text: message,
+            sender: 'human',
+            isAutoReply: false
+        });
+
+        res.json({
+            success: true,
+            message: '人工回覆已發送'
+        });
+    } catch (error) {
+        console.error('人工回覆 LINE 訊息錯誤:', error);
+        res.status(500).json({
+            success: false,
+            error: '發送人工回覆失敗'
         });
     }
 });
@@ -2211,6 +2509,11 @@ app.get('/api/accounts/:id', authenticateJWT, checkRole(['admin']), (req, res) =
     }
 });
 
+// Render 健康檢查端點
+app.get('/health', (req, res) => {
+    res.status(200).json({ ok: true });
+});
+
 // 健康檢查端點
 app.get('/api/health', (req, res) => {
     res.json({
@@ -2253,8 +2556,10 @@ const startServer = async () => {
         
         // 啟動伺服器
         const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
-            console.log('🚀 HTTP server is running on port', PORT);
+        const HOST = '0.0.0.0';
+        // Render 需要綁定 0.0.0.0，避免容器外健康檢查無法連線
+        app.listen(PORT, HOST, () => {
+            console.log('🚀 HTTP server is running on', `${HOST}:${PORT}`);
             console.log('📝 請在瀏覽器中訪問: http://localhost:' + PORT + '/login.html');
         });
         
