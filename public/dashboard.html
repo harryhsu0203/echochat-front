@@ -6307,6 +6307,7 @@ TONE(語調):
             
             // ==================== 對話管理功能 ====================
             let activeChannel = 'all';
+            let selectedConversation = null;
             
             // 載入對話數據
             async function loadConversations() {
@@ -6334,6 +6335,9 @@ TONE(語調):
                         const data = await response.json();
                         const list = Array.isArray(data) ? data : (data.conversations || []);
                         console.log('✅ 載入對話成功，數量:', list.length);
+                        if (list.length > 0) {
+                            console.log('[Dashboard Debug] conversations first customerPicture:', list[0]?.customerPicture || '');
+                        }
                         displayRealConversations(list);
                     } else if (response.status === 401 || response.status === 403) {
                         console.log('❌ 認證令牌無效');
@@ -6386,9 +6390,9 @@ TONE(語調):
                     // 判斷平台類型（基於對話內容或ID）
                     const platformInfo = detectPlatformFromConversation(conversation);
                     
-                    const picUrl = resolveConversationAvatar(null, conversation);
-                    const picHtml = picUrl 
-                        ? `<img src="${picUrl}" class="rounded-circle" width="48" height="48" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;display:none;"><i class="fas fa-user text-white"></i></div>`
+                    const avatarUrl = conversation?.customerPicture || conversation?.pictureUrl || '';
+                    const picHtml = avatarUrl 
+                        ? `<img src="${avatarUrl}" class="rounded-circle" width="48" height="48" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;display:none;"><i class="fas fa-user text-white"></i></div>`
                         : `<div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;"><i class="fas fa-user text-white"></i></div>`;
                     
                     item.innerHTML = `
@@ -6554,9 +6558,18 @@ TONE(語調):
                         <i class="fas fa-robot text-white" style="font-size: 12px;"></i>
                     </div>`;
                 }
-                const pic = resolveConversationAvatar(message, conversation);
-                if (pic) {
-                    return `<img src="${pic}" class="rounded-circle" width="32" height="32"
+                const avatarUrl =
+                    selectedConversation?.customerPicture
+                    || selectedConversation?.pictureUrl
+                    || message?.pictureUrl
+                    || '';
+                console.log('[Dashboard Debug] avatar url used:', avatarUrl, {
+                    selectedCustomerPicture: selectedConversation?.customerPicture || '',
+                    selectedPictureUrl: selectedConversation?.pictureUrl || '',
+                    messagePictureUrl: message?.pictureUrl || ''
+                });
+                if (avatarUrl) {
+                    return `<img src="${avatarUrl}" class="rounded-circle" width="32" height="32"
                         loading="lazy"
                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />` +
                         `<div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; display: none;">
@@ -6566,17 +6579,6 @@ TONE(語調):
                 return `<div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
                     <i class="fas fa-user text-muted" style="font-size: 12px;"></i>
                 </div>`;
-            }
-
-            function resolveConversationAvatar(message, conversation) {
-                const contactAvatar = message?.contact?.avatar_url
-                    || conversation?.contact?.avatar_url
-                    || '';
-                return message?.pictureUrl
-                    || conversation?.customerPicture
-                    || conversation?.pictureUrl
-                    || contactAvatar
-                    || '';
             }
 
             // 載入真實對話詳情
@@ -6610,6 +6612,19 @@ TONE(語調):
                     if (response.ok) {
                         const data = await response.json();
                         if (data.success) {
+                            selectedConversation = data.conversation || null;
+                            console.log('[Dashboard Debug] selectedConversation:', selectedConversation);
+                            console.log('[Dashboard Debug] selectedConversation.customerPicture:', selectedConversation?.customerPicture || '');
+                            if (selectedConversation?.messages) {
+                                const assistantOnly = selectedConversation.messages.filter((m) => {
+                                    const role = String(m?.role || '').toLowerCase();
+                                    const sender = String(m?.sender || '').toLowerCase();
+                                    const direction = String(m?.direction || '').toLowerCase();
+                                    return role === 'assistant' || sender === 'assistant' || direction === 'outbound';
+                                });
+                                console.log('[Dashboard Debug] selectedConversation.messages:', selectedConversation.messages);
+                                console.log('[Dashboard Debug] assistant messages only:', assistantOnly);
+                            }
                             displayRealMessages(data.conversation);
                             // 開始即時更新
                             startConversationUpdates();
@@ -6628,6 +6643,7 @@ TONE(語調):
             // 顯示真實訊息
             function displayRealMessages(conversation) {
                 console.log('顯示真實訊息:', conversation);
+                selectedConversation = conversation || null;
                 
                 // 更新對話標題
                 const platformInfo = detectPlatformFromConversation(conversation);
@@ -6651,8 +6667,11 @@ TONE(語調):
                 if (conversation.messages && conversation.messages.length > 0) {
                     conversation.messages.forEach(message => {
                         const messageDiv = document.createElement('div');
-                        // 客戶傳來的(user)顯示在左邊，我方回覆(assistant)顯示在右邊
-                        const isCustomer = message.role === 'user';
+                        // 客戶傳來的(user/inbound)顯示在左邊，我方回覆(assistant/outbound)顯示在右邊
+                        const role = String(message.role || '').toLowerCase();
+                        const sender = String(message.sender || '').toLowerCase();
+                        const direction = String(message.direction || '').toLowerCase();
+                        const isCustomer = role === 'user' || sender === 'user' || direction === 'inbound';
                         const aiBadge = message.isAutoReply
                             ? '<span class="badge bg-info text-dark ms-2">AI 回覆</span>'
                             : '';
