@@ -6306,6 +6306,7 @@ TONE(語調):
             // 已移除側邊欄切換功能與初始化邏輯
             
             // ==================== 對話管理功能 ====================
+            let activeChannel = 'all';
             
             // 載入對話數據
             async function loadConversations() {
@@ -6319,7 +6320,10 @@ TONE(語調):
                     }
 
                     const apiBase = (window.API_BASE_URL && window.API_BASE_URL.endsWith('/api')) ? window.API_BASE_URL : (window.API_BASE_URL || 'https://echochat-api.onrender.com/api');
-                    const response = await fetch(apiBase + '/conversations', {
+                    const channelQuery = activeChannel && activeChannel !== 'all'
+                        ? `?channel=${encodeURIComponent(activeChannel)}`
+                        : '';
+                    const response = await fetch(apiBase + '/conversations' + channelQuery, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
@@ -6360,10 +6364,13 @@ TONE(語調):
                 container.innerHTML = '';
 
                 if (conversations.length === 0) {
+                    const emptyText = activeChannel && activeChannel !== 'all'
+                        ? '目前沒有此平台對話'
+                        : '尚無對話記錄';
                     container.innerHTML = `
                         <div class="text-center p-4">
                             <i class="fas fa-comments text-muted" style="font-size: 3rem;"></i>
-                            <p class="text-muted mt-3">尚無對話記錄</p>
+                            <p class="text-muted mt-3">${emptyText}</p>
                             <p class="text-muted small">開始與 AI 助理對話或串接 LINE 等平台來查看對話</p>
                         </div>
                     `;
@@ -6379,9 +6386,9 @@ TONE(語調):
                     // 判斷平台類型（基於對話內容或ID）
                     const platformInfo = detectPlatformFromConversation(conversation);
                     
-                    const picUrl = conversation.customerPicture || null;
+                    const picUrl = resolveConversationAvatar(null, conversation);
                     const picHtml = picUrl 
-                        ? `<img src="${picUrl}" class="rounded-circle" width="48" height="48" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;display:none;"><i class="fas fa-user text-white"></i></div>`
+                        ? `<img src="${picUrl}" class="rounded-circle" width="48" height="48" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;display:none;"><i class="fas fa-user text-white"></i></div>`
                         : `<div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;"><i class="fas fa-user text-white"></i></div>`;
                     
                     item.innerHTML = `
@@ -6390,7 +6397,7 @@ TONE(語調):
                         </div>
                         <div class="flex-grow-1">
                             <div class="d-flex justify-content-between align-items-start">
-                                <h6 class="mb-1">${conversation.customerName || platformInfo.name}</h6>
+                                <h6 class="mb-1">${conversation.displayName || conversation.customerName || platformInfo.name}</h6>
                                 <small class="text-muted">${formatTime(conversation.updatedAt || new Date().toISOString())}</small>
                             </div>
                             <p class="mb-1 text-muted small">${conversation.lastMessage || '無訊息'}</p>
@@ -6415,26 +6422,13 @@ TONE(語調):
 
             // 從對話內容判斷平台類型
             function detectPlatformFromConversation(conversation) {
-                // 預設為 LINE（因為目前主要支援 LINE）
-                const defaultPlatform = {
-                    name: 'LINE 對話',
-                    icon: 'fab fa-line',
-                    color: 'text-success',
-                    status: '線上',
-                    statusColor: 'success'
+                const channel = (conversation?.channel || conversation?.platform || 'line').toLowerCase();
+                const mapping = {
+                    line: { name: 'LINE 對話', icon: 'fab fa-line', color: 'text-success', status: '線上', statusColor: 'success' },
+                    instagram: { name: 'Instagram 對話', icon: 'fab fa-instagram', color: 'text-danger', status: '線上', statusColor: 'danger' },
+                    facebook: { name: 'Facebook 對話', icon: 'fab fa-facebook', color: 'text-primary', status: '線上', statusColor: 'primary' }
                 };
-
-                // 如果有訊息內容，可以進一步分析
-                if (conversation.messages && conversation.messages.length > 0) {
-                    const lastMessage = conversation.messages[conversation.messages.length - 1];
-                    if (lastMessage.content) {
-                        // 可以根據訊息內容或時間戳判斷平台
-                        // 這裡先使用預設的 LINE 設定
-                        return defaultPlatform;
-                    }
-                }
-
-                return defaultPlatform;
+                return mapping[channel] || mapping.line;
             }
 
             // 格式化時間
@@ -6560,9 +6554,10 @@ TONE(語調):
                         <i class="fas fa-robot text-white" style="font-size: 12px;"></i>
                     </div>`;
                 }
-                const pic = message.pictureUrl || message.profilePicture || conversation?.customerPicture || '';
+                const pic = resolveConversationAvatar(message, conversation);
                 if (pic) {
                     return `<img src="${pic}" class="rounded-circle" width="32" height="32"
+                        loading="lazy"
                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />` +
                         `<div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; display: none;">
                             <i class="fas fa-user text-white" style="font-size: 12px;"></i>
@@ -6571,6 +6566,17 @@ TONE(語調):
                 return `<div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
                     <i class="fas fa-user text-muted" style="font-size: 12px;"></i>
                 </div>`;
+            }
+
+            function resolveConversationAvatar(message, conversation) {
+                const contactAvatar = message?.contact?.avatar_url
+                    || conversation?.contact?.avatar_url
+                    || '';
+                return message?.pictureUrl
+                    || conversation?.customerPicture
+                    || conversation?.pictureUrl
+                    || contactAvatar
+                    || '';
             }
 
             // 載入真實對話詳情
@@ -7371,47 +7377,14 @@ TONE(語調):
             // 過濾對話
             function filterConversations(platform) {
                 console.log('過濾對話:', platform);
+                activeChannel = platform || 'all';
                 
                 // 更新過濾器按鈕狀態
-                document.querySelectorAll('.btn-filter').forEach(btn => {
+                document.querySelectorAll('.btn-filter[data-platform]').forEach(btn => {
                     btn.classList.remove('active');
                 });
-                document.querySelector(`[data-platform="${platform}"]`).classList.add('active');
-                
-                // 獲取所有對話項目
-                const conversationItems = document.querySelectorAll('.conversation-item');
-                
-                conversationItems.forEach(item => {
-                    const platformIcon = item.querySelector('.platform-icon i');
-                    let shouldShow = false;
-                    
-                    if (platform === 'all') {
-                        shouldShow = true;
-                    } else if (platform === 'line' && platformIcon.classList.contains('fa-line')) {
-                        shouldShow = true;
-                    } else if (platform === 'instagram' && platformIcon.classList.contains('fa-instagram')) {
-                        shouldShow = true;
-                    } else if (platform === 'facebook' && platformIcon.classList.contains('fa-facebook')) {
-                        shouldShow = true;
-                    } else if (platform === 'whatsapp' && platformIcon.classList.contains('fa-whatsapp')) {
-                        shouldShow = true;
-                    } else if (platform === 'telegram' && platformIcon.classList.contains('fa-telegram')) {
-                        shouldShow = true;
-                    } else if (platform === 'discord' && platformIcon.classList.contains('fa-discord')) {
-                        shouldShow = true;
-                    } else if (platform === 'wechat' && platformIcon.classList.contains('fa-weixin')) {
-                        shouldShow = true;
-                    } else if (platform === 'web' && platformIcon.classList.contains('fa-globe')) {
-                        shouldShow = true;
-                    }
-                    
-                    // 顯示或隱藏對話項目
-                    if (shouldShow) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
+                const activeBtn = document.querySelector(`[data-platform="${activeChannel}"]`);
+                if (activeBtn) activeBtn.classList.add('active');
                 
                 // 更新對話列表標題
                 const listHeader = document.querySelector('.card-header h6');
@@ -7428,8 +7401,11 @@ TONE(語調):
                 };
                 
                 if (listHeader) {
-                    listHeader.textContent = platformNames[platform] || '對話列表';
+                    listHeader.textContent = platformNames[activeChannel] || '對話列表';
                 }
+
+                // 以後端 channel 過濾重新抓取資料
+                loadConversations();
             }
             
             // 標記為已讀

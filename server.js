@@ -528,8 +528,10 @@ const ensureLineConversation = ({ userId, lineUserId, displayName, pictureUrl })
         conv = {
             id: convId,
             platform: 'line',
+            channel: 'line',
             userId: parseInt(userId, 10),
             customerName: displayName || 'LINE 使用者',
+            displayName: displayName || 'LINE 使用者',
             customerPicture: pictureUrl || null,
             customerLineId: lineUserId,
             messages: [],
@@ -539,9 +541,11 @@ const ensureLineConversation = ({ userId, lineUserId, displayName, pictureUrl })
         database.chat_history.push(conv);
     } else {
         if (displayName) conv.customerName = displayName;
+        if (displayName) conv.displayName = displayName;
         if (pictureUrl) conv.customerPicture = pictureUrl;
         if (!conv.customerLineId) conv.customerLineId = lineUserId;
         if (!conv.userId) conv.userId = parseInt(userId, 10);
+        if (!conv.channel) conv.channel = conv.platform || 'line';
     }
     return conv;
 };
@@ -1698,11 +1702,22 @@ app.get('/api/public-chat/status', (req, res) => {
 app.get('/api/conversations', authenticateJWT, (req, res) => {
     try {
         loadDatabase();
-        const conversations = database.chat_history || [];
+        const requestedChannel = String(req.query.channel || '').trim().toLowerCase();
+        let conversations = database.chat_history || [];
+
+        if (requestedChannel) {
+            conversations = conversations.filter((c) => {
+                const conversationChannel = String(c.channel || c.platform || 'line').toLowerCase();
+                return conversationChannel === requestedChannel;
+            });
+        }
         
         // 為每個對話添加統計資訊
         const conversationsWithStats = conversations.map(conv => ({
             ...conv,
+            channel: conv.channel || conv.platform || 'line',
+            displayName: conv.displayName || conv.customerName || '客戶',
+            customerPicture: conv.customerPicture || conv.pictureUrl || null,
             messageCount: conv.messages ? conv.messages.length : 0,
             lastMessage: conv.messages && conv.messages.length > 0 
                 ? conv.messages[conv.messages.length - 1].content.substring(0, 100) + '...'
@@ -1740,6 +1755,9 @@ app.get('/api/conversations/:conversationId', authenticateJWT, (req, res) => {
         // 修復訊息順序：統一依時間升冪回傳，避免 AI 訊息在前端被錯位/看似缺失
         const sortedConversation = {
             ...conversation,
+            channel: conversation.channel || conversation.platform || 'line',
+            displayName: conversation.displayName || conversation.customerName || '客戶',
+            customerPicture: conversation.customerPicture || conversation.pictureUrl || null,
             messages: [...(conversation.messages || [])].sort((a, b) => {
                 const ta = new Date(a.timestamp || 0).getTime();
                 const tb = new Date(b.timestamp || 0).getTime();
