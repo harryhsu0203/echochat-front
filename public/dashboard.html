@@ -6554,6 +6554,25 @@ TONE(語調):
                 return `<span>${contentText}</span>` + renderAttachments(message.attachments);
             }
 
+            function renderAvatar(isCustomer, message, conversation) {
+                if (!isCustomer) {
+                    return `<div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                        <i class="fas fa-robot text-white" style="font-size: 12px;"></i>
+                    </div>`;
+                }
+                const pic = message.pictureUrl || message.profilePicture || conversation?.customerPicture || '';
+                if (pic) {
+                    return `<img src="${pic}" class="rounded-circle" width="32" height="32"
+                        onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />` +
+                        `<div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; display: none;">
+                            <i class="fas fa-user text-white" style="font-size: 12px;"></i>
+                        </div>`;
+                }
+                return `<div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                    <i class="fas fa-user text-muted" style="font-size: 12px;"></i>
+                </div>`;
+            }
+
             // 載入真實對話詳情
             async function loadRealConversation(conversationId) {
                 console.log('載入真實對話:', conversationId);
@@ -6638,9 +6657,7 @@ TONE(語調):
                         messageDiv.innerHTML = `
                             <div class="d-flex ${isCustomer ? '' : 'flex-row-reverse'} align-items-end">
                                 <div class="${isCustomer ? 'me-2' : 'ms-2'}">
-                                    <div class="bg-${isCustomer ? 'light' : 'primary'} rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                        <i class="fas fa-${isCustomer ? 'user' : 'robot'} text-${isCustomer ? 'muted' : 'white'}" style="font-size: 12px;"></i>
-                                    </div>
+                                    ${renderAvatar(isCustomer, message, conversation)}
                                 </div>
                                 <div class="bg-${isCustomer ? 'white' : 'primary'} text-${isCustomer ? 'dark' : 'white'} p-3 rounded-3 shadow-sm" style="max-width: 70%; border-radius: ${isCustomer ? '15px 15px 15px 5px' : '15px 15px 5px 15px'} !important;">
                                     ${renderMessageContent(message)}

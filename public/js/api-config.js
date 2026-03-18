@@ -8,8 +8,21 @@ const API_CONFIG = {
     staging: 'https://echochat-api-staging.onrender.com/api'
 };
 
+// 讀取部署時注入的 API URL（Render Static Site 可設定 VITE_API_URL）
+function getEnvApiUrl() {
+    if (typeof window === 'undefined') return '';
+    if (window.VITE_API_URL) return window.VITE_API_URL;
+    if (window.__ENV__ && window.__ENV__.VITE_API_URL) return window.__ENV__.VITE_API_URL;
+    return '';
+}
+
 // 根據當前環境決定使用哪個 API URL
 function getApiBaseUrl() {
+    const envApiUrl = getEnvApiUrl();
+    if (envApiUrl) {
+        console.log('📍 使用環境變數 API:', envApiUrl);
+        return envApiUrl;
+    }
     const hostname = window.location.hostname;
     const port = window.location.port;
     

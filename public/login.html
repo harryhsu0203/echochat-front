@@ -145,6 +145,56 @@
             border: none;
             margin-bottom: 20px;
         }
+
+        /* 登入成功轉跳狀態卡片（保留原流程，僅優化視覺） */
+        .login-success-state {
+            margin-bottom: 20px;
+            border-radius: 14px;
+            border: 1px solid #e6f4ea;
+            background: linear-gradient(180deg, #f8fffb 0%, #f2fbf6 100%);
+            padding: 16px;
+            box-shadow: 0 8px 24px rgba(34, 139, 87, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .login-success-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #22a06b;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .login-success-title {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1f2d3d;
+            line-height: 1.2;
+        }
+
+        .login-success-subtitle {
+            margin: 2px 0 0 0;
+            font-size: 0.9rem;
+            color: #4d5b6a;
+        }
+
+        .login-success-loader {
+            margin-left: auto;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            flex-shrink: 0;
+        }
         
         .loading {
             display: inline-block;
@@ -427,8 +477,8 @@
                     
                     console.log('🔄 延遲 2 秒後跳轉到儀表板...');
                     
-                    // 顯示成功消息
-                    showAlert('登入成功！正在跳轉到儀表板...', 'success');
+                    // 顯示更精緻的成功轉跳狀態（不改 redirect 時序）
+                    showSuccessRedirectState();
                     
                     // 延遲跳轉，確保所有資料都已設置
                     setTimeout(() => {
@@ -458,6 +508,21 @@
         }
         function showAlert(msg, type) {
             document.getElementById('alertContainer').innerHTML = `<div class='alert alert-${type}'>${msg}</div>`;
+        }
+
+        function showSuccessRedirectState() {
+            document.getElementById('alertContainer').innerHTML = `
+                <div class="login-success-state" role="status" aria-live="polite">
+                    <div class="login-success-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div>
+                        <p class="login-success-title">登入成功</p>
+                        <p class="login-success-subtitle">正在為你載入工作台，請稍候...</p>
+                    </div>
+                    <div class="login-success-loader"></div>
+                </div>
+            `;
         }
         function showForgotPassword() { 
             window.location.href = 'forgot-password.html'; 

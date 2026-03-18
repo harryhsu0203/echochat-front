@@ -1,14 +1,33 @@
 services:
   - type: web
     name: echochat-backend
-    env: static
+    repo: https://github.com/harryhsu0203/echochat_back
+    runtime: node
     plan: free
-    buildCommand: echo "Frontend static deployment completed"
-    startCommand: echo "Static site - no start command needed"
-    staticPublishPath: ./public
-    healthCheckPath: /
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
     autoDeploy: true
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html 
+    envVars:
+      - key: NODE_ENV
+      - key: PORT
+      - key: JWT_SECRET
+      - key: DATA_DIR
+      - key: LINE_CHANNEL_ACCESS_TOKEN
+      - key: LINE_CHANNEL_SECRET
+      - key: OPENAI_API_KEY
+      - key: EMAIL_USER
+      - key: EMAIL_PASS
+      - key: EMAIL_FROM
+      - key: GOOGLE_APPLICATION_CREDENTIALS
+      - key: PUBLIC_CHAT_MODEL
+
+  - type: static
+    name: echochat-frontend
+    repo: https://github.com/harryhsu0203/echochat-front
+    plan: free
+    buildCommand: node -e "const fs=require('fs');const p='public/js/api-config.js';let c=fs.readFileSync(p,'utf8');if(!c.startsWith('window.VITE_API_URL')){c='window.VITE_API_URL='+JSON.stringify(process.env.VITE_API_URL||'')+';\\n'+c;}fs.writeFileSync(p,c);"
+    staticPublishPath: public
+    autoDeploy: true
+    envVars:
+      - key: VITE_API_URL
