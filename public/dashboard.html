@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- dashboard build: 2026-03-31-dom-v6 -->
+<!-- dashboard build: 2026-03-31-img-always-v7 -->
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n-title="dashboard.title">EchoChat - 儀表板 | AI 客服管理後台</title>
     <script>
-        window.__DASHBOARD_BUILD__ = '2026-03-31-dom-v6';
+        window.__DASHBOARD_BUILD__ = '2026-03-31-img-always-v7';
         console.log('%c[EchoChat] dashboard build: ' + window.__DASHBOARD_BUILD__, 'color:green;font-weight:bold;font-size:16px');
     </script>
     <meta name="description" content="EchoChat AI 客服管理儀表板，管理您的 LINE 聊天機器人、智慧客服設定、知識庫、對話記錄和 AI 助理配置。">
@@ -6394,12 +6394,13 @@ TONE(語調):
 
                     const platformInfo = detectPlatformFromConversation(conversation);
 
-                    // === 頭像：createElement 直接設 img.src，不用 innerHTML ===
+                    // === 頭像：createElement → <img>，永遠不用 <i class="fas fa-user"> ===
                     const avatarWrapper = document.createElement('div');
                     avatarWrapper.className = 'me-3';
                     avatarWrapper.style.cssText = 'flex-shrink:0;width:48px;height:48px';
                     const avatarUrl = getConversationAvatarUrl(conversation);
-                    avatarWrapper.appendChild(makeAvatarElement(avatarUrl, conversation.id, 48));
+                    console.log('[AvatarList]', conversation.id, '| url:', avatarUrl || '(none→default)');
+                    avatarWrapper.appendChild(makeAvatarImg(avatarUrl, conversation.id, 48));
                     item.appendChild(avatarWrapper);
 
                     // === 文字資訊：innerHTML 不含任何 img ===
@@ -6559,15 +6560,33 @@ TONE(語調):
             }
 
             // 建立灰色預設頭像 Element
-            function makeGrayAvatar(size) {
-                const d = document.createElement('div');
-                d.className = 'bg-secondary rounded-circle d-flex align-items-center justify-content-center';
-                d.style.cssText = `width:${size}px;height:${size}px;flex-shrink:0`;
-                d.innerHTML = `<i class="fas fa-user text-white" style="font-size:${size < 36 ? 10 : 14}px"></i>`;
-                return d;
+            // ───────────────────────────────────────────────
+            // 頭像規則（強制）：
+            //   一律使用 <img>，不用 <i class="fas fa-user">
+            //   onerror 只換 src 為 /default-avatar.png，不隱藏
+            // ───────────────────────────────────────────────
+
+            // 建立頭貼 <img> Element，永遠是 img，不是 icon div
+            function makeAvatarImg(avatarUrl, convId, size) {
+                const img = document.createElement('img');
+                // 永遠設 src，沒 URL 就用 default
+                img.src = avatarUrl || '/default-avatar.png';
+                img.alt = 'avatar';
+                img.style.cssText = `width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;flex-shrink:0`;
+                img.onerror = function() {
+                    console.error('[Avatar FAIL]', convId, 'src:', this.src);
+                    // 只換 src，不隱藏
+                    if (this.src !== window.location.origin + '/default-avatar.png') {
+                        this.src = '/default-avatar.png';
+                    }
+                };
+                img.onload = function() {
+                    console.log('[Avatar OK]', convId, this.src.substring(0, 80));
+                };
+                return img;
             }
 
-            // 建立 AI 頭像 Element
+            // AI 頭像（保留機器人圖示，不影響客戶頭貼）
             function makeAiAvatar(size) {
                 const d = document.createElement('div');
                 d.className = 'bg-primary rounded-circle d-flex align-items-center justify-content-center';
@@ -6576,44 +6595,20 @@ TONE(語調):
                 return d;
             }
 
-            // 建立頭貼 img Element（直接 createElement，不用 innerHTML）
-            // 若 avatarUrl 有效 → <img>；若無效或載入失敗 → 灰色 div
-            function makeAvatarElement(avatarUrl, convId, size) {
-                if (!avatarUrl) return makeGrayAvatar(size);
-                const img = document.createElement('img');
-                img.src = avatarUrl;
-                img.alt = 'avatar';
-                img.className = 'rounded-circle';
-                img.style.cssText = `width:${size}px;height:${size}px;object-fit:cover;display:block;flex-shrink:0`;
-                img.addEventListener('load', () => {
-                    console.log('[Avatar OK]', convId, img.src.substring(0, 80));
-                });
-                img.addEventListener('error', () => {
-                    console.error('[Avatar FAIL]', convId, 'src:', img.src.substring(0, 120));
-                    // 載入失敗才換成灰頭像
-                    const parent = img.parentNode;
-                    if (parent) {
-                        const fb = makeGrayAvatar(size);
-                        parent.replaceChild(fb, img);
-                    }
-                });
-                return img;
-            }
-
-            // renderAvatar 現在回傳 Element（不再回傳 HTML 字串）
+            // renderAvatarEl：回傳 Element
+            // isCustomer=true → <img> (客戶頭貼)
+            // isCustomer=false → AI 機器人圖示
             function renderAvatarEl(isCustomer, message, conversation) {
                 const size = 32;
                 if (!isCustomer) return makeAiAvatar(size);
                 const conv = selectedConversation || conversation;
                 const avatarUrl = getConversationAvatarUrl(conv);
-                console.log('[Avatar] CHAT | conv.id:', conv?.id, '| url:', avatarUrl ? avatarUrl.substring(0, 80) : '(none)');
-                return makeAvatarElement(avatarUrl, conv?.id || '?', size);
+                console.log('[AvatarEl] CHAT conv:', conv?.id, '| url:', avatarUrl || '(none→default)');
+                return makeAvatarImg(avatarUrl, conv?.id || '?', size);
             }
 
-            // 保留舊 renderAvatar 名稱以免影響其他呼叫，但改為回傳 Element（改成 placeholder）
+            // 舊名稱 renderAvatar 保留為 placeholder stub（實際頭像由 DOM 操作插入）
             function renderAvatar(isCustomer, message, conversation) {
-                // 回傳一個 placeholder，之後由 DOM 操作替換成真實 element
-                // 真正插入由 appendMessageDiv 處理
                 return '<span data-avatar-placeholder></span>';
             }
 
