@@ -178,7 +178,7 @@ app.use(
         scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "'unsafe-inline'", "'unsafe-eval'"],
         scriptSrcAttr: ["'unsafe-inline'"],
         styleSrc: ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
+        imgSrc: ["'self'", "data:", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://sprofile.line-scdn.net", "https://*.line-scdn.net", "https://profile.line-scdn.net", "https://*.line.me"],
         fontSrc: ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "data:"],
         connectSrc: ["'self'", "https://echochat-api.onrender.com", "https://echochat-frontend.onrender.com", "https://echochat.onrender.com"]
       },

@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<!-- dashboard build: 2026-03-31-v3 -->
+<!-- dashboard build: 2026-03-31-avatar-fix-v5 -->
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n-title="dashboard.title">EchoChat - 儀表板 | AI 客服管理後台</title>
+    <script>
+        window.__DASHBOARD_BUILD__ = '2026-03-31-avatar-fix-v5';
+        console.log('[EchoChat] dashboard build:', window.__DASHBOARD_BUILD__);
+    </script>
     <meta name="description" content="EchoChat AI 客服管理儀表板，管理您的 LINE 聊天機器人、智慧客服設定、知識庫、對話記錄和 AI 助理配置。">
     <meta name="keywords" content="EchoChat 儀表板, AI 客服管理, 客服系統後台, LINE Bot 管理, 智慧客服設定, 客服管理系統">
     <meta name="robots" content="noindex,nofollow">
@@ -6391,9 +6395,11 @@ TONE(語調):
                     // 判斷平台類型（基於對話內容或ID）
                     const platformInfo = detectPlatformFromConversation(conversation);
                     
-                    const avatarUrl = normalizeAvatarUrl(conversation?.customerPicture || conversation?.pictureUrl || '');
+                    const avatarUrl = getConversationAvatarUrl(conversation);
+                    const safeId = (conversation?.id || '').replace(/[^a-zA-Z0-9_-]/g, '_');
                     const picHtml = avatarUrl 
-                        ? `<img src="${avatarUrl}" class="rounded-circle" width="48" height="48" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;display:none;"><i class="fas fa-user text-white"></i></div>`
+                        ? `<img src="${avatarUrl}" class="rounded-circle" width="48" height="48"
+                            onerror="console.error('[Avatar] LIST onerror id=${safeId} src='+this.src);this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;display:none;"><i class="fas fa-user text-white"></i></div>`
                         : `<div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;"><i class="fas fa-user text-white"></i></div>`;
                     
                     item.innerHTML = `
@@ -6559,21 +6565,14 @@ TONE(語調):
                         <i class="fas fa-robot text-white" style="font-size: 12px;"></i>
                     </div>`;
                 }
-                const avatarUrl = normalizeAvatarUrl(
-                    selectedConversation?.customerPicture
-                    || selectedConversation?.pictureUrl
-                    || message?.pictureUrl
-                    || ''
-                );
-                console.log('[Dashboard Debug] avatar url used:', avatarUrl, {
-                    selectedCustomerPicture: selectedConversation?.customerPicture || '',
-                    selectedPictureUrl: selectedConversation?.pictureUrl || '',
-                    messagePictureUrl: message?.pictureUrl || ''
-                });
+                // Unified: always use getConversationAvatarUrl on selectedConversation
+                const conv = selectedConversation || conversation;
+                const avatarUrl = getConversationAvatarUrl(conv);
+                console.log('[Avatar] CHAT WINDOW | conv.id:', conv?.id, '| avatarUrl:', avatarUrl ? avatarUrl.substring(0, 80) : '(empty)');
                 if (avatarUrl) {
+                    const safeId = (conv?.id || '').replace(/[^a-zA-Z0-9_-]/g, '_');
                     return `<img src="${avatarUrl}" class="rounded-circle" width="32" height="32"
-                        loading="lazy"
-                        onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />` +
+                        onerror="console.error('[Avatar] CHAT onerror id=${safeId} src='+this.src);this.style.display='none';this.nextElementSibling.style.display='flex';" />` +
                         `<div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; display: none;">
                             <i class="fas fa-user text-white" style="font-size: 12px;"></i>
                         </div>`;
@@ -6587,8 +6586,19 @@ TONE(語調):
                 const str = String(value || '').trim();
                 if (!str) return '';
                 const lower = str.toLowerCase();
-                if (lower === 'null' || lower === 'undefined' || lower === 'nan') return '';
+                if (lower === 'null' || lower === 'undefined' || lower === 'nan' || lower === 'false') return '';
+                // Must be an http/https URL
+                if (!lower.startsWith('http://') && !lower.startsWith('https://')) return '';
                 return str;
+            }
+
+            function getConversationAvatarUrl(conv) {
+                const raw = conv?.customerPicture || conv?.pictureUrl || '';
+                const url = normalizeAvatarUrl(raw);
+                console.log('[Avatar] conversation', conv?.id || '?',
+                    '| raw customerPicture:', raw ? raw.substring(0, 60) + '...' : '(empty)',
+                    '| normalized:', url ? url.substring(0, 60) + '...' : '(empty)');
+                return url;
             }
 
             // 載入真實對話詳情
