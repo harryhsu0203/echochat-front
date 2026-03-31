@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<!-- dashboard build: 2026-03-31-proxy-v1 -->
+<!-- dashboard build: 2026-03-31-dom-v6 -->
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n-title="dashboard.title">EchoChat - 儀表板 | AI 客服管理後台</title>
     <script>
-        window.__DASHBOARD_BUILD__ = '2026-03-31-proxy-v1';
-        console.log('%c[EchoChat] dashboard build: ' + window.__DASHBOARD_BUILD__, 'color:green;font-weight:bold;font-size:14px');
+        window.__DASHBOARD_BUILD__ = '2026-03-31-dom-v6';
+        console.log('%c[EchoChat] dashboard build: ' + window.__DASHBOARD_BUILD__, 'color:green;font-weight:bold;font-size:16px');
     </script>
     <meta name="description" content="EchoChat AI 客服管理儀表板，管理您的 LINE 聊天機器人、智慧客服設定、知識庫、對話記錄和 AI 助理配置。">
     <meta name="keywords" content="EchoChat 儀表板, AI 客服管理, 客服系統後台, LINE Bot 管理, 智慧客服設定, 客服管理系統">
@@ -6391,33 +6391,32 @@ TONE(語調):
                     item.className = 'conversation-item d-flex align-items-center p-3 border-bottom';
                     item.style.cursor = 'pointer';
                     item.style.transition = 'background-color 0.2s';
-                    
-                    // 判斷平台類型（基於對話內容或ID）
+
                     const platformInfo = detectPlatformFromConversation(conversation);
-                    
+
+                    // === 頭像：createElement 直接設 img.src，不用 innerHTML ===
+                    const avatarWrapper = document.createElement('div');
+                    avatarWrapper.className = 'me-3';
+                    avatarWrapper.style.cssText = 'flex-shrink:0;width:48px;height:48px';
                     const avatarUrl = getConversationAvatarUrl(conversation);
-                    const safeId = (conversation?.id || '').replace(/[^a-zA-Z0-9_-]/g, '_');
-                    const picHtml = avatarUrl 
-                        ? `<img src="${avatarUrl}" class="rounded-circle" width="48" height="48"
-                            onerror="console.error('[Avatar] LIST onerror id=${safeId} src='+this.src);this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;display:none;"><i class="fas fa-user text-white"></i></div>`
-                        : `<div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;"><i class="fas fa-user text-white"></i></div>`;
-                    
-                    item.innerHTML = `
-                        <div class="me-3">
-                            ${picHtml}
+                    avatarWrapper.appendChild(makeAvatarElement(avatarUrl, conversation.id, 48));
+                    item.appendChild(avatarWrapper);
+
+                    // === 文字資訊：innerHTML 不含任何 img ===
+                    const info = document.createElement('div');
+                    info.className = 'flex-grow-1';
+                    info.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h6 class="mb-1">${conversation.displayName || conversation.customerName || platformInfo.name}</h6>
+                            <small class="text-muted">${formatTime(conversation.updatedAt || new Date().toISOString())}</small>
                         </div>
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <h6 class="mb-1">${conversation.displayName || conversation.customerName || platformInfo.name}</h6>
-                                <small class="text-muted">${formatTime(conversation.updatedAt || new Date().toISOString())}</small>
-                            </div>
-                            <p class="mb-1 text-muted small">${conversation.lastMessage || '無訊息'}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted"><i class="${platformInfo.icon} ${platformInfo.color} me-1"></i>${conversation.messageCount || 0} 條訊息</small>
-                                <span class="badge bg-${platformInfo.statusColor}">${platformInfo.status}</span>
-                            </div>
+                        <p class="mb-1 text-muted small">${conversation.lastMessage || '無訊息'}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted"><i class="${platformInfo.icon} ${platformInfo.color} me-1"></i>${conversation.messageCount || 0} 條訊息</small>
+                            <span class="badge bg-${platformInfo.statusColor}">${platformInfo.status}</span>
                         </div>
                     `;
+                    item.appendChild(info);
                     
                     item.addEventListener('click', () => loadRealConversation(conversation.id));
                     item.addEventListener('mouseenter', function() {
@@ -6559,27 +6558,63 @@ TONE(語調):
                 return `<span>${contentText}</span>` + renderAttachments(message.attachments);
             }
 
-            function renderAvatar(isCustomer, message, conversation) {
-                if (!isCustomer) {
-                    return `<div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                        <i class="fas fa-robot text-white" style="font-size: 12px;"></i>
-                    </div>`;
-                }
-                // Unified: always use getConversationAvatarUrl on selectedConversation
+            // 建立灰色預設頭像 Element
+            function makeGrayAvatar(size) {
+                const d = document.createElement('div');
+                d.className = 'bg-secondary rounded-circle d-flex align-items-center justify-content-center';
+                d.style.cssText = `width:${size}px;height:${size}px;flex-shrink:0`;
+                d.innerHTML = `<i class="fas fa-user text-white" style="font-size:${size < 36 ? 10 : 14}px"></i>`;
+                return d;
+            }
+
+            // 建立 AI 頭像 Element
+            function makeAiAvatar(size) {
+                const d = document.createElement('div');
+                d.className = 'bg-primary rounded-circle d-flex align-items-center justify-content-center';
+                d.style.cssText = `width:${size}px;height:${size}px;flex-shrink:0`;
+                d.innerHTML = `<i class="fas fa-robot text-white" style="font-size:${size < 36 ? 10 : 12}px"></i>`;
+                return d;
+            }
+
+            // 建立頭貼 img Element（直接 createElement，不用 innerHTML）
+            // 若 avatarUrl 有效 → <img>；若無效或載入失敗 → 灰色 div
+            function makeAvatarElement(avatarUrl, convId, size) {
+                if (!avatarUrl) return makeGrayAvatar(size);
+                const img = document.createElement('img');
+                img.src = avatarUrl;
+                img.alt = 'avatar';
+                img.className = 'rounded-circle';
+                img.style.cssText = `width:${size}px;height:${size}px;object-fit:cover;display:block;flex-shrink:0`;
+                img.addEventListener('load', () => {
+                    console.log('[Avatar OK]', convId, img.src.substring(0, 80));
+                });
+                img.addEventListener('error', () => {
+                    console.error('[Avatar FAIL]', convId, 'src:', img.src.substring(0, 120));
+                    // 載入失敗才換成灰頭像
+                    const parent = img.parentNode;
+                    if (parent) {
+                        const fb = makeGrayAvatar(size);
+                        parent.replaceChild(fb, img);
+                    }
+                });
+                return img;
+            }
+
+            // renderAvatar 現在回傳 Element（不再回傳 HTML 字串）
+            function renderAvatarEl(isCustomer, message, conversation) {
+                const size = 32;
+                if (!isCustomer) return makeAiAvatar(size);
                 const conv = selectedConversation || conversation;
                 const avatarUrl = getConversationAvatarUrl(conv);
-                console.log('[Avatar] CHAT WINDOW | conv.id:', conv?.id, '| avatarUrl:', avatarUrl ? avatarUrl.substring(0, 80) : '(empty)');
-                if (avatarUrl) {
-                    const safeId = (conv?.id || '').replace(/[^a-zA-Z0-9_-]/g, '_');
-                    return `<img src="${avatarUrl}" class="rounded-circle" width="32" height="32"
-                        onerror="console.error('[Avatar] CHAT onerror id=${safeId} src='+this.src);this.style.display='none';this.nextElementSibling.style.display='flex';" />` +
-                        `<div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; display: none;">
-                            <i class="fas fa-user text-white" style="font-size: 12px;"></i>
-                        </div>`;
-                }
-                return `<div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                    <i class="fas fa-user text-muted" style="font-size: 12px;"></i>
-                </div>`;
+                console.log('[Avatar] CHAT | conv.id:', conv?.id, '| url:', avatarUrl ? avatarUrl.substring(0, 80) : '(none)');
+                return makeAvatarElement(avatarUrl, conv?.id || '?', size);
+            }
+
+            // 保留舊 renderAvatar 名稱以免影響其他呼叫，但改為回傳 Element（改成 placeholder）
+            function renderAvatar(isCustomer, message, conversation) {
+                // 回傳一個 placeholder，之後由 DOM 操作替換成真實 element
+                // 真正插入由 appendMessageDiv 處理
+                return '<span data-avatar-placeholder></span>';
             }
 
             function normalizeAvatarUrl(value) {
@@ -6706,7 +6741,6 @@ TONE(語調):
                 if (conversation.messages && conversation.messages.length > 0) {
                     conversation.messages.forEach(message => {
                         const messageDiv = document.createElement('div');
-                        // 客戶傳來的(user/inbound)顯示在左邊，我方回覆(assistant/outbound)顯示在右邊
                         const role = String(message.role || '').toLowerCase();
                         const sender = String(message.sender || '').toLowerCase();
                         const direction = String(message.direction || '').toLowerCase();
@@ -6715,14 +6749,13 @@ TONE(語調):
                             ? '<span class="badge bg-info text-dark ms-2">AI 回覆</span>'
                             : '';
                         messageDiv.className = `d-flex ${isCustomer ? 'justify-content-start' : 'justify-content-end'} mb-3`;
-                        
+
                         const time = formatTime(message.timestamp);
-                        
+
+                        // 先用 innerHTML 建立骨架（不含 img，避免 innerHTML 觸發 onerror）
                         messageDiv.innerHTML = `
                             <div class="d-flex ${isCustomer ? '' : 'flex-row-reverse'} align-items-end">
-                                <div class="${isCustomer ? 'me-2' : 'ms-2'}">
-                                    ${renderAvatar(isCustomer, message, conversation)}
-                                </div>
+                                <div class="${isCustomer ? 'me-2' : 'ms-2'}" data-avatar-slot></div>
                                 <div class="bg-${isCustomer ? 'white' : 'primary'} text-${isCustomer ? 'dark' : 'white'} p-3 rounded-3 shadow-sm" style="max-width: 70%; border-radius: ${isCustomer ? '15px 15px 15px 5px' : '15px 15px 5px 15px'} !important;">
                                     ${renderMessageContent(message)}
                                     <div class="small text-${isCustomer ? 'muted' : 'white-50'} mt-1">
@@ -6731,7 +6764,13 @@ TONE(語調):
                                 </div>
                             </div>
                         `;
-                        
+
+                        // 用 createElement 直接把頭像 Element 插入 slot（不走 innerHTML）
+                        const avatarSlot = messageDiv.querySelector('[data-avatar-slot]');
+                        if (avatarSlot) {
+                            avatarSlot.appendChild(renderAvatarEl(isCustomer, message, conversation));
+                        }
+
                         chatMessages.appendChild(messageDiv);
                     });
                 } else {
