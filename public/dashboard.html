@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- dashboard build: 2026-03-31-hardurl-v8 -->
+<!-- dashboard build: 2026-03-31-svg-fallback-v9 -->
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n-title="dashboard.title">EchoChat - 儀表板 | AI 客服管理後台</title>
     <script>
-        window.__DASHBOARD_BUILD__ = '2026-03-31-hardurl-v8';
+        window.__DASHBOARD_BUILD__ = '2026-03-31-svg-fallback-v9';
         console.log('%c[EchoChat] dashboard build: ' + window.__DASHBOARD_BUILD__, 'color:green;font-weight:bold;font-size:16px');
     </script>
     <meta name="description" content="EchoChat AI 客服管理儀表板，管理您的 LINE 聊天機器人、智慧客服設定、知識庫、對話記錄和 AI 助理配置。">
@@ -6559,29 +6559,42 @@ TONE(語調):
                 return `<span>${contentText}</span>` + renderAttachments(message.attachments);
             }
 
-            // 建立灰色預設頭像 Element
-            // ───────────────────────────────────────────────
-            // 頭像規則（強制）：
-            //   一律使用 <img>，不用 <i class="fas fa-user">
-            //   onerror 只換 src 為 /default-avatar.png，不隱藏
-            // ───────────────────────────────────────────────
+            // ─────────────────────────────────────────────────────────
+            // 頭像規則：
+            //   一律 <img>，永遠有 src（inline SVG data URL 保底）
+            //   onerror 換成 AVATAR_DEFAULT_SVG，不依賴任何外部檔案
+            // ─────────────────────────────────────────────────────────
 
-            // 建立頭貼 <img> Element，永遠是 img，不是 icon div
+            // 灰色使用者頭像 SVG（inline data URL，不依賴 /default-avatar.png）
+            const AVATAR_DEFAULT_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='24' fill='%23adb5bd'/%3E%3Cpath fill='%23fff' d='M24 26c-5.5 0-9-2.5-9-7 0-3.9 2.5-7 9-7s9 3.1 9 7c0 4.5-3.5 7-9 7zm0 4c9 0 15 4.5 15 9H9c0-4.5 6-9 15-9z'/%3E%3C/svg%3E";
+
+            // 建立頭貼 <img> Element
+            // avatarUrl: 若有效則用；若空則用 SVG 保底
             function makeAvatarImg(avatarUrl, convId, size) {
                 const img = document.createElement('img');
-                // 永遠設 src，沒 URL 就用 default
-                img.src = avatarUrl || '/default-avatar.png';
+                const safeUrl = (avatarUrl && avatarUrl !== 'undefined' && avatarUrl !== 'null')
+                    ? avatarUrl
+                    : AVATAR_DEFAULT_SVG;
+
+                console.log('[Avatar DEBUG]',
+                    'convId:', convId,
+                    '| avatarUrl:', avatarUrl || '(none)',
+                    '| safeUrl:', safeUrl.substring(0, 80));
+
+                img.src = safeUrl;
                 img.alt = 'avatar';
-                img.style.cssText = `width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;flex-shrink:0`;
+                img.style.cssText = `width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;flex-shrink:0;background:#adb5bd`;
                 img.onerror = function() {
-                    console.error('[Avatar FAIL]', convId, 'src:', this.src);
-                    // 只換 src，不隱藏
-                    if (this.src !== window.location.origin + '/default-avatar.png') {
-                        this.src = '/default-avatar.png';
+                    console.error('[Avatar FAIL]', convId, 'failed src:', this.src.substring(0, 80));
+                    // fallback 永遠是 inline SVG，不依賴任何外部檔案
+                    if (this.src !== AVATAR_DEFAULT_SVG) {
+                        this.src = AVATAR_DEFAULT_SVG;
                     }
                 };
                 img.onload = function() {
-                    console.log('[Avatar OK]', convId, this.src.substring(0, 80));
+                    if (this.src !== AVATAR_DEFAULT_SVG) {
+                        console.log('[Avatar OK]', convId, this.src.substring(0, 80));
+                    }
                 };
                 return img;
             }
@@ -6636,8 +6649,8 @@ TONE(語調):
                     'customerPicture:', (conv?.customerPicture || '').substring(0, 40) || '(none)');
 
                 if (!lineId || !/^U[0-9a-f]{32}$/i.test(lineId)) {
-                    console.warn('[Avatar] invalid lineId, using default. lineId=', lineId);
-                    return '/default-avatar.png';
+                    console.warn('[Avatar] invalid lineId, returning SVG default. lineId=', lineId);
+                    return ''; // makeAvatarImg 會用 AVATAR_DEFAULT_SVG 保底
                 }
 
                 // 硬寫 API domain，不依賴 window.API_BASE_URL（避免打到 front domain）
