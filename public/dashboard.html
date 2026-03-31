@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- dashboard build: 2026-03-31-svg-fallback-v9 -->
+<!-- dashboard build: 2026-03-31-final-v10 -->
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n-title="dashboard.title">EchoChat - 儀表板 | AI 客服管理後台</title>
     <script>
-        window.__DASHBOARD_BUILD__ = '2026-03-31-svg-fallback-v9';
+        window.__DASHBOARD_BUILD__ = '2026-03-31-final-v10';
         console.log('%c[EchoChat] dashboard build: ' + window.__DASHBOARD_BUILD__, 'color:green;font-weight:bold;font-size:16px');
     </script>
     <meta name="description" content="EchoChat AI 客服管理儀表板，管理您的 LINE 聊天機器人、智慧客服設定、知識庫、對話記錄和 AI 助理配置。">
@@ -6643,19 +6643,14 @@ TONE(語調):
             function getConversationAvatarUrl(conv) {
                 const lineId = conv?.customerLineId;
 
-                console.log('[Avatar]',
-                    'conv.id:', conv?.id,
-                    'lineId:', lineId,
-                    'customerPicture:', (conv?.customerPicture || '').substring(0, 40) || '(none)');
-
+                // 強制打印，讓你看到每筆對話的 lineId 和最終 URL
                 if (!lineId || !/^U[0-9a-f]{32}$/i.test(lineId)) {
-                    console.warn('[Avatar] invalid lineId, returning SVG default. lineId=', lineId);
-                    return ''; // makeAvatarImg 會用 AVATAR_DEFAULT_SVG 保底
+                    console.warn('[Avatar FINAL] conv:', conv?.id, '| lineId:', lineId, '→ INVALID, will use SVG fallback');
+                    return '';
                 }
 
-                // 硬寫 API domain，不依賴 window.API_BASE_URL（避免打到 front domain）
-                const url = `https://echochat-api.onrender.com/api/avatar/${lineId}`;
-                console.log('[Avatar] proxy URL:', url);
+                const url = 'https://echochat-api.onrender.com/api/avatar/' + lineId;
+                console.log('[Avatar FINAL] conv:', conv?.id, '| lineId:', lineId, '| url:', url);
                 return url;
             }
 
