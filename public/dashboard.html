@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- dashboard build: 2026-03-31-img-always-v7 -->
+<!-- dashboard build: 2026-03-31-hardurl-v8 -->
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n-title="dashboard.title">EchoChat - 儀表板 | AI 客服管理後台</title>
     <script>
-        window.__DASHBOARD_BUILD__ = '2026-03-31-img-always-v7';
+        window.__DASHBOARD_BUILD__ = '2026-03-31-hardurl-v8';
         console.log('%c[EchoChat] dashboard build: ' + window.__DASHBOARD_BUILD__, 'color:green;font-weight:bold;font-size:16px');
     </script>
     <meta name="description" content="EchoChat AI 客服管理儀表板，管理您的 LINE 聊天機器人、智慧客服設定、知識庫、對話記錄和 AI 助理配置。">
@@ -6628,26 +6628,22 @@ TONE(語調):
              * 若 customerLineId 不存在或不符合格式，fallback 到直連 customerPicture。
              */
             function getConversationAvatarUrl(conv) {
-                const lineId = conv?.customerLineId || '';
-                const rawPic = conv?.customerPicture || conv?.pictureUrl || '';
+                const lineId = conv?.customerLineId;
 
-                // 只要 lineId 符合 LINE userId 格式（U + 32 hex），一律走 proxy
-                if (lineId && /^U[0-9a-f]{32}$/i.test(lineId)) {
-                    const apiBase = (window.API_BASE_URL || 'https://echochat-api.onrender.com/api')
-                        .replace(/\/api\/?$/, '');
-                    const proxyUrl = `${apiBase}/api/avatar/${lineId}`;
-                    console.log('[Avatar] conv', conv?.id || '?',
-                        '| lineId:', lineId,
-                        '| proxy URL:', proxyUrl);
-                    return proxyUrl;
+                console.log('[Avatar]',
+                    'conv.id:', conv?.id,
+                    'lineId:', lineId,
+                    'customerPicture:', (conv?.customerPicture || '').substring(0, 40) || '(none)');
+
+                if (!lineId || !/^U[0-9a-f]{32}$/i.test(lineId)) {
+                    console.warn('[Avatar] invalid lineId, using default. lineId=', lineId);
+                    return '/default-avatar.png';
                 }
 
-                // fallback: 直連 customerPicture（非 LINE 平台或沒有 lineId）
-                const directUrl = normalizeAvatarUrl(rawPic);
-                console.log('[Avatar] conv', conv?.id || '?',
-                    '| NO lineId, direct URL:', directUrl || '(empty)',
-                    '| raw:', rawPic ? rawPic.substring(0, 60) : '(empty)');
-                return directUrl;
+                // 硬寫 API domain，不依賴 window.API_BASE_URL（避免打到 front domain）
+                const url = `https://echochat-api.onrender.com/api/avatar/${lineId}`;
+                console.log('[Avatar] proxy URL:', url);
+                return url;
             }
 
             // 載入真實對話詳情
