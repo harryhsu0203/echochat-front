@@ -435,14 +435,14 @@
 
         // ── 動態初始化 OAuth 按鈕 ────────────────────────────
         (async () => {
-            let hasAnyOAuth = false;
+            let googleEnabled = false;
+            let lineEnabled = false;
+
             try {
-                // Google
                 const gr = await fetch(`${API}/auth/google/client-id`).then(r => r.json()).catch(() => null);
                 if (gr && gr.client_id) {
                     document.getElementById('g_id_onload').setAttribute('data-client_id', gr.client_id);
-                    document.getElementById('googleBtnWrapper').style.display = 'block';
-                    hasAnyOAuth = true;
+                    googleEnabled = true;
                     // 若 GSI button 5 秒後沒有渲染，顯示 fallback 按鈕
                     setTimeout(() => {
                         const gsiBtn = document.querySelector('.g_id_signin iframe');
@@ -450,17 +450,17 @@
                     }, 5000);
                 }
             } catch {}
+
             try {
-                // LINE
                 const lr = await fetch(`${API}/auth/line/status`).then(r => r.json()).catch(() => null);
-                if (lr && lr.enabled) {
-                    document.getElementById('lineBtnWrapper').style.display = 'block';
-                    hasAnyOAuth = true;
-                }
+                if (lr && lr.enabled) lineEnabled = true;
             } catch {}
 
-            if (hasAnyOAuth) {
+            // 有任何一個 OAuth 啟用就顯示整個區塊
+            if (googleEnabled || lineEnabled) {
                 document.getElementById('oauthButtons').style.display = 'block';
+                if (googleEnabled) document.getElementById('googleBtnWrapper').style.display = 'block';
+                if (lineEnabled)   document.getElementById('lineBtnWrapper').style.display = 'block';
             }
         })();
         // 頁面載入時檢查是否有記住的帳號
