@@ -276,17 +276,54 @@
             
             <div class="login-body">
                 <div id="alertContainer"></div>
-                <div class="d-grid mb-3" id="googleSignInBlock" style="display:none;">
-                    <div id="g_id_onload"
-                         data-client_id=""
-                         data-context="signin"
-                         data-ux_mode="popup"
-                         data-callback="onGoogleSignIn"
-                         data-auto_select="false"
-                         data-itp_support="true"></div>
-                    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
+
+                <!-- ── OAuth 登入按鈕區 ─────────────────────── -->
+                <!-- Google Identity Services（One Tap + button，popup 模式） -->
+                <div id="g_id_onload"
+                     data-client_id=""
+                     data-context="signin"
+                     data-ux_mode="popup"
+                     data-callback="onGoogleSignIn"
+                     data-auto_select="false"
+                     data-itp_support="true"></div>
+
+                <div id="oauthButtons" style="display:none;">
+                    <!-- Google 登入按鈕（GSI 官方樣式） -->
+                    <div id="googleBtnWrapper" style="display:none;margin-bottom:10px;">
+                        <div class="g_id_signin"
+                             data-type="standard"
+                             data-size="large"
+                             data-theme="outline"
+                             data-text="signin_with"
+                             data-shape="rectangular"
+                             data-logo_alignment="left"
+                             data-width="340"></div>
+                        <!-- 若 GSI button 未渲染，用此 fallback -->
+                        <button type="button" id="googleFallbackBtn" onclick="startGoogleOAuth()"
+                            style="display:none;width:100%;padding:10px;border:1px solid #dadce0;border-radius:6px;background:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
+                            <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                            使用 Google 登入
+                        </button>
+                    </div>
+
+                    <!-- LINE 登入按鈕 -->
+                    <div id="lineBtnWrapper" style="display:none;margin-bottom:10px;">
+                        <button type="button" onclick="startLineLogin()"
+                            style="width:100%;padding:10px 14px;border:none;border-radius:6px;background:#06C755;color:#fff;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.89c.50 0 .91.41.91.91s-.41.91-.91.91H17.3v1.09h2.07c.50 0 .91.41.91.91s-.41.91-.91.91H16.39a.91.91 0 0 1-.91-.91V9.89c0-.50.41-.91.91-.91h2.97zm-6.5 0c.50 0 .91.41.91.91v3.82a.91.91 0 0 1-.91.91h-.01a.91.91 0 0 1-.91-.91V9.89c0-.50.41-.91.91-.91h.01zm-2.83 0c.50 0 .91.41.91.91v2.44l-1.72-2.99a.91.91 0 0 0-.79-.46h-.01a.91.91 0 0 0-.91.91v3.82c0 .50.41.91.91.91s.91-.41.91-.91v-2.44l1.72 2.99c.17.29.48.46.79.46h.01c.50 0 .91-.41.91-.91V9.89c0-.50-.41-.91-.91-.91h-.01zM4.635 9.89c.50 0 .91.41.91.91s-.41.91-.91.91H3.27v1.09h1.37c.50 0 .91.41.91.91s-.41.91-.91.91H3.27a.91.91 0 0 1-.91-.91V9.89c0-.50.41-.91.91-.91h1.37zM12 0C5.37 0 0 4.89 0 10.91c0 5.39 4.78 9.91 11.21 10.78.44.09 1.03.29 1.18.66.14.34.09.86.04 1.21l-.18 1.09c-.06.33-.26 1.29 1.13.7 1.39-.59 7.51-4.43 10.24-7.58C24.93 15.21 24 13.15 24 10.91 24 4.89 18.63 0 12 0z"/></svg>
+                            使用 LINE 登入
+                        </button>
+                    </div>
+
+                    <!-- 分隔線 -->
+                    <div style="display:flex;align-items:center;margin:14px 0;color:#aaa;font-size:13px;gap:10px;">
+                        <div style="flex:1;height:1px;background:#e0e0e0;"></div>
+                        <span>或使用帳號密碼登入</span>
+                        <div style="flex:1;height:1px;background:#e0e0e0;"></div>
+                    </div>
                 </div>
-                
+                <!-- ─────────────────────────────────────────── -->
+
                 <form id="loginForm" onsubmit="handleLogin(event)">
                     <div class="input-group mb-3">
                         <span class="input-group-text">
@@ -330,32 +367,101 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // ── OAuth 相關工具 ──────────────────────────────────────
+        const API_BASE = (window.API_BASE_URL || 'https://echochat-api.onrender.com/api').replace(/\/api\/?$/, '');
+        const API = `${API_BASE}/api`;
+
+        function afterLogin(token, provider) {
+            if (!token) return;
+            localStorage.setItem('token', token);
+            localStorage.setItem('authToken', token);
+            showSuccessRedirectState(provider);
+        }
+
+        // ── 處理 URL query params（OAuth callback 或錯誤）──────
+        (function handleOAuthCallback() {
+            const params = new URLSearchParams(window.location.search);
+            const oauth = params.get('oauth');
+            const provider = params.get('provider') || 'OAuth';
+            const token = params.get('token');
+            const reason = params.get('reason');
+
+            if (oauth === 'success' && token) {
+                history.replaceState({}, '', window.location.pathname); // 清 URL 參數
+                afterLogin(token, provider);
+                return;
+            }
+            if (oauth === 'fail') {
+                history.replaceState({}, '', window.location.pathname);
+                const msg = {
+                    invalid_state: '登入驗證失敗（state 不符），請重試',
+                    token_exchange_failed: '第三方登入失敗，請稍後再試',
+                    missing_code: '登入流程被中斷，請重試'
+                }[reason] || `${provider} 登入失敗（${reason || '未知原因'}）`;
+                showAlert(msg, 'danger');
+            }
+        })();
+
+        // ── Google One Tap / Button callback（popup 模式）──────
         async function onGoogleSignIn(resp) {
             try {
                 const id_token = resp.credential;
-                const baseUrl = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
-                const r = await fetch(`${baseUrl}/auth/google`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id_token })});
+                showAlert('Google 登入中...', 'info');
+                const r = await fetch(`${API}/auth/google`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_token })
+                });
                 const data = await r.json();
                 if (r.ok && data.success && data.token) {
-                    localStorage.setItem('token', data.token);
-                    window.location.href = 'dashboard.html';
+                    afterLogin(data.token, 'Google');
                 } else {
                     showAlert(data.error || 'Google 登入失敗', 'danger');
                 }
-            } catch (e) { showAlert('Google 登入失敗', 'danger'); }
+            } catch (e) {
+                showAlert('Google 登入失敗：' + e.message, 'danger');
+            }
         }
 
-        // 動態載入 Client ID 並顯示 Google 登入按鈕
+        // ── Google OAuth redirect flow（fallback）─────────────
+        function startGoogleOAuth() {
+            window.location.href = `${API}/auth/google/start`;
+        }
+
+        // ── LINE Login redirect ────────────────────────────────
+        function startLineLogin() {
+            window.location.href = `${API}/auth/line/start`;
+        }
+
+        // ── 動態初始化 OAuth 按鈕 ────────────────────────────
         (async () => {
+            let hasAnyOAuth = false;
             try {
-                const baseUrl = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
-                const r = await fetch(`${baseUrl}/auth/google/client-id`);
-                const d = await r.json();
-                if (d && d.client_id) {
-                    document.getElementById('g_id_onload').setAttribute('data-client_id', d.client_id);
-                    document.getElementById('googleSignInBlock').style.display = 'block';
+                // Google
+                const gr = await fetch(`${API}/auth/google/client-id`).then(r => r.json()).catch(() => null);
+                if (gr && gr.client_id) {
+                    document.getElementById('g_id_onload').setAttribute('data-client_id', gr.client_id);
+                    document.getElementById('googleBtnWrapper').style.display = 'block';
+                    hasAnyOAuth = true;
+                    // 若 GSI button 5 秒後沒有渲染，顯示 fallback 按鈕
+                    setTimeout(() => {
+                        const gsiBtn = document.querySelector('.g_id_signin iframe');
+                        if (!gsiBtn) document.getElementById('googleFallbackBtn').style.display = 'flex';
+                    }, 5000);
                 }
             } catch {}
+            try {
+                // LINE
+                const lr = await fetch(`${API}/auth/line/status`).then(r => r.json()).catch(() => null);
+                if (lr && lr.enabled) {
+                    document.getElementById('lineBtnWrapper').style.display = 'block';
+                    hasAnyOAuth = true;
+                }
+            } catch {}
+
+            if (hasAnyOAuth) {
+                document.getElementById('oauthButtons').style.display = 'block';
+            }
         })();
         // 頁面載入時檢查是否有記住的帳號
         document.addEventListener('DOMContentLoaded', function() {
