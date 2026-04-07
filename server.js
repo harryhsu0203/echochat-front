@@ -172,17 +172,7 @@ const upload = multer({ dest: 'uploads/' });
 // 安全性中間件
 app.use(
   helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "'unsafe-inline'", "'unsafe-eval'"],
-        scriptSrcAttr: ["'unsafe-inline'"],
-        styleSrc: ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://sprofile.line-scdn.net", "https://*.line-scdn.net", "https://profile.line-scdn.net", "https://*.line.me", "https://echochat-api.onrender.com", "https://*.onrender.com"],
-        fontSrc: ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "data:"],
-        connectSrc: ["'self'", "https://echochat-api.onrender.com", "https://*.onrender.com", "https://echochat-frontend.onrender.com", "https://echochat.onrender.com"]
-      },
-    },
+    contentSecurityPolicy: false  // 停用 CSP，後台儀表板為已登入頁面，不需嚴格 CSP
   })
 );
 
