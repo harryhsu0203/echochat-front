@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- dashboard build: 2026-04-07-blob-v11 -->
+<!-- dashboard build: 2026-04-07-notification-bell-v12 -->
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n-title="dashboard.title">EchoChat - 儀表板 | AI 客服管理後台</title>
     <script>
-        window.__DASHBOARD_BUILD__ = '2026-04-07-blob-v11';
+        window.__DASHBOARD_BUILD__ = '2026-04-07-notification-bell-v12';
         console.log('%c[EchoChat] dashboard build: ' + window.__DASHBOARD_BUILD__, 'color:green;font-weight:bold;font-size:16px');
     </script>
     <meta name="description" content="EchoChat AI 客服管理儀表板，管理您的 LINE 聊天機器人、智慧客服設定、知識庫、對話記錄和 AI 助理配置。">
@@ -1553,6 +1553,32 @@
                                 <button class="btn btn-outline-secondary btn-sm me-2" onclick="refreshData()">
                                     <i class="fas fa-sync-alt me-1"></i><span data-i18n="dashboard.btn.refresh">重新整理</span>
                                 </button>
+
+                                <!-- 🔔 通知鈴鐺 -->
+                                <div class="position-relative me-2" id="notificationBellWrapper">
+                                    <button class="btn btn-outline-secondary btn-sm position-relative" id="notificationBellBtn" title="通知">
+                                        <i class="fas fa-bell"></i>
+                                        <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;font-size:0.6rem;padding:3px 5px;min-width:16px;">
+                                            0
+                                        </span>
+                                    </button>
+                                    <!-- 通知下拉面板 -->
+                                    <div id="notificationPanel" style="display:none;position:absolute;right:0;top:calc(100% + 8px);width:340px;max-height:420px;overflow-y:auto;background:#fff;border:1px solid #dee2e6;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.12);z-index:9999;">
+                                        <div class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom" style="background:#f8f9fa;border-radius:8px 8px 0 0;">
+                                            <span class="fw-semibold" style="font-size:.9rem;"><i class="fas fa-bell me-1 text-warning"></i>通知中心</span>
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-link btn-sm p-0 text-muted" onclick="markAllNotificationsRead()" title="全部標為已讀" style="font-size:.78rem;">全部已讀</button>
+                                                <button class="btn btn-link btn-sm p-0 text-muted" onclick="clearAllNotifications()" title="清除全部" style="font-size:.78rem;">清除</button>
+                                            </div>
+                                        </div>
+                                        <div id="notificationList" style="min-height:80px;">
+                                            <div class="text-center text-muted py-4" id="notificationEmptyMsg" style="font-size:.85rem;">
+                                                <i class="fas fa-check-circle me-1 text-success"></i>目前沒有通知
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <button class="btn btn-outline-danger btn-sm" id="logoutButton">
                                     <i class="fas fa-sign-out-alt me-1"></i><span data-i18n="dashboard.btn.logout">登出</span>
                                 </button>
@@ -3065,6 +3091,12 @@ TONE(語調):
                         alertDiv.remove();
                     }
                 }, 5000);
+
+                // danger / warning → 同時寫入通知中心
+                if ((type === 'danger' || type === 'warning') && typeof addNotification === 'function') {
+                    const notifType = type === 'danger' ? 'error' : 'warn';
+                    addNotification(notifType, message);
+                }
             }
             
             // 創建提示訊息容器
@@ -3931,6 +3963,192 @@ TONE(語調):
                 document.getElementById('currentTime').textContent = now.toLocaleString('zh-TW');
             }
             
+            // ─────────────────────────────────────────────────────
+            // 🔔 通知系統（Notification Center）
+            // ─────────────────────────────────────────────────────
+            const NOTIF_STORAGE_KEY = 'echochat_notifications_v1';
+
+            function loadNotifications() {
+                try {
+                    return JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || '[]');
+                } catch (_) { return []; }
+            }
+
+            function saveNotifications(list) {
+                try {
+                    localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(list.slice(-100)));
+                } catch (_) {}
+            }
+
+            /**
+             * 新增一則通知
+             * @param {'error'|'warn'|'info'|'success'} type
+             * @param {string} title  簡短標題
+             * @param {string} detail 詳細內容
+             */
+            function addNotification(type, title, detail) {
+                const list = loadNotifications();
+                const notif = {
+                    id: 'n_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                    type,          // error / warn / info / success
+                    title,
+                    detail: detail || '',
+                    time: new Date().toISOString(),
+                    read: false
+                };
+                list.unshift(notif);
+                saveNotifications(list);
+                renderNotificationBadge();
+                renderNotificationList();
+                return notif;
+            }
+
+            function markAllNotificationsRead() {
+                const list = loadNotifications().map(n => ({ ...n, read: true }));
+                saveNotifications(list);
+                renderNotificationBadge();
+                renderNotificationList();
+            }
+
+            function clearAllNotifications() {
+                saveNotifications([]);
+                renderNotificationBadge();
+                renderNotificationList();
+            }
+
+            function deleteNotification(id) {
+                const list = loadNotifications().filter(n => n.id !== id);
+                saveNotifications(list);
+                renderNotificationBadge();
+                renderNotificationList();
+            }
+
+            function renderNotificationBadge() {
+                const list = loadNotifications();
+                const unread = list.filter(n => !n.read).length;
+                const badge = document.getElementById('notificationBadge');
+                if (!badge) return;
+                if (unread > 0) {
+                    badge.textContent = unread > 99 ? '99+' : String(unread);
+                    badge.style.display = '';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+
+            function renderNotificationList() {
+                const list = loadNotifications();
+                const container = document.getElementById('notificationList');
+                const emptyMsg = document.getElementById('notificationEmptyMsg');
+                if (!container) return;
+
+                // 移除舊的通知項目（保留 emptyMsg）
+                Array.from(container.children).forEach(el => {
+                    if (el.id !== 'notificationEmptyMsg') el.remove();
+                });
+
+                if (list.length === 0) {
+                    if (emptyMsg) emptyMsg.style.display = '';
+                    return;
+                }
+                if (emptyMsg) emptyMsg.style.display = 'none';
+
+                const iconMap = {
+                    error:   { icon: 'fa-exclamation-circle', color: '#dc3545', bg: '#fff5f5' },
+                    warn:    { icon: 'fa-exclamation-triangle', color: '#fd7e14', bg: '#fff8f0' },
+                    info:    { icon: 'fa-info-circle', color: '#0d6efd', bg: '#f0f6ff' },
+                    success: { icon: 'fa-check-circle', color: '#198754', bg: '#f0fff4' }
+                };
+
+                list.forEach(notif => {
+                    const m = iconMap[notif.type] || iconMap.info;
+                    const timeStr = (() => {
+                        try {
+                            const d = new Date(notif.time);
+                            const now = new Date();
+                            const diffMin = Math.floor((now - d) / 60000);
+                            if (diffMin < 1) return '剛剛';
+                            if (diffMin < 60) return diffMin + ' 分鐘前';
+                            if (diffMin < 1440) return Math.floor(diffMin / 60) + ' 小時前';
+                            return d.toLocaleDateString('zh-TW');
+                        } catch(_) { return ''; }
+                    })();
+
+                    const item = document.createElement('div');
+                    item.style.cssText = `
+                        display:flex;align-items:flex-start;gap:10px;
+                        padding:10px 14px;border-bottom:1px solid #f0f0f0;
+                        background:${notif.read ? '#fff' : m.bg};
+                        cursor:default;transition:background .15s;
+                    `;
+
+                    item.innerHTML = `
+                        <div style="flex-shrink:0;margin-top:2px;">
+                            <i class="fas ${m.icon}" style="color:${m.color};font-size:1rem;"></i>
+                        </div>
+                        <div style="flex:1;min-width:0;">
+                            <div style="font-size:.83rem;font-weight:${notif.read ? '400' : '600'};color:#212529;line-height:1.3;">${escapeHtml(notif.title)}</div>
+                            ${notif.detail ? `<div style="font-size:.78rem;color:#6c757d;margin-top:2px;line-height:1.4;word-break:break-word;">${escapeHtml(notif.detail)}</div>` : ''}
+                            <div style="font-size:.72rem;color:#adb5bd;margin-top:4px;">${timeStr}</div>
+                        </div>
+                        <button onclick="deleteNotification('${notif.id}')" style="flex-shrink:0;background:none;border:none;color:#ced4da;font-size:.85rem;cursor:pointer;padding:0 2px;line-height:1;" title="移除">✕</button>
+                    `;
+
+                    // 點擊通知本體 → 標為已讀
+                    item.addEventListener('click', (e) => {
+                        if (e.target.tagName === 'BUTTON') return;
+                        if (!notif.read) {
+                            const all = loadNotifications();
+                            const found = all.find(n => n.id === notif.id);
+                            if (found) found.read = true;
+                            saveNotifications(all);
+                            renderNotificationBadge();
+                            renderNotificationList();
+                        }
+                    });
+
+                    container.appendChild(item);
+                });
+            }
+
+            function escapeHtml(str) {
+                return String(str || '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+            }
+
+            // 鈴鐺按鈕事件
+            (function initNotificationBell() {
+                const btn = document.getElementById('notificationBellBtn');
+                const panel = document.getElementById('notificationPanel');
+                if (!btn || !panel) return;
+
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isOpen = panel.style.display !== 'none';
+                    panel.style.display = isOpen ? 'none' : 'block';
+                    if (!isOpen) {
+                        // 開啟面板時標記全部已讀
+                        markAllNotificationsRead();
+                    }
+                });
+
+                // 點擊面板外關閉
+                document.addEventListener('click', (e) => {
+                    const wrapper = document.getElementById('notificationBellWrapper');
+                    if (wrapper && !wrapper.contains(e.target)) {
+                        panel.style.display = 'none';
+                    }
+                });
+
+                // 初始化 badge 與列表
+                renderNotificationBadge();
+                renderNotificationList();
+            })();
+
+            // ─────────────────────────────────────────────────────
             // 重新整理數據
             function refreshData() {
                 const btn = event.target;
@@ -4664,12 +4882,22 @@ TONE(語調):
                         }, 2000);
                     } else {
                         removeLoadingMessage();
-                        showChatAlert('AI 回應失敗: ' + (data.error || '未知錯誤'), 'danger');
+                        const errCode = data.errorCode || 'AI_ERROR';
+                        const errMsg = data.error || '未知錯誤';
+                        const errDetail = data.details || '';
+                        showChatAlert(errMsg, 'danger');
+                        // 寫入通知中心
+                        if (typeof addNotification === 'function') {
+                            addNotification('error', `AI 回覆失敗（${errCode}）`, errDetail || errMsg);
+                        }
                     }
                 } catch (error) {
                     console.error('聊天錯誤:', error);
                     removeLoadingMessage();
                     showChatAlert('網路錯誤，請稍後再試', 'danger');
+                    if (typeof addNotification === 'function') {
+                        addNotification('error', '網路錯誤', error.message || '無法連線到伺服器');
+                    }
                 }
             }
             
@@ -6876,15 +7104,20 @@ TONE(語調):
                             
                             // 不顯示浮動提示，避免干擾
                         } else {
-                            alert('發送失敗：' + (data.error || '未知錯誤'));
+                            const errMsg = data.error || '未知錯誤';
+                            alert('發送失敗：' + errMsg);
+                            if (typeof addNotification === 'function') addNotification('error', '訊息發送失敗', errMsg);
                         }
                     } else {
                         const errorData = await response.json().catch(() => ({}));
-                        alert('發送失敗：' + (errorData.error || '網路錯誤'));
+                        const errMsg = errorData.error || '網路錯誤';
+                        alert('發送失敗：' + errMsg);
+                        if (typeof addNotification === 'function') addNotification('error', '訊息發送失敗', errMsg);
                     }
                 } catch (error) {
                     console.error('發送訊息失敗:', error);
                     alert('發送失敗：' + error.message);
+                    if (typeof addNotification === 'function') addNotification('error', '訊息發送失敗', error.message);
                 } finally {
                     // 重新啟用發送按鈕
                     const sendBtn = document.getElementById('sendMessageBtn');
