@@ -1185,18 +1185,45 @@
                 <!-- 方案與價格 -->
                 <div class="ai-assistant-section">
                     <h2>方案與價格</h2>
-                    <p class="ai-description">Beta 早鳥方案，先用先省</p>
-                    <div class="ai-example text-center">
-                        <div class="h3 mb-2">NT$990 / 月</div>
-                        <div class="mb-2">Beta 早鳥方案</div>
-                        <div class="text-muted">不綁約、可隨時停用</div>
-                        <div class="ai-buttons">
-                            <a href="contact-us.html" class="btn btn-hero btn-primary-hero">
-                                <i class="fas fa-comments me-2"></i>加入 LINE 詢問 / 預約 Demo
-                            </a>
+                    <p class="ai-description">一個方案、全部功能，不綁約隨時停</p>
+
+                    <!-- 方案卡片 -->
+                    <div class="ai-example" style="border:2px solid #667eea;border-radius:16px;padding:0;overflow:hidden;">
+                        <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:24px;text-align:center;color:#fff;">
+                            <div style="font-size:13px;letter-spacing:2px;opacity:.85;margin-bottom:6px;">月訂閱方案</div>
+                            <div style="font-size:48px;font-weight:800;line-height:1;">NT$990</div>
+                            <div style="font-size:15px;opacity:.85;">/ 月</div>
+                        </div>
+                        <div style="padding:24px;">
+                            <ul style="list-style:none;padding:0;margin:0 0 20px;font-size:15px;">
+                                <li style="padding:8px 0;border-bottom:1px solid #f0f0f0;">✅ 無限制 LINE 對話</li>
+                                <li style="padding:8px 0;border-bottom:1px solid #f0f0f0;">✅ AI 自動回覆</li>
+                                <li style="padding:8px 0;border-bottom:1px solid #f0f0f0;">✅ 知識庫建立（無限筆）</li>
+                                <li style="padding:8px 0;border-bottom:1px solid #f0f0f0;">✅ 儀表板管理後台</li>
+                                <li style="padding:8px 0;">✅ 不綁約，可隨時停用</li>
+                            </ul>
+                            <div style="text-align:center;">
+                                <button onclick="handleSubscribeClick()" class="btn btn-hero btn-primary-hero" style="width:100%;font-size:16px;padding:14px;">
+                                    <i class="fas fa-arrow-right me-2"></i>立即訂閱
+                                </button>
+                                <div style="font-size:12px;color:#aaa;margin-top:10px;">需要帳號登入後才能購買</div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <script>
+                function handleSubscribeClick() {
+                    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                    if (token) {
+                        // 已登入 → 前往儀表板方案頁面
+                        window.location.href = 'dashboard.html?tab=plans&action=subscribe';
+                    } else {
+                        // 未登入 → 前往登入頁，登入後跳回訂閱
+                        window.location.href = 'login.html?next=subscribe';
+                    }
+                }
+                </script>
 
                 <!-- FAQ -->
                 <div class="ai-assistant-section">

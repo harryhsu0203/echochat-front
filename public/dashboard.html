@@ -1047,6 +1047,12 @@
             animation: spin 1s ease-in-out infinite;
         }
         
+        @keyframes pulseHighlight {
+            0%,100% { box-shadow: 0 0 0 0 rgba(102,126,234,.7); transform:scale(1); }
+            50% { box-shadow: 0 0 0 14px rgba(102,126,234,0); transform:scale(1.03); }
+        }
+        .pulse-highlight { animation: pulseHighlight 1s ease 3; }
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -2155,55 +2161,24 @@
                                                         </div>
                                                     </div>
 
-                                                    <!-- 升級方案 -->
-                                                    <div class="row g-3">
-                                                        <!-- Free -->
-                                                        <div class="col-md-4">
-                                                            <div class="card h-100 border">
-                                                                <div class="card-body text-center p-4">
-                                                                    <div class="mb-3">
-                                                                        <span class="badge bg-light text-dark px-3 py-2">Free</span>
-                                                                    </div>
-                                                                    <h5 class="mb-3">Free</h5>
-                                                                    <div class="mb-3">
-                                                                        <div class="fw-bold">20 文件</div>
-                                                                        <div class="fw-bold">200,000 詞元(Tokens)</div>
-                                                                    </div>
-                                                                    <button class="btn btn-outline-secondary">選擇方案</button>
+                                                    <!-- 訂閱方案（統一 NT$990/月） -->
+                                                    <div class="row g-3 justify-content-center">
+                                                        <div class="col-md-6">
+                                                            <div class="card h-100 border-0 shadow" style="border-radius:16px;overflow:hidden;">
+                                                                <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:24px;text-align:center;color:#fff;">
+                                                                    <div style="font-size:12px;letter-spacing:2px;opacity:.85;margin-bottom:6px;">月訂閱方案</div>
+                                                                    <div style="font-size:40px;font-weight:800;line-height:1;">NT$990</div>
+                                                                    <div style="font-size:13px;opacity:.8;">/ 月</div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Premium Monthly -->
-                                                        <div class="col-md-4">
-                                                            <div class="card h-100 border-warning">
-                                                                <div class="card-body text-center p-4">
-                                                                    <div class="mb-3">
-                                                                        <span class="badge bg-warning text-dark px-3 py-2">Premium - Monthly</span>
-                                                                    </div>
-                                                                    <h5 class="mb-3">$29.99 / 月</h5>
-                                                                    <div class="mb-3">
-                                                                        <div class="fw-bold">5,000 文件</div>
-                                                                        <div class="fw-bold">5,000,000 詞元(Tokens)</div>
-                                                                    </div>
-                                                                    <button class="btn btn-warning">當前方案</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Premium Annual -->
-                                                        <div class="col-md-4">
-                                                            <div class="card h-100 border-warning">
-                                                                <div class="card-body text-center p-4">
-                                                                    <div class="mb-3">
-                                                                        <span class="badge bg-warning text-dark px-3 py-2">Premium - Annual</span>
-                                                                    </div>
-                                                                    <h5 class="mb-3">$299 / 年</h5>
-                                                                    <div class="mb-3">
-                                                                        <div class="fw-bold">5,000 文件</div>
-                                                                        <div class="fw-bold">5,000,000 詞元(Tokens)</div>
-                                                                    </div>
-                                                                    <button class="btn btn-outline-warning">選擇方案</button>
+                                                                <div class="card-body p-4">
+                                                                    <ul class="list-unstyled mb-4">
+                                                                        <li class="py-2 border-bottom"><i class="fas fa-check text-success me-2"></i>無限制 LINE 對話</li>
+                                                                        <li class="py-2 border-bottom"><i class="fas fa-check text-success me-2"></i>AI 自動回覆（GPT 驅動）</li>
+                                                                        <li class="py-2 border-bottom"><i class="fas fa-check text-success me-2"></i>知識庫無限筆</li>
+                                                                        <li class="py-2 border-bottom"><i class="fas fa-check text-success me-2"></i>儀表板完整功能</li>
+                                                                        <li class="py-2"><i class="fas fa-check text-success me-2"></i>不綁約，隨時停用</li>
+                                                                    </ul>
+                                                                    <div id="dashboardPlanBtnArea" class="d-grid"></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -2783,74 +2758,104 @@ TONE(語調):
                     const d = await r.json(); tokenInfo = d && d.token ? d.token : null;
                 } catch {}
                 const planKey = tokenInfo ? String(tokenInfo.plan||'free').toLowerCase() : 'free';
-                const planName = planKey === 'enterprise' ? '企業版' : (planKey === 'premium' ? '尊榮版' : '免費版');
+                const isPaid = planKey === 'premium' || planKey === 'enterprise';
+                const planName = planKey === 'enterprise' ? '訂閱中（企業）' : (isPaid ? '訂閱中' : '免費版');
+                const badgeColor = isPaid ? 'bg-success' : 'bg-secondary';
+                const expiresAt = tokenInfo?.next_billing_at ? new Date(tokenInfo.next_billing_at).toLocaleDateString('zh-TW') : null;
+
                 container.innerHTML = `
                   <div class="row g-4">
+                    <!-- 目前狀態 -->
                     <div class="col-12">
                       <div class="card border-0 shadow-sm">
-                        <div class="card-body d-flex align-items-center justify-content-between">
-                          <div>
-                            <div class="text-muted small">目前方案</div>
-                            <div class="fs-5"><span class="badge ${tokenInfo && tokenInfo.plan==='premium' ? 'bg-success' : tokenInfo && tokenInfo.plan==='enterprise' ? 'bg-danger' : 'bg-secondary'}">${planName}</span></div>
-                          </div>
-                          <div class="text-end">
-                            <div class="text-muted small">本月已用 / 額度</div>
-                            <div class="fs-5">${tokenInfo ? (tokenInfo.used_in_cycle||0).toLocaleString() : '-'} / ${tokenInfo ? (tokenInfo.allowance||0).toLocaleString() : '-'}</div>
-                          </div>
-                          <div class="text-end">
-                            <div class="text-muted small">儲值餘額</div>
-                            <div class="fs-5 text-warning">${tokenInfo ? (tokenInfo.bonus_balance||0).toLocaleString() : '-'}</div>
-                          </div>
-                          <div class="text-end">
-                            <div class="text-muted small">下次重置</div>
-                            <div class="fs-6">${tokenInfo && tokenInfo.next_billing_at ? new Date(tokenInfo.next_billing_at).toLocaleDateString() : '-'}</div>
+                        <div class="card-body">
+                          <div class="d-flex flex-wrap align-items-center gap-4">
+                            <div>
+                              <div class="text-muted small mb-1">目前方案</div>
+                              <span class="badge ${badgeColor} px-3 py-2 fs-6">${planName}</span>
+                              ${isPaid && expiresAt ? `<div class="text-muted small mt-1">下次續費：${expiresAt}</div>` : ''}
+                            </div>
+                            <div>
+                              <div class="text-muted small mb-1">本月已用 / 額度</div>
+                              <div class="fw-bold">${tokenInfo ? (tokenInfo.used_in_cycle||0).toLocaleString() : '-'} / ${tokenInfo ? (tokenInfo.allowance||0).toLocaleString() : '-'} Tokens</div>
+                            </div>
+                            <div>
+                              <div class="text-muted small mb-1">儲值餘額</div>
+                              <div class="fw-bold text-warning">${tokenInfo ? (tokenInfo.bonus_balance||0).toLocaleString() : '-'} Tokens</div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <div class="col-lg-6">
-                      <div class="card border-0 shadow-sm h-100"><div class="card-body">
-                        <h6 class="mb-3">快速儲值</h6>
-                        <div class="d-grid gap-2">
-                          <button class="btn btn-outline-warning" data-topup="10000|100">10,000 Tokens（NT$100）</button>
-                          <button class="btn btn-outline-warning" data-topup="50000|450">50,000 Tokens（NT$450）</button>
-                          <button class="btn btn-outline-warning" data-topup="100000|800">100,000 Tokens（NT$800）</button>
+                    <!-- 方案訂閱（統一 NT$990） -->
+                    <div class="col-lg-7">
+                      <div class="card border-0 shadow-sm h-100">
+                        <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:20px 24px;border-radius:8px 8px 0 0;">
+                          <div style="color:rgba(255,255,255,.8);font-size:12px;letter-spacing:2px;margin-bottom:4px;">月訂閱方案</div>
+                          <div style="color:#fff;font-size:32px;font-weight:800;">NT$990 <span style="font-size:14px;font-weight:400;opacity:.8;">/ 月</span></div>
                         </div>
-                      </div></div>
+                        <div class="card-body">
+                          <ul class="list-unstyled mb-4">
+                            <li class="py-2 border-bottom small"><i class="fas fa-check text-success me-2"></i>無限制 LINE 對話</li>
+                            <li class="py-2 border-bottom small"><i class="fas fa-check text-success me-2"></i>AI 自動回覆（GPT 驅動）</li>
+                            <li class="py-2 border-bottom small"><i class="fas fa-check text-success me-2"></i>知識庫無限筆</li>
+                            <li class="py-2 border-bottom small"><i class="fas fa-check text-success me-2"></i>儀表板完整功能</li>
+                            <li class="py-2 small"><i class="fas fa-check text-success me-2"></i>不綁約，可隨時停用</li>
+                          </ul>
+                          ${!isPaid ? `
+                            <button class="btn btn-primary w-100 py-2" id="upgradePlanBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);border:none;">
+                              <i class="fas fa-credit-card me-2"></i>立即訂閱 NT$990 / 月
+                            </button>
+                            <div class="text-muted text-center mt-2" style="font-size:12px;">透過信用卡安全付款（綠界金流）</div>
+                          ` : `
+                            <div class="alert alert-success mb-3 py-2"><i class="fas fa-check-circle me-1"></i>您已訂閱此方案</div>
+                            <div class="d-grid gap-2">
+                              <button class="btn btn-outline-secondary btn-sm" id="changePaymentBtn"><i class="fas fa-credit-card me-1"></i>更改付款方式</button>
+                              <button class="btn btn-outline-danger btn-sm" id="cancelSubBtn"><i class="fas fa-ban me-1"></i>取消訂閱（到期後生效）</button>
+                            </div>
+                          `}
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-lg-6">
-                      <div class="card border-0 shadow-sm h-100"><div class="card-body d-flex flex-column">
-                        ${planKey==='free' ? `
-                          <h6 class="mb-3">升級尊榮版</h6>
-                          <p class="text-muted small mb-3">升級可獲更高每月額度與優先服務</p>
-                          <div class="mt-auto">
-                            <button class="btn btn-warning w-100" id="upgradePlanBtn"><i class="fas fa-arrow-up me-1"></i>升級尊榮版</button>
-                          </div>
-                        ` : `
-                          <h6 class="mb-3">訂閱管理</h6>
+
+                    <!-- Token 儲值 -->
+                    <div class="col-lg-5">
+                      <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-light fw-bold"><i class="fas fa-coins me-1 text-warning"></i>加購 Token 儲值</div>
+                        <div class="card-body">
+                          <p class="text-muted small">儲值後立即加入餘額，用完才扣，不會過期。</p>
                           <div class="d-grid gap-2">
-                            <button class="btn btn-outline-secondary" id="changePaymentBtn"><i class="fas fa-credit-card me-1"></i>更改付款方式</button>
-                            <button class="btn btn-outline-danger" id="cancelSubBtn"><i class="fas fa-ban me-1"></i>取消訂閱（到期後生效）</button>
+                            <button class="btn btn-outline-warning" data-topup="10000|100">
+                              10,000 Tokens — <strong>NT$100</strong>
+                            </button>
+                            <button class="btn btn-outline-warning" data-topup="50000|450">
+                              50,000 Tokens — <strong>NT$450</strong>
+                              <span class="badge bg-warning text-dark ms-1">省 NT$50</span>
+                            </button>
+                            <button class="btn btn-outline-warning" data-topup="100000|800">
+                              100,000 Tokens — <strong>NT$800</strong>
+                              <span class="badge bg-warning text-dark ms-1">省 NT$200</span>
+                            </button>
                           </div>
-                          <small class="text-muted mt-2">取消後，會於到期日結束會籍。</small>
-                        `}
-                      </div></div>
+                        </div>
+                      </div>
                     </div>
                   </div>`;
 
-                container.querySelectorAll('[data-topup]').forEach(btn=>{
-                  btn.addEventListener('click', async()=>{
-                    const [t,a]=btn.getAttribute('data-topup').split('|');
-                    await startTopup(parseInt(t,10), parseInt(a,10));
-                  });
+                // 綁定按鈕事件
+                container.querySelectorAll('[data-topup]').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const [t, a] = btn.getAttribute('data-topup').split('|');
+                        await startTopup(parseInt(t, 10), parseInt(a, 10));
+                    });
                 });
                 const up = container.querySelector('#upgradePlanBtn');
-                up && up.addEventListener('click', async()=>{ await startUpgrade(); });
+                up && up.addEventListener('click', async () => { await startUpgrade(); });
                 const cancelBtn = container.querySelector('#cancelSubBtn');
-                cancelBtn && cancelBtn.addEventListener('click', async(e)=>{ e.preventDefault(); await showRetentionDialog(); });
+                cancelBtn && cancelBtn.addEventListener('click', async (e) => { e.preventDefault(); await showRetentionDialog(); });
                 const changeBtn = container.querySelector('#changePaymentBtn');
-                changeBtn && changeBtn.addEventListener('click', async(e)=>{ e.preventDefault(); await changePaymentMethod(); });
+                changeBtn && changeBtn.addEventListener('click', async (e) => { e.preventDefault(); await changePaymentMethod(); });
             }
 
             async function startTopup(tokens, amount) {
@@ -4587,6 +4592,31 @@ TONE(語調):
                 setInterval(updateTime, 1000);
                 updateTime();
                 loadDashboardData();
+
+                // ── 處理從官網「立即訂閱」跳入的情況 ──────────
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('tab') === 'plans') {
+                    // 延遲等頁面初始化完成後切換到方案頁
+                    setTimeout(() => {
+                        const plansNav = document.querySelector('[data-tab="plans"]');
+                        if (plansNav) {
+                            plansNav.click();
+                            // 若帶有 action=subscribe，自動點訂閱按鈕
+                            if (urlParams.get('action') === 'subscribe') {
+                                setTimeout(() => {
+                                    const btn = document.getElementById('upgradePlanBtn');
+                                    if (btn) {
+                                        btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        btn.classList.add('pulse-highlight');
+                                    }
+                                }, 800);
+                            }
+                        }
+                        // 清除 URL 參數
+                        history.replaceState({}, '', window.location.pathname);
+                    }, 600);
+                }
+                // ─────────────────────────────────────────────
                 
                 // 添加登出按鈕事件監聽器 - 使用延遲確保DOM完全載入
                 setTimeout(function() {

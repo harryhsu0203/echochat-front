@@ -583,13 +583,8 @@
                     
                     console.log('🔄 延遲 2 秒後跳轉到儀表板...');
                     
-                    // 顯示更精緻的成功轉跳狀態（不改 redirect 時序）
+                    // showSuccessRedirectState 會處理延遲跳轉與 ?next= 參數
                     showSuccessRedirectState();
-                    
-                    // 延遲跳轉，確保所有資料都已設置
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 2000);
                 } else {
                     const errorData = await response.json();
                     
@@ -616,19 +611,29 @@
             document.getElementById('alertContainer').innerHTML = `<div class='alert alert-${type}'>${msg}</div>`;
         }
 
-        function showSuccessRedirectState() {
+        function showSuccessRedirectState(provider) {
+            const providerLabel = provider ? ` (${provider})` : '';
             document.getElementById('alertContainer').innerHTML = `
                 <div class="login-success-state" role="status" aria-live="polite">
                     <div class="login-success-icon">
                         <i class="fas fa-check"></i>
                     </div>
                     <div>
-                        <p class="login-success-title">登入成功</p>
+                        <p class="login-success-title">登入成功${providerLabel}</p>
                         <p class="login-success-subtitle">正在為你載入工作台，請稍候...</p>
                     </div>
                     <div class="login-success-loader"></div>
                 </div>
             `;
+
+            // 判斷跳轉目標
+            const params = new URLSearchParams(window.location.search);
+            const next = params.get('next');
+            let redirectUrl = 'dashboard.html';
+            if (next === 'subscribe') {
+                redirectUrl = 'dashboard.html?tab=plans&action=subscribe';
+            }
+            setTimeout(() => { window.location.href = redirectUrl; }, 1200);
         }
         function showForgotPassword() { 
             window.location.href = 'forgot-password.html'; 
