@@ -448,6 +448,7 @@ let database = {
     chat_history: [],
     ai_assistant_config: [],
     line_profiles: [],
+    chat_retention_settings: [],
     email_verifications: [], // 儲存電子郵件驗證碼
     password_reset_requests: [] // 儲存密碼重設請求
 };
@@ -468,9 +469,11 @@ const loadDatabase = () => {
                 chat_history: loadedData.chat_history || [],
                 ai_assistant_config: loadedData.ai_assistant_config || [],
                 line_profiles: loadedData.line_profiles || [],
+                chat_retention_settings: loadedData.chat_retention_settings || [],
                 email_verifications: loadedData.email_verifications || [],
                 password_reset_requests: loadedData.password_reset_requests || []
             };
+            ensureIsolationData();
         }
     } catch (error) {
         console.error('載入資料庫檔案失敗:', error.message);
@@ -480,10 +483,329 @@ const loadDatabase = () => {
 // 儲存資料
 const saveDatabase = () => {
     try {
+        ensureIsolationData();
         fs.writeFileSync(dataFile, JSON.stringify(database, null, 2));
     } catch (error) {
         console.error('儲存資料庫檔案失敗:', error.message);
     }
+};
+
+const normalizeScopedChannelId = (value) => String(value || '').trim();
+
+const defaultLineConfig = () => ({
+    channel_access_token: '',
+    channel_secret: '',
+    webhook_url: '',
+    enabled: false,
+    channel_id: ''
+});
+
+const defaultRetentionSettings = ({ userId, channelId = null } = {}) => ({
+    userId: userId != null ? Number(userId) : null,
+    channelId: normalizeScopedChannelId(channelId) || null,
+    autoDeleteEnabled: false,
+    retentionDays: 30,
+    deleteMessagesWhenChannelDeleted: true,
+    deleteCustomerProfilesWhenChannelDeleted: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+});
+
+const defaultAiAssistantConfig = () => ({
+    assistant_name: '設計師 Rainy',
+    llm: 'gpt-5.3',
+    use_case: 'customer-service',
+    description: 'OBJECTIVE(目標任務):\n你的目標是客戶服務與美容美髮發行錄，創造一個良好的對話體驗，讓客戶感到舒適，願意分享他們的真實想法及需求。\n\nSTYLE(風格/個性):\n你的個性是很健談並且很直率人保學會存在，樂於創造一個放鬆和友好的氣圍。\n\nTONE(語調):\n親性、溫柔、深情人心。',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+});
+
+const extractOwnerIdFromConversationId = (conversationId) => {
+    const id = String(conversationId || '');
+    const match = id.match(/^(line|slack|telegram|messenger|discord)_(\d+)_/);
+    return match ? match[2] : null;
+};
+
+const ensureIsolationData = () => {
+    if (!Array.isArray(database.staff_accounts)) database.staff_accounts = [];
+    if (!Array.isArray(database.chat_history)) database.chat_history = [];
+    if (!Array.isArray(database.line_profiles)) database.line_profiles = [];
+    if (!Array.isArray(database.ai_assistant_config)) database.ai_assistant_config = [];
+    if (!Array.isArray(database.chat_retention_settings)) database.chat_retention_settings = [];
+
+    database.staff_accounts = database.staff_accounts.map((staff) => ({
+        ...staff,
+        line_config: {
+            ...defaultLineConfig(),
+            ...(staff.line_config || {})
+        }
+    }));
+
+    database.chat_history = database.chat_history.map((conv) => {
+        const ownerId = conv.userId != null ? conv.userId : extractOwnerIdFromConversationId(conv.id);
+        return {
+            ...conv,
+            userId: ownerId != null ? Number(ownerId) : conv.userId,
+            platform: conv.platform || conv.channel || 'dashboard',
+            channel: conv.channel || conv.platform || 'dashboard',
+            channelId: normalizeScopedChannelId(conv.channelId) || null
+        };
+    });
+
+    database.line_profiles = database.line_profiles.map((profile) => ({
+        ...profile,
+        userId: profile.userId != null ? Number(profile.userId) : null,
+        channelId: normalizeScopedChannelId(profile.channelId) || null
+    }));
+
+    database.chat_retention_settings = database.chat_retention_settings.map((settings) => ({
+        ...defaultRetentionSettings({ userId: settings.userId, channelId: settings.channelId }),
+        ...settings,
+        userId: settings.userId != null ? Number(settings.userId) : null,
+        channelId: normalizeScopedChannelId(settings.channelId) || null,
+        retentionDays: Math.max(1, parseInt(settings.retentionDays || '30', 10) || 30),
+        autoDeleteEnabled: !!settings.autoDeleteEnabled,
+        deleteMessagesWhenChannelDeleted: settings.deleteMessagesWhenChannelDeleted !== false,
+        deleteCustomerProfilesWhenChannelDeleted: settings.deleteCustomerProfilesWhenChannelDeleted !== false
+    }));
+};
+
+const getStaffAccountById = (userId) =>
+    database.staff_accounts.find((staff) => String(staff.id) === String(userId)) || null;
+
+const getLineChannelIdForStaff = (staff) =>
+    normalizeScopedChannelId(staff?.line_config?.channel_id) || null;
+
+const conversationBelongsToStaff = (conversation, staffId) => {
+    if (!conversation) return false;
+    if (conversation.userId != null) return String(conversation.userId) === String(staffId);
+    const ownerId = extractOwnerIdFromConversationId(conversation.id);
+    return ownerId != null && String(ownerId) === String(staffId);
+};
+
+const conversationMatchesChannel = (conversation, channelId, includeLegacyNoChannel = false) => {
+    const targetChannelId = normalizeScopedChannelId(channelId);
+    if (!targetChannelId) return true;
+    const convChannelId = normalizeScopedChannelId(conversation?.channelId);
+    if (convChannelId === targetChannelId) return true;
+    return includeLegacyNoChannel && !convChannelId;
+};
+
+const getOwnedConversation = (staffId, conversationId, options = {}) => {
+    const { channelId = null, includeLegacyNoChannel = false } = options;
+    return (database.chat_history || []).find((conv) =>
+        conv.id === conversationId &&
+        conversationBelongsToStaff(conv, staffId) &&
+        conversationMatchesChannel(conv, channelId, includeLegacyNoChannel)
+    ) || null;
+};
+
+const getOwnedConversations = (staffId, options = {}) => {
+    const { channel = null, channelId = null, includeLegacyNoChannel = false } = options;
+    const requestedPlatform = String(channel || '').trim().toLowerCase();
+    return (database.chat_history || []).filter((conv) => {
+        if (!conversationBelongsToStaff(conv, staffId)) return false;
+        if (requestedPlatform) {
+            const platform = String(conv.channel || conv.platform || '').toLowerCase();
+            if (platform !== requestedPlatform) return false;
+        }
+        return conversationMatchesChannel(conv, channelId, includeLegacyNoChannel);
+    });
+};
+
+const getScopedRetentionSettings = (userId, channelId = null) => {
+    const targetUserId = Number(userId);
+    const normalizedChannelId = normalizeScopedChannelId(channelId) || null;
+    const exact = database.chat_retention_settings.find((item) =>
+        Number(item.userId) === targetUserId &&
+        normalizeScopedChannelId(item.channelId) === normalizeScopedChannelId(normalizedChannelId)
+    );
+    if (exact) return exact;
+    const accountDefault = database.chat_retention_settings.find((item) =>
+        Number(item.userId) === targetUserId &&
+        !normalizeScopedChannelId(item.channelId)
+    );
+    return accountDefault || defaultRetentionSettings({ userId: targetUserId, channelId: normalizedChannelId });
+};
+
+const upsertScopedRetentionSettings = (userId, payload, channelId = null) => {
+    const targetUserId = Number(userId);
+    const normalizedChannelId = normalizeScopedChannelId(channelId) || null;
+    const idx = database.chat_retention_settings.findIndex((item) =>
+        Number(item.userId) === targetUserId &&
+        normalizeScopedChannelId(item.channelId) === normalizeScopedChannelId(normalizedChannelId)
+    );
+    const current = idx >= 0
+        ? database.chat_retention_settings[idx]
+        : defaultRetentionSettings({ userId: targetUserId, channelId: normalizedChannelId });
+    const next = {
+        ...current,
+        userId: targetUserId,
+        channelId: normalizedChannelId,
+        autoDeleteEnabled: payload.autoDeleteEnabled != null ? !!payload.autoDeleteEnabled : current.autoDeleteEnabled,
+        retentionDays: Math.max(1, parseInt(payload.retentionDays ?? current.retentionDays, 10) || current.retentionDays),
+        deleteMessagesWhenChannelDeleted: payload.deleteMessagesWhenChannelDeleted != null
+            ? !!payload.deleteMessagesWhenChannelDeleted
+            : current.deleteMessagesWhenChannelDeleted,
+        deleteCustomerProfilesWhenChannelDeleted: payload.deleteCustomerProfilesWhenChannelDeleted != null
+            ? !!payload.deleteCustomerProfilesWhenChannelDeleted
+            : current.deleteCustomerProfilesWhenChannelDeleted,
+        createdAt: current.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    };
+    if (idx >= 0) database.chat_retention_settings[idx] = next;
+    else database.chat_retention_settings.push(next);
+    return next;
+};
+
+const getScopedAiAssistantConfig = (userId, channelId = null) => {
+    const targetUserId = Number(userId);
+    const normalizedChannelId = normalizeScopedChannelId(channelId) || null;
+    const scoped = database.ai_assistant_config.find((item) =>
+        Number(item.userId) === targetUserId &&
+        normalizeScopedChannelId(item.channelId) === normalizeScopedChannelId(normalizedChannelId)
+    );
+    if (scoped) return scoped;
+    const accountDefault = database.ai_assistant_config.find((item) =>
+        Number(item.userId) === targetUserId &&
+        !normalizeScopedChannelId(item.channelId)
+    );
+    if (accountDefault) return accountDefault;
+    const legacy = database.ai_assistant_config.find((item) => item && item.userId == null);
+    if (legacy) return { ...legacy, userId: targetUserId, channelId: normalizedChannelId };
+    return { ...defaultAiAssistantConfig(), userId: targetUserId, channelId: normalizedChannelId };
+};
+
+const upsertScopedAiAssistantConfig = (userId, payload, channelId = null) => {
+    const targetUserId = Number(userId);
+    const normalizedChannelId = normalizeScopedChannelId(channelId) || null;
+    const idx = database.ai_assistant_config.findIndex((item) =>
+        Number(item.userId) === targetUserId &&
+        normalizeScopedChannelId(item.channelId) === normalizeScopedChannelId(normalizedChannelId)
+    );
+    const current = idx >= 0
+        ? database.ai_assistant_config[idx]
+        : getScopedAiAssistantConfig(targetUserId, normalizedChannelId);
+    const next = {
+        ...current,
+        userId: targetUserId,
+        channelId: normalizedChannelId,
+        assistant_name: payload.assistant_name.trim(),
+        llm: payload.llm.trim(),
+        use_case: payload.use_case.trim(),
+        description: payload.description ? payload.description.trim() : '',
+        created_at: current.created_at || new Date().toISOString(),
+        updated_at: new Date().toISOString()
+    };
+    if (idx >= 0) database.ai_assistant_config[idx] = next;
+    else database.ai_assistant_config.push(next);
+    return next;
+};
+
+const upsertLineProfile = ({ userId, channelId = null, lineUserId, displayName, pictureUrl }) => {
+    if (!lineUserId) return null;
+    if (!database.line_profiles) database.line_profiles = [];
+    const targetUserId = Number(userId);
+    const normalizedChannelId = normalizeScopedChannelId(channelId) || null;
+    const idx = database.line_profiles.findIndex((p) =>
+        String(p.lineUserId) === String(lineUserId) &&
+        Number(p.userId) === targetUserId &&
+        normalizeScopedChannelId(p.channelId) === normalizeScopedChannelId(normalizedChannelId)
+    );
+    const record = {
+        userId: targetUserId,
+        channelId: normalizedChannelId,
+        platform: 'line',
+        lineUserId,
+        displayName: displayName || 'LINE 使用者',
+        pictureUrl: pictureUrl || null,
+        updatedAt: new Date().toISOString()
+    };
+    if (idx === -1) database.line_profiles.push(record);
+    else database.line_profiles[idx] = { ...database.line_profiles[idx], ...record };
+    return idx === -1 ? record : database.line_profiles[idx];
+};
+
+const deleteScopedLineProfiles = ({ userId, channelId = null, includeLegacyNoChannel = false }) => {
+    const targetUserId = Number(userId);
+    const normalizedChannelId = normalizeScopedChannelId(channelId) || null;
+    let deleted = 0;
+    database.line_profiles = (database.line_profiles || []).filter((profile) => {
+        if (Number(profile.userId) !== targetUserId) return true;
+        if (!normalizedChannelId) {
+            deleted += 1;
+            return false;
+        }
+        const profileChannelId = normalizeScopedChannelId(profile.channelId) || null;
+        if (profileChannelId === normalizedChannelId || (includeLegacyNoChannel && !profileChannelId)) {
+            deleted += 1;
+            return false;
+        }
+        return true;
+    });
+    return deleted;
+};
+
+const ensureLineConversation = ({ userId, lineUserId, displayName, pictureUrl, channelId = null }) => {
+    if (!database.chat_history) database.chat_history = [];
+    const normalizedChannelId = normalizeScopedChannelId(channelId) || 'default';
+    const convId = `line_${userId}_${normalizedChannelId}_${lineUserId}`;
+    let conv = database.chat_history.find((c) =>
+        c.id === convId ||
+        (
+            conversationBelongsToStaff(c, userId) &&
+            String(c.customerLineId || '') === String(lineUserId) &&
+            String(c.channel || c.platform || '').toLowerCase() === 'line' &&
+            conversationMatchesChannel(c, normalizedChannelId, true)
+        )
+    );
+    if (!conv) {
+        conv = {
+            id: convId,
+            platform: 'line',
+            channel: 'line',
+            channelId: normalizedChannelId,
+            userId: parseInt(userId, 10),
+            customerName: displayName || 'LINE 使用者',
+            displayName: displayName || 'LINE 使用者',
+            customerPicture: pictureUrl || null,
+            customerLineId: lineUserId,
+            messages: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+        database.chat_history.push(conv);
+    } else {
+        conv.id = convId;
+        conv.channelId = normalizedChannelId;
+        if (displayName) conv.customerName = displayName;
+        if (displayName) conv.displayName = displayName;
+        if (pictureUrl) conv.customerPicture = pictureUrl;
+        if (!conv.customerLineId) conv.customerLineId = lineUserId;
+        if (!conv.userId) conv.userId = parseInt(userId, 10);
+        if (!conv.channel) conv.channel = conv.platform || 'line';
+        if (!conv.platform) conv.platform = 'line';
+    }
+    return conv;
+};
+
+const purgeLineChannelScopedData = ({ userId, channelId, deleteProfiles = true, includeLegacyNoChannel = false }) => {
+    const targetUserId = Number(userId);
+    const normalizedChannelId = normalizeScopedChannelId(channelId) || null;
+    let deletedConversations = 0;
+    let deletedMessages = 0;
+    database.chat_history = (database.chat_history || []).filter((conv) => {
+        if (!conversationBelongsToStaff(conv, targetUserId)) return true;
+        if (String(conv.channel || conv.platform || '').toLowerCase() !== 'line') return true;
+        if (!conversationMatchesChannel(conv, normalizedChannelId, includeLegacyNoChannel)) return true;
+        deletedConversations += 1;
+        deletedMessages += Array.isArray(conv.messages) ? conv.messages.length : 0;
+        return false;
+    });
+    const deletedProfiles = deleteProfiles
+        ? deleteScopedLineProfiles({ userId: targetUserId, channelId: normalizedChannelId, includeLegacyNoChannel })
+        : 0;
+    return { deletedConversations, deletedMessages, deletedProfiles };
 };
 
 // 初始化資料庫
@@ -532,53 +854,7 @@ const updateStaffPassword = (id, newPassword) => {
     return false;
 };
 
-const upsertLineProfile = (lineUserId, displayName, pictureUrl) => {
-    if (!lineUserId) return null;
-    if (!database.line_profiles) database.line_profiles = [];
-    const idx = database.line_profiles.findIndex(p => p.lineUserId === lineUserId);
-    const record = {
-        lineUserId,
-        displayName: displayName || 'LINE 使用者',
-        pictureUrl: pictureUrl || null,
-        updatedAt: new Date().toISOString()
-    };
-    if (idx === -1) {
-        database.line_profiles.push(record);
-    } else {
-        database.line_profiles[idx] = { ...database.line_profiles[idx], ...record };
-    }
-    return record;
-};
-
-const ensureLineConversation = ({ userId, lineUserId, displayName, pictureUrl }) => {
-    if (!database.chat_history) database.chat_history = [];
-    const convId = `line_${userId}_${lineUserId}`;
-    let conv = database.chat_history.find(c => c.id === convId);
-    if (!conv) {
-        conv = {
-            id: convId,
-            platform: 'line',
-            channel: 'line',
-            userId: parseInt(userId, 10),
-            customerName: displayName || 'LINE 使用者',
-            displayName: displayName || 'LINE 使用者',
-            customerPicture: pictureUrl || null,
-            customerLineId: lineUserId,
-            messages: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-        };
-        database.chat_history.push(conv);
-    } else {
-        if (displayName) conv.customerName = displayName;
-        if (displayName) conv.displayName = displayName;
-        if (pictureUrl) conv.customerPicture = pictureUrl;
-        if (!conv.customerLineId) conv.customerLineId = lineUserId;
-        if (!conv.userId) conv.userId = parseInt(userId, 10);
-        if (!conv.channel) conv.channel = conv.platform || 'line';
-    }
-    return conv;
-};
+// LINE profile / conversation helper 已移到上方的隔離工具函式區塊
 
 const appendConversationMessage = (conversation, message) => {
     if (!conversation.messages) conversation.messages = [];
@@ -957,12 +1233,7 @@ app.post('/api/register', async (req, res) => {
             role: 'user',
             email: email,
             created_at: new Date().toISOString(),
-            line_config: {
-                channel_access_token: '',
-                channel_secret: '',
-                webhook_url: '',
-                enabled: false
-            }
+            line_config: defaultLineConfig()
         };
         
         database.staff_accounts.push(newUser);
@@ -1331,15 +1602,9 @@ app.post('/api/reset-password', async (req, res) => {
 // 獲取 AI 助理配置
 app.get('/api/ai-assistant-config', authenticateJWT, (req, res) => {
     try {
-        // 獲取第一個配置，如果沒有則返回預設值
-        const config = database.ai_assistant_config[0] || {
-            assistant_name: '設計師 Rainy',
-            llm: 'gpt-5.3',
-            use_case: 'customer-service',
-            description: 'OBJECTIVE(目標任務):\n你的目標是客戶服務與美容美髮發行錄，創造一個良好的對話體驗，讓客戶感到舒適，願意分享他們的真實想法及需求。\n\nSTYLE(風格/個性):\n你的個性是很健談並且很直率人保學會存在，樂於創造一個放鬆和友好的氣圍。\n\nTONE(語調):\n親性、溫柔、深情人心。',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-        };
+        loadDatabase();
+        const channelId = normalizeScopedChannelId(req.query.channelId) || null;
+        const config = getScopedAiAssistantConfig(req.staff.id, channelId);
         
         res.json({
             success: true,
@@ -1357,7 +1622,7 @@ app.get('/api/ai-assistant-config', authenticateJWT, (req, res) => {
 // 更新 AI 助理配置
 app.post('/api/ai-assistant-config', authenticateJWT, (req, res) => {
     try {
-        const { assistant_name, llm, use_case, description } = req.body;
+        const { assistant_name, llm, use_case, description, channelId } = req.body;
         
         // 驗證必要欄位
         if (!assistant_name || !llm || !use_case) {
@@ -1367,26 +1632,19 @@ app.post('/api/ai-assistant-config', authenticateJWT, (req, res) => {
             });
         }
         
-        const config = {
-            assistant_name: assistant_name.trim(),
-            llm: llm.trim(),
-            use_case: use_case.trim(),
-            description: description ? description.trim() : '',
-            updated_at: new Date().toISOString()
-        };
-        
-        // 如果是第一個配置，添加創建時間
-        if (database.ai_assistant_config.length === 0) {
-            config.created_at = new Date().toISOString();
-        } else {
-            config.created_at = database.ai_assistant_config[0].created_at;
-        }
-        
-        // 更新或創建配置（只保留一個配置）
-        database.ai_assistant_config = [config];
+        loadDatabase();
+        const config = upsertScopedAiAssistantConfig(
+            req.staff.id,
+            { assistant_name, llm, use_case, description },
+            channelId
+        );
         saveDatabase();
         
-        console.log('✅ AI 助理配置已更新:', config.assistant_name);
+        console.log('✅ AI 助理配置已更新:', {
+            accountId: req.staff.id,
+            channelId: normalizeScopedChannelId(channelId) || null,
+            assistant: config.assistant_name
+        });
         
         res.json({
             success: true,
@@ -1405,20 +1663,19 @@ app.post('/api/ai-assistant-config', authenticateJWT, (req, res) => {
 // 重置 AI 助理配置為預設值
 app.post('/api/ai-assistant-config/reset', authenticateJWT, (req, res) => {
     try {
-        const defaultConfig = {
-            assistant_name: '設計師 Rainy',
-            llm: 'gpt-5.3',
-            use_case: 'customer-service',
-            description: 'OBJECTIVE(目標任務):\n你的目標是客戶服務與美容美髮發行錄，創造一個良好的對話體驗，讓客戶感到舒適，願意分享他們的真實想法及需求。\n\nSTYLE(風格/個性):\n你的個性是很健談並且很直率人保學會存在，樂於創造一個放鬆和友好的氣圍。\n\nTONE(語調):\n親性、溫柔、深情人心。',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-        };
-        
-        // 重置為預設配置
-        database.ai_assistant_config = [defaultConfig];
+        loadDatabase();
+        const channelId = normalizeScopedChannelId(req.body?.channelId) || null;
+        const defaultConfig = upsertScopedAiAssistantConfig(
+            req.staff.id,
+            defaultAiAssistantConfig(),
+            channelId
+        );
         saveDatabase();
         
-        console.log('✅ AI 助理配置已重置為預設值');
+        console.log('✅ AI 助理配置已重置為預設值:', {
+            accountId: req.staff.id,
+            channelId
+        });
         
         res.json({
             success: true,
@@ -1466,7 +1723,7 @@ app.get('/api/ai-models', authenticateJWT, (req, res) => {
 // AI 聊天 API 端點 - 使用配置的 AI 模型生成回應
 app.post('/api/chat', authenticateJWT, async (req, res) => {
     try {
-        const { message, conversationId, skipLog } = req.body;
+        const { message, conversationId, skipLog, channelId: requestedChannelId } = req.body;
         
         if (!message || typeof message !== 'string') {
             return res.status(400).json({
@@ -1477,22 +1734,28 @@ app.post('/api/chat', authenticateJWT, async (req, res) => {
 
         // 載入資料庫
         loadDatabase();
+        const scopedChannelId = normalizeScopedChannelId(requestedChannelId) || null;
         
         // 獲取 AI 助理配置
-        const aiConfig = database.ai_assistant_config[0] || {
-            assistant_name: 'AI 助理',
-            llm: 'gpt-5.3',
-            use_case: 'customer-service',
-            description: '我是您的智能客服助理，很高興為您服務！'
-        };
+        const aiConfig = getScopedAiAssistantConfig(req.staff.id, scopedChannelId);
 
         // 構建系統提示詞（實際呼叫一律使用環境變數指定之模型）
         const systemPrompt = `你是 ${aiConfig.assistant_name}，${aiConfig.description}。你的使用場景是：${aiConfig.use_case}。請根據用戶的問題提供專業、友善且有用的回應。`;
 
         // 準備對話歷史
         let conversationHistory = [];
+        let existingConversation = null;
         if (conversationId && database.chat_history) {
-            const existingConversation = database.chat_history.find(conv => conv.id === conversationId);
+            existingConversation = getOwnedConversation(req.staff.id, conversationId, {
+                channelId: scopedChannelId,
+                includeLegacyNoChannel: true
+            });
+            if (!existingConversation) {
+                return res.status(404).json({
+                    success: false,
+                    error: '找不到此帳號/頻道的對話'
+                });
+            }
             if (existingConversation && existingConversation.messages) {
                 conversationHistory = existingConversation.messages.slice(-10); // 保留最近10條訊息
             }
@@ -1539,12 +1802,16 @@ app.post('/api/chat', authenticateJWT, async (req, res) => {
 
             let conversation;
             if (conversationId) {
-                conversation = database.chat_history.find(conv => conv.id === conversationId);
+                conversation = existingConversation;
             }
 
             if (!conversation) {
                 conversation = {
                     id: conversationId || `conv_${Date.now()}`,
+                    userId: req.staff.id,
+                    platform: 'dashboard',
+                    channel: 'dashboard',
+                    channelId: scopedChannelId,
                     messages: [],
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
@@ -1552,6 +1819,8 @@ app.post('/api/chat', authenticateJWT, async (req, res) => {
                 database.chat_history.push(conversation);
             }
 
+            conversation.userId = req.staff.id;
+            conversation.channelId = normalizeScopedChannelId(conversation.channelId || scopedChannelId) || null;
             conversation.messages.push(newMessage, aiMessage);
             conversation.updatedAt = new Date().toISOString();
 
@@ -1674,14 +1943,12 @@ app.get('/api/conversations', authenticateJWT, (req, res) => {
     try {
         loadDatabase();
         const requestedChannel = String(req.query.channel || '').trim().toLowerCase();
-        let conversations = database.chat_history || [];
-
-        if (requestedChannel) {
-            conversations = conversations.filter((c) => {
-                const conversationChannel = String(c.channel || c.platform || 'line').toLowerCase();
-                return conversationChannel === requestedChannel;
-            });
-        }
+        const requestedChannelId = normalizeScopedChannelId(req.query.channelId) || null;
+        let conversations = getOwnedConversations(req.staff.id, {
+            channel: requestedChannel || null,
+            channelId: requestedChannelId,
+            includeLegacyNoChannel: !!requestedChannelId
+        });
         
         // 為每個對話添加統計資訊
         const conversationsWithStats = conversations.map(conv => ({
@@ -1713,8 +1980,12 @@ app.get('/api/conversations/:conversationId', authenticateJWT, (req, res) => {
     try {
         const { conversationId } = req.params;
         loadDatabase();
+        const requestedChannelId = normalizeScopedChannelId(req.query.channelId) || null;
         
-        const conversation = database.chat_history.find(conv => conv.id === conversationId);
+        const conversation = getOwnedConversation(req.staff.id, conversationId, {
+            channelId: requestedChannelId,
+            includeLegacyNoChannel: !!requestedChannelId
+        });
         
         if (!conversation) {
             return res.status(404).json({
@@ -1754,8 +2025,13 @@ app.delete('/api/conversations/:conversationId', authenticateJWT, (req, res) => 
     try {
         const { conversationId } = req.params;
         loadDatabase();
+        const requestedChannelId = normalizeScopedChannelId(req.query.channelId) || null;
         
-        const conversationIndex = database.chat_history.findIndex(conv => conv.id === conversationId);
+        const conversationIndex = database.chat_history.findIndex((conv) =>
+            conv.id === conversationId &&
+            conversationBelongsToStaff(conv, req.staff.id) &&
+            conversationMatchesChannel(conv, requestedChannelId, !!requestedChannelId)
+        );
         
         if (conversationIndex === -1) {
             return res.status(404).json({
@@ -1784,7 +2060,7 @@ app.delete('/api/conversations/:conversationId', authenticateJWT, (req, res) => 
 app.get('/api/line-config', authenticateJWT, (req, res) => {
     try {
         loadDatabase();
-        const user = database.staff_accounts.find(staff => staff.id === req.staff.id);
+        const user = getStaffAccountById(req.staff.id);
         
         if (!user) {
             return res.status(404).json({
@@ -1795,12 +2071,11 @@ app.get('/api/line-config', authenticateJWT, (req, res) => {
 
         res.json({
             success: true,
-            line_config: user.line_config || {
-                channel_access_token: '',
-                channel_secret: '',
-                webhook_url: '',
-                enabled: false
-            }
+            line_config: {
+                ...defaultLineConfig(),
+                ...(user.line_config || {})
+            },
+            retention_settings: getScopedRetentionSettings(req.staff.id, getLineChannelIdForStaff(user))
         });
     } catch (error) {
         console.error('獲取 LINE 配置錯誤:', error);
@@ -1812,7 +2087,7 @@ app.get('/api/line-config', authenticateJWT, (req, res) => {
 });
 
 // 更新 LINE 配置 API
-app.post('/api/line-config', authenticateJWT, (req, res) => {
+app.post('/api/line-config', authenticateJWT, async (req, res) => {
     try {
         const { channel_access_token, channel_secret, webhook_url, enabled } = req.body;
         loadDatabase();
@@ -1826,12 +2101,28 @@ app.post('/api/line-config', authenticateJWT, (req, res) => {
             });
         }
 
+        let verifiedChannelId = '';
+        if (channel_access_token) {
+            try {
+                const verifyResp = await axios.get('https://api.line.me/oauth2/v2.1/verify', {
+                    params: { access_token: channel_access_token },
+                    timeout: 10000
+                });
+                verifiedChannelId = normalizeScopedChannelId(verifyResp.data?.client_id);
+            } catch (verifyErr) {
+                console.warn('LINE channel_id 驗證失敗，保留原設定:', verifyErr.message);
+            }
+        }
+
         // 更新 LINE 配置
         database.staff_accounts[userIndex].line_config = {
+            ...defaultLineConfig(),
+            ...(database.staff_accounts[userIndex].line_config || {}),
             channel_access_token: channel_access_token || '',
             channel_secret: channel_secret || '',
             webhook_url: webhook_url || '',
-            enabled: enabled || false
+            enabled: enabled || false,
+            channel_id: verifiedChannelId || database.staff_accounts[userIndex].line_config?.channel_id || ''
         };
 
         saveDatabase();
@@ -1840,7 +2131,9 @@ app.post('/api/line-config', authenticateJWT, (req, res) => {
 
         res.json({
             success: true,
-            message: 'LINE 配置更新成功'
+            message: 'LINE 配置更新成功',
+            line_config: database.staff_accounts[userIndex].line_config,
+            retention_settings: getScopedRetentionSettings(req.staff.id, database.staff_accounts[userIndex].line_config.channel_id)
         });
     } catch (error) {
         console.error('更新 LINE 配置錯誤:', error);
@@ -1848,6 +2141,86 @@ app.post('/api/line-config', authenticateJWT, (req, res) => {
             success: false,
             error: '更新 LINE 配置失敗'
         });
+    }
+});
+
+app.delete('/api/line-config', authenticateJWT, (req, res) => {
+    try {
+        loadDatabase();
+        const user = getStaffAccountById(req.staff.id);
+        if (!user) {
+            return res.status(404).json({ success: false, error: '用戶不存在' });
+        }
+
+        const channelId = getLineChannelIdForStaff(user);
+        const retention = getScopedRetentionSettings(req.staff.id, channelId);
+        const includeLegacyNoChannel = !channelId;
+        const deleteProfiles = retention.deleteCustomerProfilesWhenChannelDeleted !== false;
+        const deletion = purgeLineChannelScopedData({
+            userId: req.staff.id,
+            channelId,
+            deleteProfiles,
+            includeLegacyNoChannel
+        });
+
+        user.line_config = defaultLineConfig();
+        database.chat_retention_settings = database.chat_retention_settings.filter((item) =>
+            !(Number(item.userId) === Number(req.staff.id) && normalizeScopedChannelId(item.channelId) === normalizeScopedChannelId(channelId))
+        );
+        database.ai_assistant_config = database.ai_assistant_config.filter((item) =>
+            !(Number(item.userId) === Number(req.staff.id) && normalizeScopedChannelId(item.channelId) === normalizeScopedChannelId(channelId))
+        );
+        saveDatabase();
+
+        console.log(`[CHANNEL_DELETE] accountId=${req.staff.id} channelId=${channelId || 'default'} platform=line`);
+        console.log(`[CHANNEL_DELETE] conversations_deleted=${deletion.deletedConversations}`);
+        console.log(`[CHANNEL_DELETE] messages_deleted=${deletion.deletedMessages}`);
+        console.log(`[CHANNEL_DELETE] profiles_deleted=${deletion.deletedProfiles}`);
+
+        return res.json({
+            success: true,
+            message: 'LINE 頻道設定與其相關資料已刪除',
+            deleted: deletion,
+            removedLineConversations: deletion.deletedConversations
+        });
+    } catch (error) {
+        console.error('刪除 LINE 配置錯誤:', error);
+        return res.status(500).json({ success: false, error: '刪除 LINE 配置失敗' });
+    }
+});
+
+app.get('/api/retention-settings', authenticateJWT, (req, res) => {
+    try {
+        loadDatabase();
+        const channelId = normalizeScopedChannelId(req.query.channelId) || null;
+        return res.json({
+            success: true,
+            settings: getScopedRetentionSettings(req.staff.id, channelId)
+        });
+    } catch (error) {
+        console.error('獲取保存設定錯誤:', error);
+        return res.status(500).json({ success: false, error: '獲取保存設定失敗' });
+    }
+});
+
+app.post('/api/retention-settings', authenticateJWT, (req, res) => {
+    try {
+        loadDatabase();
+        const { channelId, autoDeleteEnabled, retentionDays, deleteMessagesWhenChannelDeleted, deleteCustomerProfilesWhenChannelDeleted } = req.body || {};
+        const settings = upsertScopedRetentionSettings(
+            req.staff.id,
+            { autoDeleteEnabled, retentionDays, deleteMessagesWhenChannelDeleted, deleteCustomerProfilesWhenChannelDeleted },
+            channelId
+        );
+        saveDatabase();
+        return res.json({
+            success: true,
+            message: '保存設定已更新',
+            settings
+        });
+    } catch (error) {
+        console.error('更新保存設定錯誤:', error);
+        return res.status(500).json({ success: false, error: '更新保存設定失敗' });
     }
 });
 
@@ -1867,6 +2240,7 @@ app.post('/api/webhook/line/:userId', async (req, res) => {
         }
 
         const { channel_access_token, channel_secret } = user.line_config;
+        const scopedLineChannelId = getLineChannelIdForStaff(user);
         
         if (!channel_access_token || !channel_secret) {
             return res.status(400).json({
@@ -1903,10 +2277,17 @@ app.post('/api/webhook/line/:userId', async (req, res) => {
             }
 
             // 儲存/更新 Profile
-            const profileRecord = upsertLineProfile(sourceUserId, displayName, pictureUrl);
+            const profileRecord = upsertLineProfile({
+                userId,
+                channelId: scopedLineChannelId,
+                lineUserId: sourceUserId,
+                displayName,
+                pictureUrl
+            });
             const conv = ensureLineConversation({
                 userId,
                 lineUserId: sourceUserId,
+                channelId: scopedLineChannelId,
                 displayName: profileRecord?.displayName || displayName,
                 pictureUrl: profileRecord?.pictureUrl || pictureUrl
             });
@@ -2045,15 +2426,19 @@ app.post('/api/line/manual-reply', authenticateJWT, async (req, res) => {
         }
 
         loadDatabase();
-        const conversation = database.chat_history.find(c => c.id === conversationId);
+        const staff = getStaffAccountById(req.staff.id);
+        const staffChannelId = getLineChannelIdForStaff(staff);
+        const conversation = getOwnedConversation(req.staff.id, conversationId, {
+            channelId: staffChannelId,
+            includeLegacyNoChannel: true
+        });
         if (!conversation) {
             return res.status(404).json({
                 success: false,
-                error: '找不到對話記錄'
+                error: '找不到屬於此帳號/頻道的對話記錄'
             });
         }
 
-        const staff = database.staff_accounts.find(s => s.id === req.staff.id);
         const lineConfig = staff?.line_config;
         if (!lineConfig?.channel_access_token || !lineConfig?.channel_secret) {
             return res.status(400).json({
@@ -2092,15 +2477,20 @@ app.post('/api/line/manual-reply', authenticateJWT, async (req, res) => {
 // 統計數據 API
 app.get('/api/stats', authenticateJWT, async (req, res) => {
     try {
+        loadDatabase();
+        const ownedConversations = getOwnedConversations(req.staff.id);
+        const ownedKnowledge = (database.knowledge || []).filter((item) =>
+            String(item.userId || item.user_id || '') === String(req.staff.id)
+        );
         // 計算真實的統計數據
-        const totalUsers = database.user_questions.length;
-        const totalMessages = database.chat_history.length;
-        const knowledgeItems = database.knowledge.length;
+        const totalUsers = ownedConversations.length;
+        const totalMessages = ownedConversations.reduce((sum, conv) => sum + ((conv.messages || []).length), 0);
+        const knowledgeItems = ownedKnowledge.length;
         
         // 計算平均回應時間（基於最近的對話）
         let avgResponseTime = 2.3; // 預設值
-        if (database.chat_history.length > 0) {
-            const recentMessages = database.chat_history.slice(-100); // 最近100條訊息
+        if (ownedConversations.length > 0) {
+            const recentMessages = ownedConversations.slice(-100); // 最近100條對話
             const responseTimes = recentMessages
                 .filter(msg => msg.responseTime)
                 .map(msg => msg.responseTime);
@@ -2114,13 +2504,13 @@ app.get('/api/stats', authenticateJWT, async (req, res) => {
         const now = new Date();
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
         
-        const recentUsers = database.user_questions.filter(user => {
-            const userDate = new Date(user.created_at || user.timestamp || now);
+        const recentUsers = ownedConversations.filter((conv) => {
+            const userDate = new Date(conv.updatedAt || conv.createdAt || now);
             return userDate >= sevenDaysAgo;
         }).length;
         
         // 計算知識庫使用統計
-        const knowledgeUsage = database.knowledge.reduce((acc, item) => {
+        const knowledgeUsage = ownedKnowledge.reduce((acc, item) => {
             acc.totalItems++;
             if (item.usage_count) acc.totalUsage += item.usage_count;
             return acc;
@@ -2152,6 +2542,8 @@ app.get('/api/stats', authenticateJWT, async (req, res) => {
 // 用戶活躍度趨勢 API
 app.get('/api/stats/activity', authenticateJWT, async (req, res) => {
     try {
+        loadDatabase();
+        const ownedConversations = getOwnedConversations(req.staff.id);
         const now = new Date();
         const days = [];
         const activityData = [];
@@ -2166,8 +2558,8 @@ app.get('/api/stats/activity', authenticateJWT, async (req, res) => {
             const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
             const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
             
-            const dayUsers = database.user_questions.filter(user => {
-                const userDate = new Date(user.created_at || user.timestamp || now);
+            const dayUsers = ownedConversations.filter((conv) => {
+                const userDate = new Date(conv.updatedAt || conv.createdAt || now);
                 return userDate >= dayStart && userDate < dayEnd;
             }).length;
             
@@ -2200,33 +2592,26 @@ app.get('/api/stats/activity', authenticateJWT, async (req, res) => {
 // 最近活動 API
 app.get('/api/stats/recent-activity', authenticateJWT, async (req, res) => {
     try {
+        loadDatabase();
         const now = new Date();
         const activities = [];
+        const ownedConversations = getOwnedConversations(req.staff.id);
+        const ownedKnowledge = (database.knowledge || []).filter((item) =>
+            String(item.userId || item.user_id || '') === String(req.staff.id)
+        );
         
         // 從各種數據源生成活動
-        const recentUsers = database.user_questions.slice(-5);
-        const recentMessages = database.chat_history.slice(-5);
-        const recentKnowledge = database.knowledge.slice(-5);
-        
-        // 用戶註冊活動
-        recentUsers.forEach(user => {
-            activities.push({
-                type: 'user_register',
-                icon: 'fas fa-user-plus',
-                color: 'bg-success',
-                text: `新用戶註冊: ${user.username || '匿名用戶'}`,
-                time: formatTimeAgo(new Date(user.created_at || user.timestamp || now))
-            });
-        });
+        const recentMessages = ownedConversations.slice(-5);
+        const recentKnowledge = ownedKnowledge.slice(-5);
         
         // 訊息活動
-        recentMessages.forEach(msg => {
+        recentMessages.forEach(conv => {
             activities.push({
                 type: 'message',
                 icon: 'fas fa-comment',
                 color: 'bg-primary',
-                text: `新訊息: ${msg.content ? msg.content.substring(0, 30) + '...' : '訊息內容'}`,
-                time: formatTimeAgo(new Date(msg.timestamp || now))
+                text: `對話更新: ${conv.displayName || conv.customerName || '客戶'}`,
+                time: formatTimeAgo(new Date(conv.updatedAt || conv.createdAt || now))
             });
         });
         
@@ -2335,7 +2720,8 @@ app.post('/api/accounts', authenticateJWT, checkRole(['admin']), async (req, res
             role: role || 'staff',
             email: email || '',
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
+            line_config: defaultLineConfig()
         };
 
         database.staff_accounts.push(newAccount);

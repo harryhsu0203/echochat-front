@@ -900,7 +900,7 @@ async function deleteChannel(id) {
 
 async function confirmDeleteChannel(id) {
     if (!id) return;
-    if (!confirm('確定要刪除此頻道嗎？')) return;
+    if (!confirm('確定要刪除此頻道嗎？\n\n只會刪除目前帳號下此頻道相關的對話與設定，不會影響其他帳號或其他頻道。')) return;
     try {
         const data = await deleteChannel(id);
         if (!data.success) throw new Error(data.error || '刪除失敗');
