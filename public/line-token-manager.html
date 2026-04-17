@@ -219,6 +219,16 @@
                         </button>
                     </div>
 
+                    <div class="mt-4 p-3 border border-danger rounded">
+                        <h6 class="text-danger mb-2"><i class="fas fa-unlink me-2"></i>移除 LINE 整合</h6>
+                        <p class="small text-muted mb-2">
+                            將從 EchoChat 刪除您的 LINE Token 設定，並<strong>永久刪除</strong>本帳號在伺服器上儲存的所有 LINE 對話紀錄（無法復原）。不會刪除 LINE 官方帳號本身。
+                        </p>
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeLineIntegration()">
+                            <i class="fas fa-trash-alt me-1"></i>移除設定並刪除對話
+                        </button>
+                    </div>
+
                     <!-- Webhook URL 區塊 - 無論是否儲存都可取得 -->
                     <div id="webhookInfoCard" class="info-card mt-4 p-3 bg-light rounded border" style="display: none;">
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -248,6 +258,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/api-config.js"></script>
     <script>
+        let loadedOaChannelId = null;
+
         // 頁面載入時初始化
         document.addEventListener('DOMContentLoaded', function() {
             loadSettings();
@@ -293,6 +305,7 @@
                     const data = await response.json();
                     console.log('載入設定回應:', data);
                     if (data.success && data.data) {
+                        loadedOaChannelId = data.data.oaChannelId || null;
                         // 載入現有設定（不顯示敏感資訊）
                         if (data.data.channel_access_token || data.data.channelAccessToken) {
                             document.getElementById('channelAccessToken').value = '****已設定****';
@@ -415,6 +428,46 @@
             if (confirm('確定要重置所有設定嗎？')) {
                 document.getElementById('lineConfigForm').reset();
                 document.getElementById('successMessage').style.display = 'none';
+            }
+        }
+
+        // 移除 LINE 整合（後端會刪除 line_api_settings 與 chat_history 中的 LINE 對話）
+        async function removeLineIntegration() {
+            if (!confirm('確定要移除 LINE 設定嗎？\n\n此操作會永久刪除 EchoChat 內所有 LINE 對話紀錄，且無法復原。')) {
+                return;
+            }
+            const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+            if (!token) {
+                showError('請先登入');
+                return;
+            }
+            const apiBase = window.API_BASE_URL || 'https://echochat-api.onrender.com/api';
+            let url = `${apiBase}/line-api/settings`;
+            if (loadedOaChannelId) {
+                url += `?channelId=${encodeURIComponent(loadedOaChannelId)}`;
+            }
+            try {
+                const response = await fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok || !data.success) {
+                    throw new Error(data.error || `移除失敗 (${response.status})`);
+                }
+                loadedOaChannelId = null;
+                document.getElementById('lineConfigForm').reset();
+                document.getElementById('successMessage').style.display = 'none';
+                document.getElementById('channelAccessToken').value = '';
+                document.getElementById('channelSecret').value = '';
+                updateChannelStatus(false);
+                alert(`已移除 LINE 設定。\n已刪除對話紀錄 ${data.removedLineConversations ?? 0} 筆。`);
+            } catch (error) {
+                console.error(error);
+                showError(error.message || '移除失敗');
             }
         }
 
