@@ -36,7 +36,7 @@ router.get('/settings', (req, res) => {
             }
         ],
         features: {
-            ai_models: ['gpt-4o-mini', 'gpt-4o', 'claude-3-haiku', 'gemini-pro'],
+            ai_models: ['gpt-5.3'],
             knowledge_base: true,
             multi_modal: true,
             voice_recognition: true,
@@ -111,8 +111,8 @@ router.get('/features', (req, res) => {
     const features = {
         ai_models: {
             enabled: true,
-            supported: ['gpt-4o-mini', 'gpt-4o', 'claude-3-haiku', 'gemini-pro'],
-            default: 'gpt-4o-mini'
+            supported: ['gpt-5.3'],
+            default: 'gpt-5.3'
         },
         knowledge_base: {
             enabled: true,

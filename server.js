@@ -15,6 +15,46 @@ const { v4: uuidv4 } = require('uuid');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
 require('dotenv').config();
+const OpenAI = require('openai');
+
+const resolvedOpenAIModel = () =>
+    (process.env.OPENAI_MODEL || process.env.PUBLIC_CHAT_MODEL || 'gpt-5.3').trim();
+
+console.log('目前模型：', resolvedOpenAIModel());
+
+const openai = process.env.OPENAI_API_KEY
+    ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    : null;
+
+async function openaiResponsesFromMessages(messages, { maxOutputTokens = 1000, temperature = 0.7 } = {}) {
+    if (!openai) {
+        const err = new Error('OPENAI_API_KEY 未設置');
+        err.status = 401;
+        throw err;
+    }
+    const input = messages
+        .filter((m) => m && typeof m.content === 'string' && m.content.trim() !== '')
+        .filter((m) => m.role === 'system' || m.role === 'user' || m.role === 'assistant')
+        .map((m) => ({
+            type: 'message',
+            role: m.role,
+            content: m.content
+        }));
+    if (!input.length) {
+        throw new Error('沒有可送出的對話內容');
+    }
+    const response = await openai.responses.create({
+        model: resolvedOpenAIModel(),
+        input,
+        max_output_tokens: maxOutputTokens,
+        temperature
+    });
+    const text = (response.output_text || '').trim();
+    if (!text) {
+        throw new Error('OpenAI 回傳空白內容');
+    }
+    return text;
+}
 
 const DEFAULT_SENDER_EMAIL = 'contact@echochat.com.tw';
 const EMAIL_ACCOUNT = process.env.EMAIL_USER || 'echochatsup@gmail.com';
@@ -1294,7 +1334,7 @@ app.get('/api/ai-assistant-config', authenticateJWT, (req, res) => {
         // 獲取第一個配置，如果沒有則返回預設值
         const config = database.ai_assistant_config[0] || {
             assistant_name: '設計師 Rainy',
-            llm: 'gpt-4o-mini',
+            llm: 'gpt-5.3',
             use_case: 'customer-service',
             description: 'OBJECTIVE(目標任務):\n你的目標是客戶服務與美容美髮發行錄，創造一個良好的對話體驗，讓客戶感到舒適，願意分享他們的真實想法及需求。\n\nSTYLE(風格/個性):\n你的個性是很健談並且很直率人保學會存在，樂於創造一個放鬆和友好的氣圍。\n\nTONE(語調):\n親性、溫柔、深情人心。',
             created_at: new Date().toISOString(),
@@ -1367,7 +1407,7 @@ app.post('/api/ai-assistant-config/reset', authenticateJWT, (req, res) => {
     try {
         const defaultConfig = {
             assistant_name: '設計師 Rainy',
-            llm: 'gpt-4o-mini',
+            llm: 'gpt-5.3',
             use_case: 'customer-service',
             description: 'OBJECTIVE(目標任務):\n你的目標是客戶服務與美容美髮發行錄，創造一個良好的對話體驗，讓客戶感到舒適，願意分享他們的真實想法及需求。\n\nSTYLE(風格/個性):\n你的個性是很健談並且很直率人保學會存在，樂於創造一個放鬆和友好的氣圍。\n\nTONE(語調):\n親性、溫柔、深情人心。',
             created_at: new Date().toISOString(),
@@ -1398,54 +1438,14 @@ app.post('/api/ai-assistant-config/reset', authenticateJWT, (req, res) => {
 app.get('/api/ai-models', authenticateJWT, (req, res) => {
     try {
         const models = {
-            'gpt-4o-mini': {
-                name: 'GPT-4o Mini',
+            'gpt-5.3': {
+                name: 'GPT-5.3',
                 provider: 'OpenAI',
-                description: '快速且經濟實惠的對話體驗，適合一般客服需求',
-                features: ['快速回應', '成本效益高', '支援多語言', '適合日常對話'],
-                pricing: '經濟實惠',
+                description: '專案統一使用之旗艦對話模型，適合客服與專業回覆',
+                features: ['高準確度', '自然語氣', '多語言支援', '複雜問題理解'],
+                pricing: '依用量計費',
                 speed: '快速',
                 max_tokens: 128000,
-                supported_languages: ['中文', '英文', '日文', '韓文', '法文', '德文', '西班牙文']
-            },
-            'gpt-4o': {
-                name: 'GPT-4o',
-                provider: 'OpenAI',
-                description: '高級版本，提供更強大的理解和生成能力',
-                features: ['高品質回應', '複雜任務處理', '創意內容生成', '深度理解'],
-                pricing: '中等',
-                speed: '中等',
-                max_tokens: 128000,
-                supported_languages: ['中文', '英文', '日文', '韓文', '法文', '德文', '西班牙文']
-            },
-            'gpt-4-turbo': {
-                name: 'GPT-4 Turbo',
-                provider: 'OpenAI',
-                description: '平衡效能和速度的優化版本',
-                features: ['平衡效能', '快速處理', '高品質輸出', '廣泛應用'],
-                pricing: '中等',
-                speed: '快速',
-                max_tokens: 128000,
-                supported_languages: ['中文', '英文', '日文', '韓文', '法文', '德文', '西班牙文']
-            },
-            'gpt-3.5-turbo': {
-                name: 'GPT-3.5 Turbo',
-                provider: 'OpenAI',
-                description: '經典版本，穩定可靠且成本較低',
-                features: ['穩定可靠', '成本較低', '快速回應', '廣泛支援'],
-                pricing: '經濟實惠',
-                speed: '快速',
-                max_tokens: 16385,
-                supported_languages: ['中文', '英文', '日文', '韓文', '法文', '德文', '西班牙文']
-            },
-            'gpt-3.5-turbo-16k': {
-                name: 'GPT-3.5 Turbo 16K',
-                provider: 'OpenAI',
-                description: '支援更長對話的擴展版本',
-                features: ['長對話支援', '大上下文', '穩定效能', '適合複雜對話'],
-                pricing: '中等',
-                speed: '中等',
-                max_tokens: 16385,
                 supported_languages: ['中文', '英文', '日文', '韓文', '法文', '德文', '西班牙文']
             }
         };
@@ -1481,12 +1481,12 @@ app.post('/api/chat', authenticateJWT, async (req, res) => {
         // 獲取 AI 助理配置
         const aiConfig = database.ai_assistant_config[0] || {
             assistant_name: 'AI 助理',
-            llm: 'gpt-4o-mini',
+            llm: 'gpt-5.3',
             use_case: 'customer-service',
             description: '我是您的智能客服助理，很高興為您服務！'
         };
 
-        // 構建系統提示詞
+        // 構建系統提示詞（實際呼叫一律使用環境變數指定之模型）
         const systemPrompt = `你是 ${aiConfig.assistant_name}，${aiConfig.description}。你的使用場景是：${aiConfig.use_case}。請根據用戶的問題提供專業、友善且有用的回應。`;
 
         // 準備對話歷史
@@ -1505,24 +1505,10 @@ app.post('/api/chat', authenticateJWT, async (req, res) => {
             { role: 'user', content: message }
         ];
 
-        // 調用 OpenAI API
-        const openaiResponse = await axios.post(
-            'https://api.openai.com/v1/chat/completions',
-            {
-                model: aiConfig.llm,
-                messages: messages,
-                max_tokens: 1000,
-                temperature: 0.7
-            },
-            {
-                headers: {
-                    'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-
-        const aiReply = openaiResponse.data.choices[0].message.content.trim();
+        const aiReply = await openaiResponsesFromMessages(messages, {
+            maxOutputTokens: 1000,
+            temperature: 0.7
+        });
 
         // 更新對話歷史
         const newMessage = {
@@ -1576,26 +1562,27 @@ app.post('/api/chat', authenticateJWT, async (req, res) => {
             success: true,
             reply: aiReply,
             conversationId: conversation.id,
-            model: aiConfig.llm,
+            model: resolvedOpenAIModel(),
             assistantName: aiConfig.assistant_name
         });
 
     } catch (error) {
         console.error('AI 聊天錯誤:', error);
         
+        const httpStatus = error.response?.status ?? error.status;
         // 檢查是否為 OpenAI API 錯誤
-        if (error.response && error.response.status === 401) {
+        if (httpStatus === 401) {
             console.error('OpenAI API 金鑰錯誤:', {
-                status: error.response.status,
-                statusText: error.response.statusText,
-                data: error.response.data
+                status: httpStatus,
+                statusText: error.response?.statusText,
+                data: error.response?.data ?? error.error ?? error.message
             });
             return res.status(500).json({
                 success: false,
                 error: 'OpenAI API 金鑰無效或已過期',
                 details: '請檢查您的 OpenAI API 金鑰是否正確設置'
             });
-        } else if (error.response && error.response.status === 429) {
+        } else if (httpStatus === 429) {
             return res.status(500).json({
                 success: false,
                 error: 'OpenAI API 請求頻率過高，請稍後再試'
@@ -1651,24 +1638,16 @@ app.post('/api/public-chat', async (req, res) => {
             return res.json({ success: true, reply: fallback });
         }
 
-        const openaiResponse = await axios.post('https://api.openai.com/v1/chat/completions', {
-            model: process.env.PUBLIC_CHAT_MODEL || 'gpt-4o-mini',
-            messages,
-            max_tokens: 600,
-            temperature: 0.7
-        }, {
-            headers: {
-                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const aiReply = openaiResponse.data.choices?.[0]?.message?.content?.trim() || '目前無法提供回覆，請稍後再試。';
+        const aiReply =
+            (await openaiResponsesFromMessages(messages, {
+                maxOutputTokens: 600,
+                temperature: 0.7
+            })) || '目前無法提供回覆，請稍後再試。';
         res.json({ success: true, reply: aiReply });
     } catch (error) {
         console.error('公開聊天錯誤:', error.response?.data || error.message);
         // 提供更具體的錯誤提示但不洩漏敏感資訊
-        const errMsg = error.response?.status === 401
+        const errMsg = (error.response?.status ?? error.status) === 401
             ? 'OpenAI 金鑰無效，已切換為一般說明回覆。'
             : '服務暫時不可用，已切換為一般說明回覆。';
         const context = extractSiteContext();
@@ -1684,7 +1663,7 @@ app.get('/api/public-chat/status', (req, res) => {
     res.json({
         success: true,
         hasApiKey: !!process.env.OPENAI_API_KEY,
-        model: process.env.PUBLIC_CHAT_MODEL || 'gpt-4o-mini'
+        model: resolvedOpenAIModel()
     });
 });
 

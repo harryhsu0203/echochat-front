@@ -1,9 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const { Client, middleware } = require('@line/bot-sdk');
-const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const OpenAI = require('openai');
 
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -12,6 +12,15 @@ const config = {
 
 const app = express();
 const lineClient = new Client(config);
+
+const resolvedOpenAIModel = () =>
+  (process.env.OPENAI_MODEL || process.env.PUBLIC_CHAT_MODEL || 'gpt-5.3').trim();
+
+console.log('目前模型：', resolvedOpenAIModel());
+
+const openai = process.env.OPENAI_API_KEY
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null;
 
 // 載入資料庫
 const loadDatabase = () => {
@@ -23,7 +32,7 @@ const loadDatabase = () => {
     return {
       ai_assistant_config: {
         name: 'AI 助理',
-        model: 'gpt-4o-mini',
+        model: 'gpt-5.3',
         useCase: '一般客服',
         description: '我是您的智能客服助理，很高興為您服務！'
       }
@@ -62,11 +71,14 @@ async function handleEvent(event) {
 }
 
 async function getGPTReply(userInput) {
+  if (!openai) {
+    throw new Error('OPENAI_API_KEY 未設置');
+  }
   // 載入資料庫獲取 AI 配置
   const data = loadDatabase();
   const aiConfig = data.ai_assistant_config || {
     name: 'AI 助理',
-    model: 'gpt-4o-mini',
+    model: 'gpt-5.3',
     useCase: '一般客服',
     description: '我是您的智能客服助理，很高興為您服務！'
   };
@@ -74,26 +86,29 @@ async function getGPTReply(userInput) {
   // 構建系統提示詞
   const systemPrompt = `你是 ${aiConfig.name}，${aiConfig.description}。你的使用場景是：${aiConfig.useCase}。請根據用戶的問題提供專業、友善且有用的回應。`;
 
-  const response = await axios.post(
-    'https://api.openai.com/v1/chat/completions',
-    {
-      model: aiConfig.model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userInput }
-      ],
-      max_tokens: 1000,
-      temperature: 0.7
-    },
-    {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
+  const response = await openai.responses.create({
+    model: resolvedOpenAIModel(),
+    input: [
+      {
+        type: 'message',
+        role: 'system',
+        content: systemPrompt
+      },
+      {
+        type: 'message',
+        role: 'user',
+        content: userInput
       }
-    }
-  );
+    ],
+    max_output_tokens: 1000,
+    temperature: 0.7
+  });
 
-  return response.data.choices[0].message.content.trim();
+  const text = (response.output_text || '').trim();
+  if (!text) {
+    throw new Error('OpenAI 回傳空白內容');
+  }
+  return text;
 }
 
 app.listen(3000, () => {

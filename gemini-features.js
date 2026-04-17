@@ -4,41 +4,14 @@ const router = express.Router();
 
 // 支援的語言模型
 const SUPPORTED_MODELS = {
-    'gpt-4o-mini': {
-        name: 'GPT-4o Mini',
+    'gpt-5.3': {
+        name: 'GPT-5.3',
         provider: 'OpenAI',
-        description: '快速且經濟實惠的對話體驗',
-        features: ['快速回應', '成本效益高', '支援多語言'],
-        pricing: '經濟實惠',
+        description: '專案統一使用之對話模型',
+        features: ['高準確度', '自然語氣', '多語言支援'],
+        pricing: '依用量計費',
         speed: '快速',
         max_tokens: 128000
-    },
-    'gpt-4o': {
-        name: 'GPT-4o',
-        provider: 'OpenAI',
-        description: '高級版本，提供更強大的理解和生成能力',
-        features: ['高品質回應', '複雜任務處理', '創意內容生成'],
-        pricing: '中等',
-        speed: '中等',
-        max_tokens: 128000
-    },
-    'claude-3-haiku': {
-        name: 'Claude 3 Haiku',
-        provider: 'Anthropic',
-        description: '快速且經濟的Claude模型',
-        features: ['快速回應', '成本效益高', '安全性高'],
-        pricing: '經濟實惠',
-        speed: '快速',
-        max_tokens: 200000
-    },
-    'gemini-pro': {
-        name: 'Gemini Pro',
-        provider: 'Google',
-        description: 'Google的通用AI模型',
-        features: ['多模態支援', '創意能力強', '程式碼生成'],
-        pricing: '經濟實惠',
-        speed: '快速',
-        max_tokens: 32768
     }
 };
 

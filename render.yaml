@@ -20,7 +20,7 @@ services:
       - key: EMAIL_PASS
       - key: EMAIL_FROM
       - key: GOOGLE_APPLICATION_CREDENTIALS
-      - key: PUBLIC_CHAT_MODEL
+      - key: OPENAI_MODEL
 
   - type: static
     name: echochat-frontend
