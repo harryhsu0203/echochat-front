@@ -1530,6 +1530,7 @@ app.post('/api/chat', authenticateJWT, async (req, res) => {
             isAutoReply: true
         };
 
+        let responseConversationId = conversationId || null;
         if (!skipLog) {
             // 保存對話歷史
             if (!database.chat_history) {
@@ -1556,12 +1557,13 @@ app.post('/api/chat', authenticateJWT, async (req, res) => {
 
             // 保存到資料庫
             saveDatabase();
+            responseConversationId = conversation.id;
         }
 
         res.json({
             success: true,
             reply: aiReply,
-            conversationId: conversation.id,
+            conversationId: responseConversationId,
             model: resolvedOpenAIModel(),
             assistantName: aiConfig.assistant_name
         });
